@@ -1,0 +1,1824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Josephine's Scents</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#C9A96E;--gl:#E8D5A3;--gd:#8B6914;
+  --bg:#0D0B08;--b2:#141210;--b3:#1C1810;--b4:#242018;
+  --t1:#F5F0E8;--t2:#C8BBA5;--t3:#8A7D6A;
+  --br:rgba(201,169,110,0.15);--br2:rgba(201,169,110,0.32);
+  --ok:#4CAF73;--er:#E05252;--info:#388BFD;
+}
+body{background:var(--bg);color:var(--t1);font-family:'Jost',sans-serif;min-height:100vh;overflow-x:hidden}
+.serif{font-family:'Cormorant Garamond',serif}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-thumb{background:var(--gd);border-radius:2px}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96);backdrop-filter:blur(14px);border-bottom:1px solid var(--br);display:flex;flex-direction:column;padding:0}
+.nav-top{display:flex;align-items:center;justify-content:space-between;padding:0 14px;height:50px;gap:8px}
+.brand{font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:600;color:var(--gold);letter-spacing:2px;cursor:pointer;white-space:nowrap;flex-shrink:0;user-select:none}
+.nav-tabs{display:flex;gap:2px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding:4px 12px;border-top:1px solid var(--br);scrollbar-width:none}
+.nav-tabs::-webkit-scrollbar{display:none}
+.nt{padding:5px 12px;border-radius:6px;cursor:pointer;font-size:12px;font-weight:500;color:var(--t3);border:none;background:none;white-space:nowrap;transition:all .2s;flex-shrink:0}
+.nt:hover{color:var(--t2);background:var(--b3)}
+.nt.on{color:var(--gold);background:var(--b3)}
+.nav-r{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.icon-btn{background:var(--b3);border:1px solid var(--br);border-radius:7px;padding:6px 9px;cursor:pointer;color:var(--t2);font-size:12px;display:flex;align-items:center;gap:4px;transition:all .2s;position:relative;white-space:nowrap}
+.icon-btn:hover{border-color:var(--gold);color:var(--gold)}
+.cbadge{position:absolute;top:-5px;right:-5px;background:var(--gold);color:var(--bg);font-size:9px;font-weight:700;width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;display:none}
+.pts-chip{background:var(--b3);border:1px solid var(--br);border-radius:14px;padding:4px 9px;font-size:11px;color:var(--gold);cursor:pointer;white-space:nowrap}
+.own-btn{padding:5px 9px;border-radius:6px;border:1px solid var(--br);background:none;color:var(--t3);font-size:11px;cursor:pointer;transition:all .2s;white-space:nowrap;display:none}
+.own-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,.07);display:flex}
+
+/* ── PAGES ── */
+.pg{display:none;padding-top:92px;min-height:100vh}
+.pg.on{display:block}
+
+/* ── HERO ── */
+.hero{min-height:calc(100vh - 58px);display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 10%,rgba(201,169,110,.07) 0%,transparent 60%)}
+.hero-in{max-width:660px;padding:40px 20px}
+.eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:18px}
+.h-title{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,9vw,82px);font-weight:300;line-height:1.08;margin-bottom:14px}
+.h-title em{font-style:italic;color:var(--gold)}
+.h-sub{font-size:14px;color:var(--t3);line-height:1.8;max-width:420px;margin:0 auto 32px}
+.h-cta{background:var(--gold);color:var(--bg);padding:13px 34px;border-radius:3px;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border:none;transition:all .3s}
+.h-cta:hover{background:var(--gl)}
+.h-stats{display:flex;gap:32px;justify-content:center;margin-top:44px;padding-top:32px;border-top:1px solid var(--br);flex-wrap:wrap}
+.h-sn{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold)}
+.h-sl{font-size:10px;color:var(--t3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
+
+/* ── AUTH MODAL ── */
+.auth-ov{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:400;display:none;align-items:center;justify-content:center;padding:16px;backdrop-filter:blur(8px)}
+.auth-ov.on{display:flex}
+.auth-box{background:var(--b2);border:1px solid var(--br);border-radius:16px;width:100%;max-width:400px;padding:32px}
+.auth-logo{font-family:'Cormorant Garamond',serif;font-size:24px;color:var(--gold);text-align:center;letter-spacing:2px;margin-bottom:6px}
+.auth-sub{font-size:12px;color:var(--t3);text-align:center;margin-bottom:24px}
+.auth-tabs{display:flex;background:var(--b3);border-radius:8px;padding:3px;margin-bottom:22px}
+.auth-tab{flex:1;padding:8px;text-align:center;border-radius:6px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t3);transition:all .2s;border:none;background:none}
+.auth-tab.on{background:var(--b4);color:var(--gold);border:1px solid var(--br)}
+.f-grp{margin-bottom:14px}
+.f-lbl{font-size:11px;color:var(--t3);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;display:block}
+.f-inp{width:100%;background:var(--b3);border:1px solid var(--br);border-radius:7px;padding:10px 13px;font-size:13px;color:var(--t1);outline:none;transition:border .2s;font-family:'Jost',sans-serif}
+.f-inp:focus{border-color:var(--gold)}
+.auth-btn{width:100%;background:var(--gold);color:var(--bg);padding:12px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;letter-spacing:.5px;margin-top:6px;transition:all .3s}
+.auth-btn:hover{background:var(--gl)}
+.auth-err{background:rgba(224,82,82,.1);border:1px solid rgba(224,82,82,.3);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--er);margin-bottom:12px;display:none}
+.guest-link{text-align:center;margin-top:14px;font-size:12px;color:var(--t3);cursor:pointer}
+.guest-link span{color:var(--gold)}
+
+/* ── SEARCH BAR ── */
+.search-wrap{max-width:1080px;margin:0 auto;padding:20px 16px 0}
+.search-box{display:flex;align-items:center;gap:10px;background:var(--b2);border:1px solid var(--br);border-radius:10px;padding:10px 16px}
+.search-box input{flex:1;background:none;border:none;outline:none;font-size:14px;color:var(--t1);font-family:'Jost',sans-serif}
+.search-box input::placeholder{color:var(--t3)}
+
+/* ── SHOP ── */
+.shop-wrap{max-width:1080px;margin:0 auto;padding:16px 16px 80px}
+.sec-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;flex-wrap:wrap;gap:10px}
+.sec-title{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400}
+.sort-sel{background:var(--b3);border:1px solid var(--br);border-radius:6px;padding:6px 10px;color:var(--t2);font-size:12px;cursor:pointer;font-family:'Jost',sans-serif;outline:none}
+.filter-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.fb{padding:5px 14px;border-radius:16px;border:1px solid var(--br);background:transparent;color:var(--t3);font-size:11px;cursor:pointer;transition:all .2s}
+.fb:hover{border-color:var(--gold);color:var(--gl)}
+.fb.on{background:var(--gold);color:var(--bg);border-color:var(--gold)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px}
+.pc{background:var(--b2);border:1px solid var(--br);border-radius:12px;overflow:hidden;transition:all .3s;cursor:pointer;position:relative}
+.pc:hover{border-color:var(--br2);transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,.5)}
+.pc.oos{opacity:.55}
+.p-img{height:185px;display:flex;align-items:center;justify-content:center;font-size:58px;background:var(--b3);position:relative}
+.ob{position:absolute;top:8px;right:8px;background:rgba(224,82,82,.9);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px}
+.nb{position:absolute;top:8px;left:8px;background:rgba(201,169,110,.9);color:var(--bg);font-size:9px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px}
+.wb{position:absolute;bottom:8px;right:8px;background:rgba(13,11,8,.7);border:1px solid var(--br);border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s}
+.wb:hover,.wb.on{border-color:var(--gold)}
+.p-body{padding:14px}
+.p-name{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:500;margin-bottom:2px}
+.p-notes{font-size:11px;color:var(--t3);margin-bottom:8px;font-style:italic}
+.p-stars{font-size:11px;color:var(--gold);margin-bottom:7px}
+.p-footer{display:flex;align-items:center;justify-content:space-between}
+.p-price{font-size:17px;font-weight:600;color:var(--gold)}
+.p-size{font-size:10px;color:var(--t3);margin-top:1px}
+.atc{background:transparent;border:1px solid var(--br2);color:var(--gold);padding:7px 13px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
+.atc:hover:not(:disabled){background:var(--gold);color:var(--bg)}
+.atc:disabled{opacity:.35;cursor:not-allowed}
+.stk-row{display:flex;align-items:center;gap:7px;margin-top:9px}
+.sw{width:34px;height:18px;background:var(--b4);border-radius:9px;position:relative;cursor:pointer;border:1px solid var(--br);transition:all .3s;flex-shrink:0}
+.sw.on{background:var(--ok)}
+.sk{width:12px;height:12px;border-radius:50%;background:#fff;position:absolute;top:2px;left:2px;transition:all .3s}
+.sw.on .sk{left:18px}
+
+/* ── CART PANEL ── */
+.c-ov{position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:200;display:none;backdrop-filter:blur(4px)}
+.c-ov.on{display:block}
+.c-panel{position:fixed;top:0;right:0;bottom:0;width:370px;max-width:96vw;background:var(--b2);border-left:1px solid var(--br);z-index:201;transform:translateX(100%);transition:transform .32s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column}
+.c-panel.on{transform:translateX(0)}
+.c-hdr{padding:18px 16px;border-bottom:1px solid var(--br);display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+.c-hdr h3{font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400}
+.xbtn{background:none;border:1px solid var(--br);border-radius:5px;width:28px;height:28px;cursor:pointer;color:var(--t3);display:flex;align-items:center;justify-content:center;font-size:14px}
+.c-items{flex:1;padding:12px;display:flex;flex-direction:column;gap:10px;overflow-y:auto}
+.ci{display:flex;gap:10px;align-items:center;background:var(--b3);border-radius:8px;padding:10px;border:1px solid var(--br)}
+.ci-em{font-size:24px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--b4);border-radius:7px;flex-shrink:0}
+.ci-info{flex:1;min-width:0}
+.ci-name{font-size:13px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ci-price{font-size:12px;color:var(--gold)}
+.qw{display:flex;align-items:center;gap:6px}
+.qb{width:22px;height:22px;border-radius:4px;border:1px solid var(--br);background:var(--b4);color:var(--t1);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center}
+.qb:hover{border-color:var(--gold)}
+.rm{background:none;border:none;color:var(--t3);cursor:pointer;font-size:13px;padding:3px}
+.rm:hover{color:var(--er)}
+.c-foot{padding:16px;border-top:1px solid var(--br);flex-shrink:0}
+.c-row{display:flex;justify-content:space-between;font-size:13px;color:var(--t3);margin-bottom:6px}
+.c-tot{display:flex;justify-content:space-between;font-size:17px;font-weight:600;margin:10px 0 14px;padding-top:10px;border-top:1px solid var(--br)}
+.c-tot span:last-child{color:var(--gold)}
+.promo-row{display:flex;gap:8px;margin-bottom:12px}
+.promo-in{flex:1;background:var(--b3);border:1px solid var(--br);border-radius:6px;padding:8px 12px;font-size:12px;color:var(--t1);outline:none;font-family:'Jost',sans-serif}
+.promo-in:focus{border-color:var(--gold)}
+.promo-apply{background:var(--b4);border:1px solid var(--br2);color:var(--gold);border-radius:6px;padding:8px 14px;font-size:12px;cursor:pointer;font-weight:500;transition:all .2s}
+.promo-apply:hover{background:var(--gold);color:var(--bg)}
+.ck-btn{width:100%;background:var(--gold);color:var(--bg);padding:13px;border-radius:7px;font-size:13px;font-weight:600;letter-spacing:1px;cursor:pointer;border:none;text-transform:uppercase;transition:all .3s}
+.ck-btn:hover{background:var(--gl)}
+.earn-note{background:var(--b4);border-radius:5px;padding:8px 12px;font-size:11px;color:var(--t3);text-align:center;margin-top:8px}
+.earn-note strong{color:var(--gold)}
+.empty-cart{text-align:center;padding:52px 20px;color:var(--t3)}
+
+/* ── PRODUCT MODAL ── */
+.m-ov{position:fixed;inset:0;background:rgba(0,0,0,.82);z-index:300;display:none;align-items:center;justify-content:center;backdrop-filter:blur(7px);padding:16px}
+.m-ov.on{display:flex}
+.modal{background:var(--b2);border:1px solid var(--br);border-radius:14px;width:100%;max-width:460px;max-height:92vh;overflow-y:auto}
+.m-hdr{padding:14px 14px 0;display:flex;justify-content:flex-end}
+.m-body{padding:18px}
+.m-em{font-size:68px;text-align:center;display:block;margin-bottom:10px}
+.m-name{font-family:'Cormorant Garamond',serif;font-size:26px;font-weight:400;margin-bottom:4px}
+.m-notes{font-size:12px;color:var(--t3);font-style:italic;margin-bottom:12px}
+.m-desc{font-size:13px;color:var(--t2);line-height:1.7;margin-bottom:14px}
+.m-meta{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px}
+.mm{background:var(--b3);border-radius:7px;padding:10px;border:1px solid var(--br)}
+.mm-l{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:2px}
+.mm-v{font-size:14px;font-weight:500}
+.m-add{width:100%;background:var(--gold);color:var(--bg);padding:12px;border-radius:7px;font-size:13px;font-weight:600;cursor:pointer;border:none;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
+.m-add:hover{background:var(--gl)}
+.m-add:disabled{opacity:.35;cursor:not-allowed}
+.rvs-sec{border-top:1px solid var(--br);padding-top:14px}
+.rv{padding:10px 0;border-bottom:1px solid var(--br)}
+.rv:last-of-type{border-bottom:none}
+.rv-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:4px}
+.rv-name{font-size:13px;font-weight:500}
+.rv-stars{font-size:12px;color:var(--gold)}
+.rv-text{font-size:12px;color:var(--t3);line-height:1.6}
+.rv-date{font-size:11px;color:var(--t3);margin-top:2px}
+.write-rv{margin-top:12px;background:var(--b3);border-radius:8px;padding:14px;border:1px solid var(--br)}
+.write-rv h5{font-size:13px;font-weight:500;margin-bottom:10px;color:var(--t2)}
+.star-pick{display:flex;gap:6px;margin-bottom:10px;font-size:20px;cursor:pointer}
+.rv-ta{width:100%;background:var(--b4);border:1px solid var(--br);border-radius:6px;padding:8px 10px;font-size:12px;color:var(--t1);font-family:'Jost',sans-serif;resize:none;outline:none;height:60px}
+.rv-ta:focus{border-color:var(--gold)}
+.rv-sub{background:var(--gold);color:var(--bg);border:none;border-radius:5px;padding:7px 18px;font-size:12px;font-weight:600;cursor:pointer;margin-top:8px}
+
+/* ── WISHLIST ── */
+.wish-wrap{max-width:1080px;margin:0 auto;padding:24px 16px 80px}
+
+/* ── LOYALTY ── */
+.loy-wrap{max-width:680px;margin:0 auto;padding:28px 16px 80px}
+.pts-circle{width:130px;height:130px;border-radius:50%;border:3px solid var(--gold);display:flex;flex-direction:column;align-items:center;justify-content:center;margin:0 auto 16px;background:var(--b2)}
+.pts-n{font-family:'Cormorant Garamond',serif;font-size:42px;font-weight:400;color:var(--gold);line-height:1}
+.pts-l{font-size:10px;color:var(--t3);letter-spacing:2px;text-transform:uppercase}
+.tier-b{display:inline-block;padding:5px 18px;border-radius:16px;font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase}
+.t-bronze{background:rgba(176,120,60,.18);color:#C8914A;border:1px solid rgba(200,145,74,.35)}
+.t-silver{background:rgba(140,140,160,.18);color:#A8A8C0;border:1px solid rgba(168,168,192,.35)}
+.t-gold{background:rgba(201,169,110,.18);color:var(--gold);border:1px solid var(--br2)}
+.prog-bar{background:var(--b3);border-radius:3px;height:5px;margin:10px 0;overflow:hidden}
+.prog-fill{background:linear-gradient(90deg,var(--gd),var(--gold));height:100%;border-radius:3px;transition:width .5s}
+.rw-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:26px}
+.rw-card{background:var(--b2);border:1px solid var(--br);border-radius:10px;padding:17px;text-align:center;transition:all .3s}
+.rw-card:hover{border-color:var(--br2)}
+.rw-icon{font-size:30px;margin-bottom:9px}
+.rw-name{font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:500;margin-bottom:5px}
+.rw-cost{font-size:12px;color:var(--gold);margin-bottom:9px}
+.rw-btn{width:100%;padding:7px;border-radius:5px;border:1px solid var(--br2);background:transparent;color:var(--gold);font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
+.rw-btn:hover:not(:disabled){background:var(--gold);color:var(--bg)}
+.rw-btn:disabled{opacity:.38;cursor:not-allowed}
+.ref-box{background:var(--b2);border:1px solid var(--br);border-radius:10px;padding:18px;margin-bottom:24px}
+.ref-code{font-family:'Cormorant Garamond',serif;font-size:22px;letter-spacing:5px;color:var(--gold);text-align:center;padding:12px;background:var(--b3);border-radius:7px;margin:10px 0;border:1px dashed var(--br2)}
+.copy-btn{width:100%;background:transparent;border:1px solid var(--br2);color:var(--gold);padding:9px;border-radius:6px;font-size:12px;font-weight:500;cursor:pointer;transition:all .2s}
+.copy-btn:hover{background:var(--gold);color:var(--bg)}
+.h-list{display:flex;flex-direction:column;gap:7px}
+.h-item{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;background:var(--b2);border-radius:7px;border:1px solid var(--br)}
+.h-lbl{font-size:13px;color:var(--t2)}
+.h-date{font-size:11px;color:var(--t3)}
+.h-pts{font-size:13px;font-weight:600;color:var(--ok)}
+.h-pts.neg{color:var(--er)}
+
+/* ── GAMES ── */
+.games-wrap{max-width:860px;margin:0 auto;padding:28px 16px 80px}
+.g-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:14px;margin-bottom:26px}
+.g-card{background:var(--b2);border:1px solid var(--br);border-radius:11px;padding:20px;cursor:pointer;transition:all .3s;text-align:center}
+.g-card:hover{border-color:var(--br2);transform:translateY(-2px)}
+.g-icon{font-size:40px;margin-bottom:12px}
+.g-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;margin-bottom:6px}
+.g-desc{font-size:12px;color:var(--t3);line-height:1.6;margin-bottom:12px}
+.g-rwd{font-size:11px;color:var(--gold);background:rgba(201,169,110,.1);border-radius:14px;padding:3px 12px;display:inline-block}
+.g-area{background:var(--b2);border:1px solid var(--br);border-radius:14px;padding:24px;margin-top:8px}
+.g-area h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;text-align:center;margin-bottom:16px}
+.sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:270px;margin:0 auto 14px}
+.sc-cell{aspect-ratio:1;background:var(--b3);border:1px solid var(--br2);border-radius:7px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:28px;transition:all .25s}
+.sc-cell.h{font-size:0}.sc-cell.h::after{content:'?';font-size:18px;color:var(--t3)}
+.sc-cell.rv{background:var(--b4);border-color:var(--gold)}
+.g-res{text-align:center;padding:12px;background:var(--b3);border-radius:7px;font-size:13px;color:var(--t2)}
+.g-res.win{border:1px solid var(--gold);color:var(--gold)}
+.g-btn{background:var(--gold);color:var(--bg);padding:9px 22px;border-radius:5px;border:none;font-size:12px;font-weight:600;cursor:pointer;letter-spacing:1px;display:block;margin:10px auto 0}
+.g-btn:hover{background:var(--gl)}
+.mem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:7px;max-width:300px;margin:0 auto 14px}
+.mc{aspect-ratio:1;background:var(--b3);border:1px solid var(--br);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .3s}
+.mc.fl,.mc.mt{background:var(--b4);border-color:var(--br2)}
+.mc.mt{border-color:var(--gold);background:rgba(201,169,110,.07)}
+.quiz-q{font-family:'Cormorant Garamond',serif;font-size:17px;text-align:center;margin-bottom:16px;line-height:1.5}
+.quiz-opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;max-width:360px;margin:0 auto 12px}
+.q-opt{padding:10px 12px;border:1px solid var(--br);border-radius:7px;cursor:pointer;font-size:12px;color:var(--t2);background:var(--b3);transition:all .2s;text-align:center}
+.q-opt:hover{border-color:var(--gold);color:var(--gold)}
+.q-opt.correct{border-color:var(--ok);color:var(--ok);background:rgba(76,175,115,.1)}
+.q-opt.wrong{border-color:var(--er);color:var(--er);background:rgba(224,82,82,.1)}
+
+/* ── CHECKOUT ── */
+.ck-wrap{max-width:600px;margin:0 auto;padding:28px 16px 80px}
+.steps{display:flex;gap:0;margin-bottom:26px}
+.step{flex:1;display:flex;align-items:center}
+.s-dot{width:26px;height:26px;border-radius:50%;border:2px solid var(--br2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;color:var(--t3);flex-shrink:0;background:var(--b2)}
+.s-dot.ac{border-color:var(--gold);color:var(--gold)}
+.s-dot.dn{background:var(--gold);border-color:var(--gold);color:var(--bg)}
+.s-line{flex:1;height:1px;background:var(--br)}
+.s-line.dn{background:var(--gold)}
+.s-lbl{font-size:10px;color:var(--t3);margin-top:3px;text-align:center}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.s-card{background:var(--b2);border:1px solid var(--br);border-radius:11px;padding:18px;margin-bottom:14px}
+.s-card h4{font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:400;margin-bottom:14px}
+.pay-methods{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px}
+.pm{padding:11px 13px;border:1px solid var(--br);border-radius:7px;cursor:pointer;display:flex;align-items:center;gap:8px;font-size:12px;color:var(--t3);transition:all .2s;background:var(--b3)}
+.pm:hover,.pm.on{border-color:var(--gold);color:var(--gold)}
+.pm.on{background:rgba(201,169,110,.06)}
+.use-pts-row{display:flex;align-items:center;justify-content:space-between;padding:11px 14px;background:var(--b3);border-radius:7px;border:1px solid var(--br);margin-bottom:14px}
+.nx-btn{width:100%;background:var(--gold);color:var(--bg);padding:13px;border-radius:7px;font-size:13px;font-weight:600;letter-spacing:1px;cursor:pointer;border:none;text-transform:uppercase;transition:all .3s;margin-top:6px}
+.nx-btn:hover{background:var(--gl)}
+/* Paystack button styling */
+.pstk-btn{width:100%;background:#0BA4DB;color:#fff;padding:13px;border-radius:7px;font-size:13px;font-weight:600;letter-spacing:1px;cursor:pointer;border:none;text-transform:uppercase;transition:all .3s;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:8px}
+.pstk-btn:hover{background:#0990c4}
+.pstk-btn:disabled{opacity:.5;cursor:not-allowed}
+.pay-note{background:var(--b3);border-radius:6px;padding:10px 14px;font-size:12px;color:var(--t3);margin-top:10px;line-height:1.6}
+.pay-note strong{color:var(--t2)}
+
+/* ── OWNER DASHBOARD ── */
+.ow-wrap{max-width:960px;margin:0 auto;padding:28px 16px 80px}
+.d-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:14px;margin-bottom:26px}
+.d-card{background:var(--b2);border:1px solid var(--br);border-radius:11px;padding:18px}
+.d-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:7px}
+.d-val{font-family:'Cormorant Garamond',serif;font-size:28px;font-weight:400;color:var(--gold)}
+.d-sub{font-size:11px;color:var(--ok);margin-top:3px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{text-align:left;font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.5px;padding:9px 11px;border-bottom:1px solid var(--br)}
+.tbl td{padding:10px 11px;border-bottom:1px solid var(--br);font-size:12px;color:var(--t2)}
+.tbl tr:last-child td{border-bottom:none}
+.sp{padding:3px 9px;border-radius:14px;font-size:10px;font-weight:500}
+.sp-p{background:rgba(239,165,48,.12);color:#EFA530}
+.sp-d{background:rgba(76,175,115,.12);color:var(--ok)}
+.sp-s{background:rgba(56,139,253,.12);color:var(--info)}
+.sp-c{background:rgba(224,82,82,.12);color:var(--er)}
+.promo-tag{background:var(--b3);border:1px solid var(--br2);border-radius:5px;padding:5px 12px;font-size:12px;color:var(--gold);display:inline-flex;align-items:center;gap:8px;margin:3px}
+.del-p{background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--b3);border:1px solid var(--gold);border-radius:7px;padding:11px 22px;font-size:13px;color:var(--t1);z-index:600;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(-8px)}
+
+/* ── SUCCESS ── */
+.suc{text-align:center;padding:50px 20px;max-width:460px;margin:0 auto}
+.suc-icon{font-size:54px;margin-bottom:14px}
+.suc-t{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:300;margin-bottom:10px}
+.suc-s{font-size:13px;color:var(--t3);line-height:1.7;margin-bottom:26px}
+.suc-id{font-size:12px;color:var(--gold);background:rgba(201,169,110,.1);border:1px solid var(--br2);border-radius:7px;padding:9px 18px;display:inline-block;margin-bottom:18px;letter-spacing:1px}
+.cont-btn{background:transparent;border:1px solid var(--br2);color:var(--gold);padding:11px 28px;border-radius:7px;font-size:13px;cursor:pointer;transition:all .2s}
+.cont-btn:hover{background:var(--gold);color:var(--bg)}
+
+/* ── LOADING SPINNER ── */
+.spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+@media(max-width:560px){
+  .nav-tabs .nt{padding:5px 7px;font-size:10px}
+  .pgrid{grid-template-columns:1fr 1fr}
+  .rw-grid{grid-template-columns:1fr}
+  .f-row{grid-template-columns:1fr}
+  .d-grid{grid-template-columns:1fr 1fr}
+  .quiz-opts{grid-template-columns:1fr}
+  .pay-methods{grid-template-columns:1fr}
+  .h-stats{gap:20px}
+}
+</style>
+</head>
+<body>
+<div class="toast" id="toast"></div>
+
+<!-- ══════════════════════════════════════════════
+     NAV
+════════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-top">
+    <div class="brand" id="brandLogo" onclick="brandClick()">Josephine's</div>
+    <div class="nav-r">
+      <div class="pts-chip" id="ptsChip" onclick="go('loyalty')">⭐ <span id="navPts">0</span></div>
+      <button class="icon-btn" id="userBtn" onclick="handleUserBtn()">👤 <span id="userBtnTxt">Sign In</span></button>
+      <button class="icon-btn" id="cartIconBtn" onclick="toggleCart()">🛍️ <span id="cCnt">0</span><span class="cbadge" id="cBadge">0</span></button>
+      <button class="own-btn" id="ownBtn" onclick="toggleOwner()" style="display:none">Owner</button>
+    </div>
+  </div>
+  <div class="nav-tabs" id="navTabs">
+    <button class="nt on" id="ntHome" onclick="go('home')">Home</button>
+    <button class="nt" id="ntShop" onclick="go('shop')">Shop</button>
+    <button class="nt" id="ntWish" onclick="go('wishlist')">Wishlist<span id="wlBadge" style="color:var(--gold)"></span></button>
+    <button class="nt" id="ntLoy" onclick="go('loyalty')">Loyalty</button>
+    <button class="nt" id="ntGames" onclick="go('games')">Play</button>
+    <button class="nt" id="ownerTab" style="display:none" onclick="go('owner')">📊 Dashboard</button>
+  </div>
+</nav>
+
+<!-- CART OVERLAY -->
+<div class="c-ov" id="cOv" onclick="toggleCart()"></div>
+<div class="c-panel" id="cPanel">
+  <div class="c-hdr"><h3>Your Cart</h3><button class="xbtn" onclick="toggleCart()">✕</button></div>
+  <div class="c-items" id="cItems"></div>
+  <div class="c-foot" id="cFoot"></div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="m-ov" id="mOv" onclick="if(event.target===this)closeMod()">
+  <div class="modal"><div class="m-hdr"><button class="xbtn" onclick="closeMod()">✕</button></div><div class="m-body" id="mBody"></div></div>
+</div>
+
+<!-- OWNER PIN MODAL -->
+<div class="auth-ov" id="ownerOv">
+  <div class="auth-box">
+    <div class="auth-logo">🔐 Owner Access</div>
+    <p class="auth-sub">Enter your owner password to access the dashboard</p>
+    <div class="auth-err" id="ownerErr"></div>
+    <div id="ownerPinForm">
+      <div class="f-grp"><label class="f-lbl">Owner Password</label><input class="f-inp" id="ownerPinInp" type="password" placeholder="Enter owner password" onkeydown="if(event.key==='Enter')verifyOwnerPin()"/></div>
+      <button class="auth-btn" onclick="verifyOwnerPin()">Access Dashboard</button>
+      <div style="margin-top:12px;padding:10px 14px;background:var(--b3);border-radius:7px;font-size:12px;color:var(--t3);line-height:1.6">
+        <strong style="color:var(--t2)">Change password?</strong><br>
+        <input class="f-inp" id="newOwnerPin1" type="password" placeholder="New password" style="margin-top:7px;padding:8px 11px;font-size:12px"/>
+        <input class="f-inp" id="newOwnerPin2" type="password" placeholder="Confirm new password" style="margin-top:6px;padding:8px 11px;font-size:12px"/>
+        <button onclick="changeOwnerPin()" style="margin-top:7px;width:100%;background:transparent;border:1px solid var(--br2);color:var(--gold);border-radius:5px;padding:7px;font-size:12px;cursor:pointer">Update Password</button>
+      </div>
+    </div>
+    <p class="guest-link" onclick="closeOwnerOv()">Cancel</p>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div class="auth-ov" id="authOv" onclick="if(event.target===this)closeAuth()">
+  <div class="auth-box">
+    <div class="auth-logo">Josephine's Scents</div>
+    <p class="auth-sub">Sign in to track orders & earn loyalty points</p>
+    <div class="auth-err" id="authErr"></div>
+    <div class="auth-tabs">
+      <button class="auth-tab on" id="loginTab" onclick="switchAuth('login')">Sign In</button>
+      <button class="auth-tab" id="signupTab" onclick="switchAuth('signup')">Create Account</button>
+    </div>
+    <div id="authForm"></div>
+    <p class="guest-link" onclick="closeAuth()">Continue as <span>Guest</span></p>
+  </div>
+</div>
+
+<!-- ══ HOME ══ -->
+<div class="pg on" id="pg-home">
+  <div class="hero">
+    <div class="hero-in">
+      <p class="eyebrow">Eau de Parfum · Lagos · Est. 2021</p>
+      <h1 class="h-title">Where Scent<br>Becomes <em>Memory</em></h1>
+      <p class="h-sub">Handcrafted fragrances that tell your story. Each bottle a journey, each note a feeling never forgotten.</p>
+      <button class="h-cta" onclick="go('shop')">Explore Collection</button>
+      <div class="h-stats">
+        <div><div class="h-sn">48+</div><div class="h-sl">Fragrances</div></div>
+        <div><div class="h-sn">2.4k</div><div class="h-sl">Clients</div></div>
+        <div><div class="h-sn">100%</div><div class="h-sl">Authentic</div></div>
+        <div><div class="h-sn">5★</div><div class="h-sl">Rated</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ SHOP ══ -->
+<div class="pg" id="pg-shop">
+  <div class="search-wrap">
+    <div class="search-box">
+      <span style="font-size:16px;color:var(--t3)">🔍</span>
+      <input id="searchInp" placeholder="Search by name, note, or category…" oninput="renderShop()"/>
+      <span id="searchX" style="cursor:pointer;color:var(--t3);display:none;font-size:13px" onclick="clearSearch()">✕</span>
+    </div>
+  </div>
+  <div class="shop-wrap">
+    <div class="sec-hdr">
+      <h2 class="sec-title">Collection</h2>
+      <select class="sort-sel" id="sortSel" onchange="renderShop()">
+        <option value="default">Default order</option>
+        <option value="price-asc">Price: Low → High</option>
+        <option value="price-desc">Price: High → Low</option>
+        <option value="name">Name A–Z</option>
+        <option value="rating">Top Rated</option>
+      </select>
+    </div>
+    <div class="filter-row" id="fRow"></div>
+    <div class="pgrid" id="pGrid"></div>
+  </div>
+</div>
+
+<!-- ══ WISHLIST ══ -->
+<div class="pg" id="pg-wishlist">
+  <div class="wish-wrap">
+    <h2 class="serif" style="font-size:30px;font-weight:300;margin-bottom:20px">My Wishlist</h2>
+    <div class="pgrid" id="wishGrid"></div>
+    <div id="wishEmpty" style="display:none;text-align:center;padding:60px 20px;color:var(--t3)">
+      <div style="font-size:48px;margin-bottom:14px">🤍</div>
+      <p class="serif" style="font-size:20px">Your wishlist is empty</p>
+      <p style="font-size:13px;margin-top:6px">Tap the heart on any product to save it</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══ LOYALTY ══ -->
+<div class="pg" id="pg-loyalty">
+  <div class="loy-wrap">
+    <div style="text-align:center;padding:30px 0 22px;border-bottom:1px solid var(--br);margin-bottom:26px">
+      <div class="pts-circle"><div class="pts-n" id="loyPts">0</div><div class="pts-l">Points</div></div>
+      <div class="tier-b t-bronze" id="tierBadge">Bronze Member</div>
+      <p style="font-size:13px;color:var(--t3);margin:10px 0 6px" id="tierProg"></p>
+      <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+    </div>
+    <div class="ref-box" style="margin-bottom:26px">
+      <h3 class="serif" style="font-size:20px;font-weight:400;margin-bottom:5px">Refer a Friend</h3>
+      <p style="font-size:13px;color:var(--t3);margin-bottom:4px">Share your code. You both earn <strong style="color:var(--gold)">50 pts</strong> when they place their first order.</p>
+      <div class="ref-code" id="refCode">JOSE–0000</div>
+      <button class="copy-btn" onclick="copyRef()">📋 Copy Referral Code</button>
+    </div>
+    <h3 class="serif" style="font-size:22px;font-weight:400;margin-bottom:14px">Redeem Rewards</h3>
+    <div class="rw-grid" id="rwGrid"></div>
+    <h3 class="serif" style="font-size:22px;font-weight:400;margin-bottom:12px">Points History</h3>
+    <div class="h-list" id="hList"></div>
+  </div>
+</div>
+
+<!-- ══ GAMES ══ -->
+<div class="pg" id="pg-games">
+  <div class="games-wrap">
+    <div style="text-align:center;margin-bottom:26px">
+      <h2 class="serif" style="font-size:34px;font-weight:300;margin-bottom:6px">Play & Earn</h2>
+      <p style="font-size:13px;color:var(--t3)">Win loyalty points every time you play</p>
+    </div>
+    <div class="g-grid">
+      <div class="g-card" onclick="launchGame('scratch')"><div class="g-icon">🎫</div><div class="g-name">Scent Scratch</div><div class="g-desc">Reveal tiles and match 3 symbols.</div><div class="g-rwd">Up to 100 pts</div></div>
+      <div class="g-card" onclick="launchGame('memory')"><div class="g-icon">🌸</div><div class="g-name">Fragrance Memory</div><div class="g-desc">Flip cards and match all scent pairs.</div><div class="g-rwd">Up to 50 pts</div></div>
+      <div class="g-card" onclick="launchGame('quiz')"><div class="g-icon">🎓</div><div class="g-name">Scent Quiz</div><div class="g-desc">Answer perfumery trivia. 10 pts each!</div><div class="g-rwd">10 pts per answer</div></div>
+      <div class="g-card" onclick="launchGame('spin')"><div class="g-icon">🎡</div><div class="g-name">Fortune Wheel</div><div class="g-desc">Spin once a day for surprise rewards.</div><div class="g-rwd">10–200 pts</div></div>
+    </div>
+    <div class="g-area" id="gArea" style="display:none"><div id="gContent"></div></div>
+  </div>
+</div>
+
+<!-- ══ CHECKOUT ══ -->
+<div class="pg" id="pg-checkout"><div class="ck-wrap" id="ckInner"></div></div>
+
+<!-- ══ OWNER DASHBOARD ══ -->
+<div class="pg" id="pg-owner">
+  <div class="ow-wrap">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px">
+      <h2 class="serif" style="font-size:28px;font-weight:300">Welcome, Josephine &#128081;</h2>
+      <button onclick="exitOwner()" style="background:transparent;border:1px solid var(--br2);color:var(--t3);border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer">Exit Dashboard</button>
+    </div>
+    <div class="d-grid" style="margin-bottom:20px">
+      <div class="d-card"><div class="d-lbl">Revenue</div><div class="d-val" id="dRev">&#8358;0</div><div class="d-sub" id="dRevSub">All time</div></div>
+      <div class="d-card"><div class="d-lbl">Orders</div><div class="d-val" id="dOrd">0</div><div class="d-sub" id="dOrdSub">0 pending</div></div>
+      <div class="d-card"><div class="d-lbl">Products</div><div class="d-val" id="dProds">0</div><div class="d-sub" id="dProdSub">0 out of stock</div></div>
+      <div class="d-card"><div class="d-lbl">Points Issued</div><div class="d-val" id="dPts">0</div><div class="d-sub">Across customers</div></div>
+    </div>
+    <div class="ow-tabs">
+      <button class="ow-tab on" onclick="owTab('products',event)">Products</button>
+      <button class="ow-tab" onclick="owTab('orders',event)">Orders</button>
+      <button class="ow-tab" onclick="owTab('promos',event)">Promo Codes</button>
+      <button class="ow-tab" onclick="owTab('notifications',event)">Notifications</button>
+    </div>
+
+    <!-- PRODUCTS SECTION -->
+    <div class="ow-section on" id="owSec-products">
+      <div class="prod-form" id="prodForm">
+        <h4 id="prodFormTitle">+ Add New Product</h4>
+        <div class="f2-row">
+          <div class="f-grp"><label class="f-lbl">Product Name *</label><input class="f-inp" id="pName" placeholder="e.g. Oud Royale"/></div>
+          <div class="f-grp"><label class="f-lbl">Brand / Collection</label><input class="f-inp" id="pBrand" placeholder="e.g. Josephine Premium"/></div>
+        </div>
+        <div class="f3-row" style="margin-top:10px">
+          <div class="f-grp"><label class="f-lbl">Price (NGN) *</label><input class="f-inp" id="pPrice" type="number" placeholder="12500"/></div>
+          <div class="f-grp"><label class="f-lbl">Size</label><input class="f-inp" id="pSize" placeholder="50ml"/></div>
+          <div class="f-grp"><label class="f-lbl">Category *</label>
+            <select class="f-inp" id="pCat" style="cursor:pointer">
+              <option>Floral</option><option>Oud</option><option>Fresh</option>
+              <option>Woody</option><option>Oriental</option><option>Citrus</option>
+              <option>Musk</option><option>Gourmand</option>
+            </select>
+          </div>
+        </div>
+        <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Scent Notes</label><input class="f-inp" id="pNotes" placeholder="e.g. Rose, Oud, Musk"/></div>
+        <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Description *</label>
+          <textarea class="f-inp" id="pDesc" rows="3" placeholder="Describe the fragrance story, feel, and who it is for..." style="resize:vertical;min-height:80px"></textarea>
+        </div>
+        <div class="f-grp" style="margin-top:12px">
+          <label class="f-lbl">Choose Fragrance Logo *</label>
+          <div style="display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin-top:8px">
+            <div class="ep-preview" id="epPreview">&#127801;</div>
+            <div class="emoji-picker" id="emojiPicker"></div>
+          </div>
+        </div>
+        <div style="display:flex;gap:18px;align-items:center;margin-top:14px;flex-wrap:wrap">
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);cursor:pointer">
+            <div class="sw on" id="pStockSw" onclick="toggleFormStock()"><div class="sk"></div></div>
+            <span id="pStockLbl">In Stock</span>
+          </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);cursor:pointer">
+            <input type="checkbox" id="pIsNew" style="accent-color:var(--gold)"/> Mark as New Arrival
+          </label>
+        </div>
+        <div style="margin-top:14px">
+          <button class="spb" onclick="saveProduct()">Save Product</button>
+          <button class="ceb" id="cancelEditBtn" style="display:none" onclick="cancelEdit()">Cancel</button>
+        </div>
+      </div>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;margin-bottom:12px">
+        All Products (<span id="prodCount">0</span>)
+      </h4>
+      <div class="ow-pg" id="owProdGrid"></div>
+    </div>
+
+    <!-- ORDERS SECTION -->
+    <div class="ow-section" id="owSec-orders">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+        <h4 style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400">All Orders</h4>
+        <input class="f-inp" id="orderSearch" placeholder="Search by name or order ID..." style="width:200px;padding:7px 11px;font-size:12px" oninput="filterOrders()"/>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="tbl">
+          <thead><tr><th>Order ID</th><th>Customer</th><th>Phone</th><th>Items</th><th>Total</th><th>Payment</th><th>Date</th><th>Status</th><th>Update</th></tr></thead>
+          <tbody id="ordTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PROMOS SECTION -->
+    <div class="ow-section" id="owSec-promos">
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;margin-bottom:12px">Promo Codes</h4>
+      <div id="promoMgr" style="margin-bottom:14px;display:flex;flex-wrap:wrap;gap:6px"></div>
+      <div class="prod-form" style="padding:16px">
+        <h4 style="font-size:15px;margin-bottom:12px">Create New Code</h4>
+        <div class="f2-row">
+          <div class="f-grp"><label class="f-lbl">Code</label><input class="f-inp" id="newPCode" placeholder="e.g. SUMMER20"/></div>
+          <div class="f-grp"><label class="f-lbl">Discount %</label><input class="f-inp" id="newPVal" type="number" placeholder="20"/></div>
+        </div>
+        <button class="spb" style="margin-top:10px" onclick="addPromo()">Add Code</button>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS SECTION -->
+    <div class="ow-section" id="owSec-notifications">
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;margin-bottom:12px">Notification Settings</h4>
+      <div class="prod-form" style="padding:16px;margin-bottom:14px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--t2)">Email Notifications (Web3Forms)</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:2px">Order details sent to your registered email</div>
+          </div>
+          <div class="sw on" id="emailNotifSw" onclick="toggleNotifSetting('email')"><div class="sk"></div></div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
+          <div>
+            <div style="font-size:13px;font-weight:500;color:var(--t2)">WhatsApp Notifications (+2347033273249)</div>
+            <div style="font-size:11px;color:var(--t3);margin-top:2px">Opens WhatsApp with full order details on each order</div>
+          </div>
+          <div class="sw on" id="waNotifSw" onclick="toggleNotifSetting('wa')"><div class="sk"></div></div>
+        </div>
+      </div>
+      <h4 style="font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;margin-bottom:10px">Notification Log</h4>
+      <div class="nlog" id="notifLog">
+        <p style="font-size:13px;color:var(--t3);padding:12px">No notifications yet. They appear here after orders are placed.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ══════════════════════════════════════════════
+     JAVASCRIPT
+════════════════════════════════════════════════ -->
+<script>
+// ─── CONFIG ──────────────────────────────────
+const WEB3FORMS_KEY = '8c88b220-3604-493e-8239-e80479edec36';
+const OWNER_WHATSAPP = '2347033273249';
+const PAYSTACK_PK = 'pk_test_a5e02752656ad57301fdd73a94671d1cd6c70e84';
+
+// ─── STATE ───────────────────────────────────
+const S = {
+  user: null,        // {name, email, phone, referralCode, isGuest}
+  cart: [],
+  wishlist: [],
+  points: 0,
+  isOwner: false,
+  filter: 'all',
+  sortBy: 'default',
+  orders: [],
+  pHistory: [],
+  promos: [
+    {code:'JOSEPHINE10', pct:10},
+    {code:'NEWCLIENT', pct:15},
+    {code:'WELCOME', pct:5},
+  ],
+  reviewMap: {},
+  spinUsed: false,
+  ckStep: 1,
+  ckData: {name:'',phone:'',email:'',addr:'',payment:'paystack',usePoints:false,promoCode:'',promoDiscount:0,paystackRef:''},
+  notifSent: false,
+};
+
+// Seed some sample orders for demo
+S.orders = [
+  {id:'JS-001',customer:'Adaeze O.',phone:'08012345678',items:2,total:22300,payment:'paystack',status:'done',date:'May 20'},
+  {id:'JS-002',customer:'Chidi K.',phone:'08098765432',items:1,total:9800,payment:'transfer',status:'ship',date:'May 25'},
+  {id:'JS-003',customer:'Ngozi M.',phone:'07011223344',items:3,total:34100,payment:'paystack',status:'pending',date:'May 28'},
+];
+
+// ─── PRODUCTS ────────────────────────────────
+const products = [
+  {id:1,name:'Oud Royale',em:'🪵',cat:'Oud',price:12500,size:'50ml',notes:'Deep oud · Amber · Sandalwood',desc:'A majestic oud blend inspired by the royal courts of the East. Rich, smoky, and enduring on the skin.',inStock:true,isNew:false,rating:4.8,ratingCount:24},
+  {id:2,name:'Rose Céleste',em:'🌹',cat:'Floral',price:9800,size:'50ml',notes:'Damask rose · Musk · Bergamot',desc:'Velvety rose petals kissed by morning dew. A timeless floral with a thoroughly modern soul.',inStock:true,isNew:true,rating:4.9,ratingCount:38},
+  {id:3,name:'Citrus Soleil',em:'🍊',cat:'Fresh',price:7500,size:'30ml',notes:'Blood orange · Grapefruit · Vetiver',desc:'A burst of Mediterranean sunshine. Light, vibrant, and perfect for every occasion.',inStock:true,isNew:false,rating:4.6,ratingCount:17},
+  {id:4,name:'Black Velvet',em:'🖤',cat:'Oriental',price:15000,size:'100ml',notes:'Black pepper · Iris · Tonka bean',desc:'Mysterious and captivating. This bold oriental commands every room it enters with quiet authority.',inStock:false,isNew:false,rating:4.7,ratingCount:12},
+  {id:5,name:'Jasmine Dreams',em:'🌸',cat:'Floral',price:8900,size:'50ml',notes:'Jasmine · Ylang-ylang · Vanilla',desc:'Dreamy and intoxicating — the scent of warm summer nights beneath a canopy of stars.',inStock:true,isNew:true,rating:4.8,ratingCount:29},
+  {id:6,name:'Cedar & Smoke',em:'🌲',cat:'Woody',price:11200,size:'50ml',notes:'Cedarwood · Smoked oak · Leather',desc:'Raw, earthy power. A fragrance designed for those who walk their own path without apology.',inStock:true,isNew:false,rating:4.5,ratingCount:10},
+  {id:7,name:'La Mer Blanche',em:'🌊',cat:'Fresh',price:8200,size:'30ml',notes:'Sea salt · White tea · Driftwood',desc:'The crisp, clean breath of the open ocean. Pure, free, and completely calming.',inStock:true,isNew:false,rating:4.6,ratingCount:15},
+  {id:8,name:'Saffron Elixir',em:'✨',cat:'Oriental',price:13800,size:'50ml',notes:'Saffron · Rose · Patchouli',desc:'A luxurious saffron heart enveloped in rose and patchouli. Opulent, exotic, unforgettable.',inStock:false,isNew:false,rating:4.9,ratingCount:8},
+  {id:9,name:'Neroli Garden',em:'🌼',cat:'Floral',price:8600,size:'30ml',notes:'Neroli · White peach · Musk',desc:'Delicate neroli blossoms rising above a peachy, musky base. The essence of pure elegance.',inStock:true,isNew:false,rating:4.7,ratingCount:21},
+  {id:10,name:'Oud Noir',em:'🌑',cat:'Oud',price:18000,size:'100ml',notes:'Black oud · Frankincense · Myrrh',desc:'The darkest chapter of oud perfumery. Dense, sacred, and profoundly unforgettable.',inStock:true,isNew:true,rating:4.9,ratingCount:33},
+  {id:11,name:'Ambre Doux',em:'🍯',cat:'Oriental',price:10500,size:'50ml',notes:'Warm amber · Honey · Vanilla',desc:'Amber kissed with honey and warm vanilla — cocooning, sweet, and deeply irresistible.',inStock:true,isNew:false,rating:4.6,ratingCount:19},
+  {id:12,name:'Iris Blanc',em:'🤍',cat:'Floral',price:9200,size:'50ml',notes:'White iris · Powder · Cedarwood',desc:'Powdery iris with a clean wooden base. Understated luxury at its finest.',inStock:true,isNew:true,rating:4.8,ratingCount:14},
+];
+
+// Seed default reviews
+S.reviewMap = {};
+products.forEach(p => {
+  S.reviewMap[p.id] = [
+    {name:'Amaka C.',stars:5,text:'Absolutely divine! The scent lasts all day long.',date:'May 15'},
+    {name:'Tunde A.',stars:4,text:'Great quality, very elegant. Will order again.',date:'Apr 28'},
+  ];
+});
+
+const cats = ['all','Floral','Oud','Fresh','Woody','Oriental'];
+const rewards = [
+  {id:'r1',icon:'💝',name:'10% Off Next Order',cost:100},
+  {id:'r2',icon:'🎁',name:'Free 5ml Sample',cost:150},
+  {id:'r3',icon:'🚚',name:'Free Delivery',cost:80},
+  {id:'r4',icon:'✨',name:'VIP Scent Access',cost:300},
+];
+
+// ─── UTILS ───────────────────────────────────
+function stars(r){return'★'.repeat(Math.round(r))+'☆'.repeat(5-Math.round(r));}
+function uid(){return'JS-'+Date.now().toString().slice(-6);}
+function showToast(msg, dur=2600){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('on'),dur);
+}
+function updatePtsUI(){
+  document.getElementById('navPts').textContent=S.points;
+  const el=document.getElementById('loyPts');if(el)el.textContent=S.points;
+}
+function makeRef(name){
+  const base=(name||'JOSE').toUpperCase().slice(0,4);
+  return base+'–'+Math.floor(1000+Math.random()*9000);
+}
+
+// ─── AUTH ─────────────────────────────────────
+let authMode = 'login';
+function openAuth(){
+  switchAuth('login');
+  document.getElementById('authOv').classList.add('on');
+}
+function closeAuth(){document.getElementById('authOv').classList.remove('on');}
+function switchAuth(mode){
+  authMode=mode;
+  document.getElementById('loginTab').classList.toggle('on',mode==='login');
+  document.getElementById('signupTab').classList.toggle('on',mode==='signup');
+  document.getElementById('authErr').style.display='none';
+  renderAuthForm();
+}
+function renderAuthForm(){
+  const f=document.getElementById('authForm');
+  if(authMode==='login'){
+    f.innerHTML=`
+      <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="aEmail" type="email" placeholder="you@example.com"/></div>
+      <div class="f-grp"><label class="f-lbl">Password</label><input class="f-inp" id="aPwd" type="password" placeholder="Your password"/></div>
+      <button class="auth-btn" onclick="doLogin()">Sign In</button>`;
+  } else {
+    f.innerHTML=`
+      <div class="f-grp"><label class="f-lbl">Full Name</label><input class="f-inp" id="aName" placeholder="Your full name"/></div>
+      <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="aEmail" type="email" placeholder="you@example.com"/></div>
+      <div class="f-grp"><label class="f-lbl">Phone</label><input class="f-inp" id="aPhone" placeholder="+234 000 000 0000"/></div>
+      <div class="f-grp"><label class="f-lbl">Password</label><input class="f-inp" id="aPwd" type="password" placeholder="Create a password"/></div>
+      <div class="f-grp"><label class="f-lbl">Referral Code (optional)</label><input class="f-inp" id="aRef" placeholder="Friend's referral code"/></div>
+      <button class="auth-btn" onclick="doSignup()">Create Account</button>`;
+  }
+}
+function showAuthErr(msg){
+  const e=document.getElementById('authErr');e.textContent=msg;e.style.display='block';
+}
+function doLogin(){
+  const email=document.getElementById('aEmail').value.trim();
+  const pwd=document.getElementById('aPwd').value;
+  if(!email||!pwd){showAuthErr('Please fill in all fields.');return;}
+  // Simulate auth — in production connect to a real backend
+  const saved=localStorage.getItem('js_user_'+email);
+  if(!saved){showAuthErr('No account found. Please sign up.');return;}
+  const userData=JSON.parse(saved);
+  if(userData.pwd!==btoa(pwd)){showAuthErr('Incorrect password.');return;}
+  loginUser(userData);
+}
+function doSignup(){
+  const name=document.getElementById('aName').value.trim();
+  const email=document.getElementById('aEmail').value.trim();
+  const phone=document.getElementById('aPhone').value.trim();
+  const pwd=document.getElementById('aPwd').value;
+  const ref=document.getElementById('aRef').value.trim().toUpperCase();
+  if(!name||!email||!pwd){showAuthErr('Name, email, and password are required.');return;}
+  if(localStorage.getItem('js_user_'+email)){showAuthErr('An account with this email already exists.');return;}
+  const refCode=makeRef(name);
+  const userData={name,email,phone,pwd:btoa(pwd),refCode,points:50,pHistory:[{lbl:'Welcome bonus',date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}),pts:50,t:'earn'}],orders:[],wishlist:[]};
+  // Handle referral
+  if(ref){
+    // Award referrer (scan all users — in production this is backend logic)
+    for(let k in localStorage){
+      if(k.startsWith('js_user_')){
+        const u=JSON.parse(localStorage[k]);
+        if(u.refCode===ref){u.points=(u.points||0)+50;u.pHistory=u.pHistory||[];u.pHistory.unshift({lbl:'Referral bonus: '+name+' joined',date:'Today',pts:50,t:'earn'});localStorage.setItem(k,JSON.stringify(u));break;}
+      }
+    }
+    userData.points+=50;
+    userData.pHistory.unshift({lbl:'Referral signup bonus',date:'Today',pts:50,t:'earn'});
+  }
+  localStorage.setItem('js_user_'+email,JSON.stringify(userData));
+  loginUser(userData);
+}
+function loginUser(userData){
+  S.user={name:userData.name,email:userData.email,phone:userData.phone||'',refCode:userData.refCode};
+  S.points=userData.points||0;
+  S.pHistory=userData.pHistory||[];
+  S.orders=userData.orders||[];
+  S.wishlist=userData.wishlist||[];
+  document.getElementById('refCode').textContent=S.user.refCode;
+  updatePtsUI();updateCartUI();
+  closeAuth();showToast('Welcome back, '+S.user.name+'!');
+  updateWishlistBadge();updateUserNav();
+}
+function saveUserData(){
+  if(!S.user||S.user.isGuest)return;
+  const saved=localStorage.getItem('js_user_'+S.user.email);
+  if(!saved)return;
+  const userData=JSON.parse(saved);
+  userData.points=S.points;userData.pHistory=S.pHistory;userData.orders=S.orders;userData.wishlist=S.wishlist;
+  localStorage.setItem('js_user_'+S.user.email,JSON.stringify(userData));
+}
+function logout(){
+  saveUserData();S.user=null;S.points=0;S.pHistory=[];S.wishlist=[];
+  S.isOwner=false;
+  const tab=document.getElementById('ownerTab'); if(tab) tab.style.display='none';
+  const ob=document.getElementById('ownBtn'); if(ob){ob.classList.remove('on');ob.textContent='Owner';}
+  updatePtsUI();updateCartUI();updateWishlistBadge();updateUserNav();showToast('Signed out.');go('home');
+}
+
+// ─── NAVIGATION ──────────────────────────────
+function go(p){
+  document.querySelectorAll('.pg').forEach(x=>x.classList.remove('on'));
+  document.querySelectorAll('.nt').forEach(x=>x.classList.remove('on'));
+  document.getElementById('pg-'+p).classList.add('on');
+  const tabMap={home:'ntHome',shop:'ntShop',wishlist:'ntWish',loyalty:'ntLoy',games:'ntGames'};
+  if(tabMap[p]){const t=document.getElementById(tabMap[p]);if(t)t.classList.add('on');}
+  if(p==='shop') renderShop();
+  if(p==='wishlist') renderWishlist();
+  if(p==='loyalty'){if(!S.user){openAuth();return;}renderLoyalty();}
+  if(p==='games') document.getElementById('gArea').style.display='none';
+  if(p==='owner'){renderOwner();setTimeout(renderEmojiPicker,80);}
+  window.scrollTo(0,0);
+}
+
+// ─── SHOP ────────────────────────────────────
+function renderFilters(){
+  document.getElementById('fRow').innerHTML=cats.map(c=>`<button class="fb${c===S.filter?' on':''}" onclick="applyFilter('${c}')">${c==='all'?'All':c}</button>`).join('');
+}
+function applyFilter(f){S.filter=f;renderShop();}
+function clearSearch(){document.getElementById('searchInp').value='';renderShop();}
+function renderShop(){
+  renderFilters();
+  const q=(document.getElementById('searchInp').value||'').toLowerCase();
+  document.getElementById('searchX').style.display=q?'block':'none';
+  let list=q ? products.filter(p=>p.name.toLowerCase().includes(q)||p.notes.toLowerCase().includes(q)||p.cat.toLowerCase().includes(q))
+               : S.filter==='all'?[...products]:products.filter(p=>p.cat===S.filter);
+  const sort=document.getElementById('sortSel').value;
+  if(sort==='price-asc') list.sort((a,b)=>a.price-b.price);
+  else if(sort==='price-desc') list.sort((a,b)=>b.price-a.price);
+  else if(sort==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
+  else if(sort==='rating') list.sort((a,b)=>b.rating-a.rating);
+  const w=new Set(S.wishlist);
+  document.getElementById('pGrid').innerHTML=list.length ? list.map(p=>`
+    <div class="pc${p.inStock?'':' oos'}" onclick="openMod(${p.id})">
+      <div class="p-img">${p.em}
+        ${!p.inStock?'<div class="ob">Out of Stock</div>':''}
+        ${p.isNew?'<div class="nb">New</div>':''}
+        <div class="wb${w.has(p.id)?' on':''}" onclick="event.stopPropagation();toggleWish(${p.id})">${w.has(p.id)?'❤️':'🤍'}</div>
+      </div>
+      <div class="p-body">
+        <div class="p-stars">${stars(p.rating)} <span style="color:var(--t3);font-size:10px">(${p.ratingCount})</span></div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-notes">${p.notes}</div>
+        <div class="p-footer">
+          <div><div class="p-price">₦${p.price.toLocaleString()}</div><div class="p-size">${p.size}</div></div>
+          <button class="atc" ${!p.inStock?'disabled':''} onclick="event.stopPropagation();addCart(${p.id})">${p.inStock?'Add':'Sold Out'}</button>
+        </div>
+        ${S.isOwner?`<div class="stk-row" onclick="event.stopPropagation()">
+          <div class="sw${p.inStock?' on':''}" onclick="toggleStock(${p.id})"><div class="sk"></div></div>
+          <span style="font-size:10px;color:var(--t3)">${p.inStock?'In Stock':'Out of Stock'}</span>
+        </div>`:''}
+      </div>
+    </div>`).join('')
+    :`<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--t3)">No products found matching "<em style="color:var(--t2)">${q}</em>"</div>`;
+}
+function toggleStock(id){
+  const p=products.find(x=>x.id===id);p.inStock=!p.inStock;
+  renderShop();showToast(`${p.name} → ${p.inStock?'In Stock':'Out of Stock'}`);
+}
+
+// ─── WISHLIST ────────────────────────────────
+function toggleWish(id){
+  if(!S.user){openAuth();return;}
+  const idx=S.wishlist.indexOf(id);
+  if(idx>-1) S.wishlist.splice(idx,1); else S.wishlist.push(id);
+  updateWishlistBadge();
+  showToast(idx>-1?'Removed from wishlist':'Added to wishlist ❤️');
+  saveUserData();renderShop();
+}
+function updateWishlistBadge(){
+  document.getElementById('wlBadge').textContent=S.wishlist.length?` (${S.wishlist.length})`:'';
+}
+function renderWishlist(){
+  const empty=document.getElementById('wishEmpty');
+  document.getElementById('wishEmpty').style.display=S.wishlist.length?'none':'block';
+  document.getElementById('wishGrid').innerHTML=S.wishlist.map(id=>{
+    const p=products.find(x=>x.id===id);if(!p)return'';
+    return`<div class="pc${p.inStock?'':' oos'}" onclick="openMod(${p.id})">
+      <div class="p-img">${p.em}${!p.inStock?'<div class="ob">Out of Stock</div>':''}
+        <div class="wb on" onclick="event.stopPropagation();toggleWish(${p.id})">❤️</div>
+      </div>
+      <div class="p-body">
+        <div class="p-stars">${stars(p.rating)}</div>
+        <div class="p-name">${p.name}</div>
+        <div class="p-notes">${p.notes}</div>
+        <div class="p-footer">
+          <div><div class="p-price">₦${p.price.toLocaleString()}</div><div class="p-size">${p.size}</div></div>
+          <button class="atc" ${!p.inStock?'disabled':''} onclick="event.stopPropagation();addCart(${p.id})">${p.inStock?'Add':'Sold Out'}</button>
+        </div>
+      </div>
+    </div>`;}).join('');
+}
+
+// ─── PRODUCT MODAL ───────────────────────────
+let modalPid=null, draftStars=5;
+function openMod(id){
+  modalPid=id;draftStars=5;
+  const p=products.find(x=>x.id===id);
+  const revs=S.reviewMap[id]||[];
+  const avg=revs.length?revs.reduce((a,b)=>a+b.stars,0)/revs.length:p.rating;
+  document.getElementById('mBody').innerHTML=`
+    <span class="m-em">${p.em}</span>
+    <div class="m-name serif">${p.name}</div>
+    <div class="m-notes">${p.notes}</div>
+    <div style="font-size:13px;color:var(--gold);margin-bottom:10px">${stars(avg)} <span style="color:var(--t3);font-size:11px">${avg.toFixed(1)} · ${revs.length} reviews</span></div>
+    <div class="m-desc">${p.desc}</div>
+    <div class="m-meta">
+      <div class="mm"><div class="mm-l">Price</div><div class="mm-v">₦${p.price.toLocaleString()}</div></div>
+      <div class="mm"><div class="mm-l">Size</div><div class="mm-v">${p.size}</div></div>
+      <div class="mm"><div class="mm-l">Category</div><div class="mm-v">${p.cat}</div></div>
+      <div class="mm"><div class="mm-l">Earn Points</div><div class="mm-v">⭐ ${Math.floor(p.price/500)}</div></div>
+    </div>
+    <button class="m-add" ${!p.inStock?'disabled':''} onclick="addCart(${p.id});closeMod()">${p.inStock?'Add to Cart — ₦'+p.price.toLocaleString():'Currently Out of Stock'}</button>
+    <div class="rvs-sec">
+      <p style="font-size:13px;font-weight:500;margin-bottom:12px;color:var(--t2)">Customer Reviews</p>
+      ${revs.map(r=>`<div class="rv"><div class="rv-hdr"><span class="rv-name">${r.name}</span><span class="rv-stars">${stars(r.stars)}</span></div><div class="rv-text">${r.text}</div><div class="rv-date">${r.date}</div></div>`).join('')}
+      <div class="write-rv">
+        <h5>Write a Review</h5>
+        <div class="star-pick" id="starPick">${[1,2,3,4,5].map(n=>`<span onclick="setStars(${n})" style="cursor:pointer">${n<=draftStars?'★':'☆'}</span>`).join('')}</div>
+        <textarea class="rv-ta" id="rvText" placeholder="Share your thoughts about this fragrance…"></textarea>
+        <input class="f-inp" id="rvName" placeholder="${S.user?S.user.name:'Your name'}" style="margin-top:7px;padding:8px 11px;font-size:12px" value="${S.user?S.user.name:''}"/>
+        <button class="rv-sub" onclick="submitReview(${id})">Submit Review</button>
+      </div>
+    </div>`;
+  document.getElementById('mOv').classList.add('on');
+}
+function setStars(n){
+  draftStars=n;
+  document.getElementById('starPick').innerHTML=[1,2,3,4,5].map(i=>`<span onclick="setStars(${i})" style="cursor:pointer">${i<=n?'★':'☆'}</span>`).join('');
+}
+function submitReview(id){
+  const txt=document.getElementById('rvText').value.trim();
+  const nm=(document.getElementById('rvName').value.trim())||'Anonymous';
+  if(!txt){showToast('Please write something first!');return;}
+  if(!S.reviewMap[id]) S.reviewMap[id]=[];
+  const d=new Date();
+  S.reviewMap[id].unshift({name:nm,stars:draftStars,text:txt,date:d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})});
+  if(S.user){S.points+=5;S.pHistory.unshift({lbl:'Wrote a review — '+products.find(x=>x.id===id)?.name,date:'Today',pts:5,t:'earn'});updatePtsUI();saveUserData();}
+  showToast('Review submitted! '+( S.user?'+5 pts ⭐':''));
+  openMod(id);
+}
+function closeMod(){document.getElementById('mOv').classList.remove('on');}
+
+// ─── CART ─────────────────────────────────────
+function addCart(id){
+  if(S.isOwner){showToast('You are in Owner Mode. Please exit to shop as a customer.');return;}
+  const p=products.find(x=>x.id===id);if(!p.inStock)return;
+  const ex=S.cart.find(x=>x.id===id);
+  if(ex) ex.qty++; else S.cart.push({...p,qty:1});
+  updateCartUI();showToast(`${p.name} added to cart ✓`);
+}
+function updateCartUI(){
+  const n=S.cart.reduce((a,b)=>a+b.qty,0);
+  document.getElementById('cCnt').textContent=n;
+  const badge=document.getElementById('cBadge');
+  badge.style.display=n?'flex':'none';badge.textContent=n;
+  renderCart();
+}
+function toggleCart(){
+  if(S.isOwner){showToast('Exit Owner Mode to use the shopping cart.');return;}
+  document.getElementById('cPanel').classList.toggle('on');
+  document.getElementById('cOv').classList.toggle('on');
+}
+function applyPromo(code){
+  const p=S.promos.find(x=>x.code.toUpperCase()===code.toUpperCase());
+  if(p){S.ckData.promoCode=p.code;S.ckData.promoDiscount=p.pct;showToast(`✓ Promo "${p.code}" applied — ${p.pct}% off`);renderCart();}
+  else{showToast('Invalid promo code');S.ckData.promoCode='';S.ckData.promoDiscount=0;}
+}
+function renderCart(){
+  const items=document.getElementById('cItems'),foot=document.getElementById('cFoot');
+  if(!S.cart.length){items.innerHTML='<div class="empty-cart"><div style="font-size:44px">🛍️</div><p class="serif" style="font-size:18px;margin-top:12px">Cart is empty</p><p style="font-size:12px;margin-top:6px">Discover our fragrances</p></div>';foot.innerHTML='';return;}
+  items.innerHTML=S.cart.map(i=>`
+    <div class="ci">
+      <div class="ci-em">${i.em}</div>
+      <div class="ci-info"><div class="ci-name">${i.name}</div><div class="ci-price">₦${(i.price*i.qty).toLocaleString()}</div></div>
+      <div class="qw">
+        <button class="qb" onclick="chgQty(${i.id},-1)">−</button>
+        <span style="font-size:12px;min-width:14px;text-align:center">${i.qty}</span>
+        <button class="qb" onclick="chgQty(${i.id},1)">+</button>
+      </div>
+      <button class="rm" onclick="rmCart(${i.id})">✕</button>
+    </div>`).join('');
+  const sub=S.cart.reduce((a,b)=>a+b.price*b.qty,0);
+  const del=sub>=15000?0:1500;
+  const promoD=S.ckData.promoDiscount?Math.floor(sub*S.ckData.promoDiscount/100):0;
+  const total=sub+del-promoD;
+  const earn=Math.floor(sub/500);
+  foot.innerHTML=`
+    <div class="promo-row">
+      <input class="promo-in" id="promoInp" placeholder="Enter promo code" value="${S.ckData.promoCode}"/>
+      <button class="promo-apply" onclick="applyPromo(document.getElementById('promoInp').value)">Apply</button>
+    </div>
+    <div class="c-row"><span>Subtotal</span><span>₦${sub.toLocaleString()}</span></div>
+    <div class="c-row"><span>Delivery</span><span>${del===0?'<span style="color:var(--ok)">Free</span>':'₦'+del.toLocaleString()}</span></div>
+    ${promoD?`<div class="c-row"><span>Discount (${S.ckData.promoDiscount}%)</span><span style="color:var(--ok)">−₦${promoD.toLocaleString()}</span></div>`:''}
+    <div class="c-tot"><span>Total</span><span>₦${total.toLocaleString()}</span></div>
+    <button class="ck-btn" onclick="startCk()">Proceed to Checkout</button>
+    <div class="earn-note">You'll earn <strong>⭐ ${earn} points</strong> on this order${del>0?'<br><span style="font-size:10px;color:var(--gd)">Spend ₦15,000+ for free delivery</span>':''}</div>`;
+}
+function chgQty(id,d){const i=S.cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)S.cart=S.cart.filter(x=>x.id!==id);updateCartUI();}
+function rmCart(id){S.cart=S.cart.filter(x=>x.id!==id);updateCartUI();}
+
+// ─── CHECKOUT ─────────────────────────────────
+function startCk(){
+  if(!S.cart.length){showToast('Your cart is empty!');return;}
+  if(!S.user) openAuth();
+  else{toggleCart();S.ckStep=1;go('checkout');renderCk();}
+}
+function renderCk(){
+  const sub=S.cart.reduce((a,b)=>a+b.price*b.qty,0);
+  const del=sub>=15000?0:1500;
+  const promoD=S.ckData.promoDiscount?Math.floor(sub*S.ckData.promoDiscount/100):0;
+  const ptsDis=S.ckData.usePoints&&S.points>=100?Math.floor(sub*.1):0;
+  const total=sub+del-promoD-ptsDis;
+  const c=document.getElementById('ckInner');
+  if(S.ckStep===4){confirmOrder(c,sub,total);return;}
+  const sLabels=['Details','Payment','Review'];
+  const stHtml=sLabels.map((s,i)=>`
+    <div class="step">
+      <div style="display:flex;flex-direction:column;align-items:center">
+        <div class="s-dot ${i+1<S.ckStep?'dn':i+1===S.ckStep?'ac':''}">${i+1<S.ckStep?'✓':i+1}</div>
+        <div class="s-lbl">${s}</div>
+      </div>
+      ${i<2?`<div class="s-line ${i+1<S.ckStep?'dn':''}"></div>`:''}
+    </div>`).join('');
+  let body='';
+  if(S.ckStep===1){
+    // Pre-fill from user account
+    if(S.user&&!S.ckData.name){S.ckData.name=S.user.name||'';S.ckData.email=S.user.email||'';S.ckData.phone=S.user.phone||'';}
+    body=`<div class="s-card"><h4>Delivery Details</h4>
+      <div class="f-grp"><label class="f-lbl">Full Name</label><input class="f-inp" id="fn" value="${S.ckData.name}" placeholder="Your full name"/></div>
+      <div class="f-row">
+        <div class="f-grp"><label class="f-lbl">Phone</label><input class="f-inp" id="fp" value="${S.ckData.phone}" placeholder="+234 000 000 0000"/></div>
+        <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="fe" value="${S.ckData.email}" placeholder="you@example.com"/></div>
+      </div>
+      <div class="f-grp"><label class="f-lbl">Delivery Address</label><input class="f-inp" id="fa" value="${S.ckData.addr}" placeholder="Full address, area, Lagos"/></div>
+      </div><button class="nx-btn" onclick="nextCk()">Continue to Payment →</button>`;
+  } else if(S.ckStep===2){
+    body=`<div class="s-card"><h4>Payment Method</h4>
+      <div class="pay-methods">
+        <div class="pm${S.ckData.payment==='paystack'?' on':''}" onclick="setPay('paystack')">💳 Card / Transfer (Paystack)</div>
+        <div class="pm${S.ckData.payment==='ussd'?' on':''}" onclick="setPay('ussd')">📱 USSD</div>
+        <div class="pm${S.ckData.payment==='bank'?' on':''}" onclick="setPay('bank')">🏦 Direct Bank Transfer</div>
+        <div class="pm${S.ckData.payment==='cash'?' on':''}" onclick="setPay('cash')">🤝 Pay on Delivery</div>
+      </div>
+      ${S.ckData.payment==='bank'?`<div class="pay-note"><strong>Transfer to:</strong><br>Josephine Adebisi<br><span style="color:var(--gold);font-size:15px;font-weight:600">0123456789</span> — Access Bank<br>Send your receipt after transfer.</div>`:''}
+      ${S.ckData.payment==='ussd'?`<div class="pay-note"><strong>Dial:</strong> *901*000*<span style="color:var(--gold)">${total}</span># on your phone after placing the order.</div>`:''}
+      </div>
+      ${S.points>=100?`<div class="use-pts-row">
+        <div><div style="font-size:13px;color:var(--t2)">Use 100 pts → 10% off</div><div style="font-size:11px;color:var(--t3)">Balance: ${S.points} pts</div></div>
+        <div class="sw${S.ckData.usePoints?' on':''}" onclick="S.ckData.usePoints=!S.ckData.usePoints;renderCk()"><div class="sk"></div></div>
+      </div>`:''}
+      <button class="nx-btn" onclick="nextCk()">Review Order →</button>`;
+  } else if(S.ckStep===3){
+    body=`<div class="s-card"><h4>Order Review</h4>
+      ${S.cart.map(i=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--t2)"><span>${i.em} ${i.name} ×${i.qty}</span><span>₦${(i.price*i.qty).toLocaleString()}</span></div>`).join('')}
+      <div style="padding-top:10px">
+        <div class="c-row"><span>Subtotal</span><span>₦${sub.toLocaleString()}</span></div>
+        <div class="c-row"><span>Delivery</span><span>${del===0?'Free':'₦'+del.toLocaleString()}</span></div>
+        ${promoD?`<div class="c-row"><span>Promo discount</span><span style="color:var(--ok)">−₦${promoD.toLocaleString()}</span></div>`:''}
+        ${ptsDis?`<div class="c-row"><span>Points discount (100 pts)</span><span style="color:var(--ok)">−₦${ptsDis.toLocaleString()}</span></div>`:''}
+        <div class="c-tot"><span>Total</span><span>₦${total.toLocaleString()}</span></div>
+      </div>
+      <div style="font-size:12px;color:var(--t3);margin-top:4px">📍 ${S.ckData.addr||'No address entered'}</div>
+      <div style="font-size:12px;color:var(--t3)">📞 ${S.ckData.phone||'—'} &nbsp;|&nbsp; 💳 ${S.ckData.payment}</div>
+      </div>
+      ${S.ckData.payment==='paystack'
+        ?`<button class="pstk-btn" id="paystackBtn" onclick="initiatePaystack(${total})">
+            <span>Pay ₦${total.toLocaleString()} via Paystack</span>
+          </button>
+          <p style="text-align:center;font-size:11px;color:var(--t3);margin-top:8px">Secured by Paystack — card, bank transfer & USSD accepted</p>`
+        :`<button class="nx-btn" onclick="nextCk()">Place Order ✓</button>`}`;
+  }
+  c.innerHTML=`<h2 class="serif" style="font-size:28px;font-weight:300;margin-bottom:20px">Checkout</h2>
+    <div class="steps">${stHtml}</div>${body}`;
+}
+function nextCk(){
+  if(S.ckStep===1){
+    S.ckData.name=document.getElementById('fn')?.value||'';
+    S.ckData.phone=document.getElementById('fp')?.value||'';
+    S.ckData.email=document.getElementById('fe')?.value||'';
+    S.ckData.addr=document.getElementById('fa')?.value||'';
+    if(!S.ckData.name||!S.ckData.addr){showToast('Please fill in your name and address.');return;}
+  }
+  S.ckStep++;renderCk();
+}
+function setPay(m){S.ckData.payment=m;renderCk();}
+
+// ─── PAYSTACK INTEGRATION ────────────────────
+function initiatePaystack(amount){
+  const btn=document.getElementById('paystackBtn');
+  if(btn){btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Opening Paystack…';}
+  // Load Paystack inline JS
+  const script=document.createElement('script');
+  script.src='https://js.paystack.co/v1/inline.js';
+  script.onload=()=>launchPaystack(amount);
+  script.onerror=()=>{
+    // Fallback: simulate successful payment for demo
+    showToast('Paystack loaded in demo mode');
+    simulatePayment(amount);
+  };
+  document.head.appendChild(script);
+}
+function launchPaystack(amount){
+  if(typeof PaystackPop==='undefined'){simulatePayment(amount);return;}
+  const handler=PaystackPop.setup({
+    key: PAYSTACK_PK,
+    email: S.ckData.email||'customer@josephinesscents.com',
+    amount: amount*100, // kobo
+    currency: 'NGN',
+    ref: 'JS_'+Date.now(),
+    metadata:{name:S.ckData.name,phone:S.ckData.phone,address:S.ckData.addr},
+    callback(response){
+      S.ckData.paystackRef=response.reference;
+      S.ckStep=4;renderCk();
+    },
+    onClose(){
+      showToast('Payment cancelled. You can try again.');
+      const btn=document.getElementById('paystackBtn');
+      if(btn){btn.disabled=false;btn.innerHTML='<span>Pay ₦'+amount.toLocaleString()+' via Paystack</span>';}
+    }
+  });
+  handler.openIframe();
+}
+function simulatePayment(amount){
+  // Demo simulation — replace with real Paystack key in production
+  showToast('✅ Demo: Payment of ₦'+amount.toLocaleString()+' simulated');
+  S.ckData.paystackRef='DEMO_'+Date.now();
+  S.ckStep=4;renderCk();
+}
+
+// --- ORDER CONFIRMATION + DUAL NOTIFICATIONS -----------------------------------
+async function confirmOrder(c, sub, total) {
+  const oid   = uid();
+  const earn  = Math.floor(sub / 500);
+  const d     = new Date();
+  const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+  const timeStr = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+  const itemsList = S.cart.map(i => i.em + ' ' + i.name + ' x' + i.qty + ' = \u20a6' + (i.price * i.qty).toLocaleString()).join('\n');
+
+  // Save order to state
+  const orderObj = {
+    id: oid,
+    customer: S.ckData.name || 'Customer',
+    phone:    S.ckData.phone || '--',
+    email:    S.ckData.email || '--',
+    items:    S.cart.length,
+    total,
+    payment:  S.ckData.payment + (S.ckData.paystackRef ? ' (' + S.ckData.paystackRef + ')' : ''),
+    status:   'pending',
+    date:     dateStr,
+    itemsList
+  };
+  S.orders.unshift(orderObj);
+
+  // Loyalty points
+  S.points += earn;
+  S.pHistory.unshift({ lbl: 'Purchase: ' + S.cart.map(x => x.name).join(', '), date: 'Today', pts: earn, t: 'earn' });
+  if (S.ckData.usePoints && S.points >= 100) {
+    S.points -= 100;
+    S.pHistory.unshift({ lbl: 'Used 100 pts for 10% discount', date: 'Today', pts: -100, t: 'spend' });
+  }
+  saveUserData(); updatePtsUI();
+
+  // Build message body (plain text — works in email + WhatsApp)
+  const msg = [
+    "NEW ORDER -- Josephine's Scents",
+    "",
+    "Order ID : " + oid,
+    "Time     : " + dateStr + " " + timeStr,
+    "Customer : " + (S.ckData.name  || '--'),
+    "Phone    : " + (S.ckData.phone || '--'),
+    "Email    : " + (S.ckData.email || '--'),
+    "Address  : " + (S.ckData.addr  || '--'),
+    "",
+    "ITEMS ORDERED:",
+    itemsList,
+    "",
+    "Total   : \u20a6" + total.toLocaleString(),
+    "Payment : " + S.ckData.payment + (S.ckData.paystackRef ? " | Ref: " + S.ckData.paystackRef : ""),
+    "",
+    "Customer earns: " + earn + " loyalty pts",
+    "",
+    "Please process this order promptly!"
+  ].join('\n');
+
+  let emailOk = false, waOk = false;
+
+  // -- EMAIL via Web3Forms --
+  if (_owNotifSettings.email) {
+    try {
+      const res = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          access_key:       WEB3FORMS_KEY,
+          subject:          "New Order #" + oid + " -- Josephine's Scents",
+          from_name:        "Josephine's Scents Store",
+          name:             S.ckData.name  || 'Customer',
+          email:            S.ckData.email || 'store@josephinesscents.com',
+          message:          msg,
+          order_id:         oid,
+          customer_phone:   S.ckData.phone,
+          delivery_address: S.ckData.addr,
+          order_total:      '\u20a6' + total.toLocaleString(),
+          payment_method:   S.ckData.payment,
+          paystack_ref:     S.ckData.paystackRef || 'N/A',
+        })
+      });
+      const data = await res.json();
+      emailOk = !!data.success;
+      _notifLog.unshift({ ok: emailOk, msg: 'Email Order ' + oid + (emailOk ? ' sent OK' : ' FAILED -- check Web3Forms settings'), time: dateStr + ' ' + timeStr });
+    } catch (err) {
+      _notifLog.unshift({ ok: false, msg: 'Email error: ' + err.message, time: dateStr + ' ' + timeStr });
+    }
+  }
+
+  // -- WHATSAPP via wa.me --
+  if (_owNotifSettings.wa) {
+    try {
+      const waUrl = 'https://wa.me/' + OWNER_WHATSAPP + '?text=' + encodeURIComponent(msg);
+      window.open(waUrl, '_blank');
+      waOk = true;
+      _notifLog.unshift({ ok: true, msg: 'WhatsApp opened for Order ' + oid, time: dateStr + ' ' + timeStr });
+    } catch (err) {
+      _notifLog.unshift({ ok: false, msg: 'WhatsApp error: ' + err.message, time: dateStr + ' ' + timeStr });
+    }
+  }
+
+  if (!emailOk && !waOk) showToast('Both notifications failed -- check Notification settings', 4000);
+  if (_notifLog.length > 50) _notifLog = _notifLog.slice(0, 50);
+
+  const custName = S.ckData.name;
+  S.cart = []; updateCartUI();
+  S.ckData = { name: '', phone: '', email: '', addr: '', payment: 'paystack', usePoints: false, promoCode: '', promoDiscount: 0, paystackRef: '' };
+
+  const badges =
+    (emailOk ? '<span style="font-size:12px;color:var(--ok);background:rgba(76,175,115,.1);border-radius:6px;padding:5px 12px">Email sent</span>' : '') +
+    (waOk    ? '<span style="font-size:12px;color:var(--ok);background:rgba(76,175,115,.1);border-radius:6px;padding:5px 12px;margin-left:6px">WhatsApp notified</span>' : '');
+
+  c.innerHTML =
+    '<div class="suc">' +
+    '<div class="suc-icon">&#10003;</div>' +
+    '<h2 class="suc-t">Order Placed!</h2>' +
+    '<p class="suc-s">Thank you' + (custName ? ', ' + custName : '') + '! Your fragrance is being prepared with love. The store has been notified.</p>' +
+    '<div class="suc-id"># ' + oid + '</div><br>' +
+    (badges ? '<div style="text-align:center;margin-bottom:16px">' + badges + '</div>' : '') +
+    '<p style="font-size:13px;color:var(--gold);margin-bottom:22px">You earned ' + earn + ' loyalty points on this order!</p>' +
+    '<button class="cont-btn" onclick="go(\'shop\')">Continue Shopping</button>' +
+    ' <button class="cont-btn" onclick="go(\'loyalty\')" style="margin-left:8px">View My Points</button>' +
+    '</div>';
+}
+
+
+// ─── LOYALTY ──────────────────────────────────
+function renderLoyalty(){
+  const p=S.points;
+  document.getElementById('loyPts').textContent=p;
+  let tier='Bronze',next='Silver',needed=500-p,prog=Math.min(p/500*100,100);
+  if(p>=500&&p<1500){tier='Silver';next='Gold';needed=1500-p;prog=Math.min((p-500)/1000*100,100);}
+  else if(p>=1500){tier='Gold';next='';needed=0;prog=100;}
+  const tb=document.getElementById('tierBadge');
+  tb.textContent=tier+' Member';tb.className='tier-b t-'+tier.toLowerCase();
+  document.getElementById('tierProg').textContent=next?`Earn ${needed} more points to reach ${next}`:'You\'ve reached the highest tier! 🏆';
+  document.getElementById('progFill').style.width=prog+'%';
+  if(S.user) document.getElementById('refCode').textContent=S.user.refCode||'JOSE–0000';
+  document.getElementById('rwGrid').innerHTML=rewards.map(r=>`
+    <div class="rw-card">
+      <div class="rw-icon">${r.icon}</div>
+      <div class="rw-name serif">${r.name}</div>
+      <div class="rw-cost">⭐ ${r.cost} points</div>
+      <button class="rw-btn" ${p<r.cost?'disabled':''} onclick="redeemRw('${r.id}','${r.name}',${r.cost})">${p>=r.cost?'Redeem':'Need '+(r.cost-p)+' more'}</button>
+    </div>`).join('');
+  document.getElementById('hList').innerHTML=S.pHistory.length
+    ? S.pHistory.map(h=>`
+      <div class="h-item">
+        <div><div class="h-lbl">${h.lbl}</div><div class="h-date">${h.date}</div></div>
+        <div class="h-pts${h.t==='spend'?' neg':''}">${h.t==='earn'?'+':''}${h.pts} pts</div>
+      </div>`).join('')
+    : '<p style="font-size:13px;color:var(--t3);text-align:center;padding:20px">No history yet. Start shopping to earn points!</p>';
+}
+function redeemRw(id,name,cost){
+  if(S.points<cost){showToast('Not enough points!');return;}
+  S.points-=cost;S.pHistory.unshift({lbl:'Redeemed: '+name,date:'Today',pts:-cost,t:'spend'});
+  showToast('🎉 '+name+' redeemed!');updatePtsUI();saveUserData();renderLoyalty();
+}
+function copyRef(){
+  const code=document.getElementById('refCode').textContent;
+  navigator.clipboard.writeText(code).catch(()=>{});
+  showToast('Referral code copied! 📋');
+}
+
+// ─── GAMES ────────────────────────────────────
+function launchGame(g){
+  document.getElementById('gArea').style.display='block';
+  document.getElementById('gArea').scrollIntoView({behavior:'smooth',block:'start'});
+  if(g==='scratch') renderScratch();
+  else if(g==='memory') renderMemory();
+  else if(g==='quiz') renderQuiz();
+  else if(g==='spin') renderSpin();
+}
+function addGamePoints(pts,label){
+  S.points+=pts;S.pHistory.unshift({lbl:label,date:'Today',pts,t:'earn'});
+  updatePtsUI();saveUserData();showToast(`⭐ +${pts} points earned!`);
+}
+
+// SCRATCH
+const scrSyms=['🌹','🌸','🪵','✨','🌊','🌿'];
+let scrBoard=[],scrRev=[],scrDone=false;
+function renderScratch(){
+  scrBoard=Array.from({length:9},()=>scrSyms[Math.floor(Math.random()*scrSyms.length)]);
+  scrRev=Array(9).fill(false);scrDone=false;
+  document.getElementById('gContent').innerHTML=`<h3>🎫 Scent Scratch</h3>
+    <p style="text-align:center;font-size:12px;color:var(--t3);margin-bottom:16px">Tap all tiles to reveal. Match 3 identical symbols to win!</p>
+    <div class="sc-grid" id="scGrid"></div>
+    <div class="g-res" id="scRes">Tap a tile to begin</div>
+    <button class="g-btn" onclick="renderScratch()">Play Again</button>`;
+  renderScrGrid();
+}
+function renderScrGrid(){
+  document.getElementById('scGrid').innerHTML=scrBoard.map((s,i)=>`
+    <div class="sc-cell${scrRev[i]?' rv':' h'}" onclick="revScr(${i})">${scrRev[i]?s:''}</div>`).join('');
+}
+function revScr(i){
+  if(scrDone||scrRev[i])return;scrRev[i]=true;renderScrGrid();
+  if(scrRev.every(x=>x)){
+    scrDone=true;
+    const counts={};scrBoard.forEach(s=>counts[s]=(counts[s]||0)+1);
+    const max=Math.max(...Object.values(counts));
+    let pts=0;if(max>=3) pts=max>=5?100:max===4?60:30;
+    const el=document.getElementById('scRes');
+    el.className='g-res'+(pts?' win':'');
+    el.textContent=pts?`🎉 Matched ${max}! +${pts} points`:'No match this time. Try again!';
+    if(pts) addGamePoints(pts,'Scratch card win');
+  }
+}
+
+// MEMORY
+const memEmojis=['🌹','🌸','🪵','✨','🌊','🌿','🌺','🎋'];
+let mCards=[],mFlipped=[],mMatched=[],mLocked=false,mMoves=0,mFIdx=[];
+function renderMemory(){
+  const deck=[...memEmojis,...memEmojis].sort(()=>Math.random()-.5);
+  mCards=deck;mFlipped=Array(16).fill(false);mMatched=[];mLocked=false;mMoves=0;mFIdx=[];
+  document.getElementById('gContent').innerHTML=`<h3>🌸 Fragrance Memory</h3>
+    <p style="text-align:center;font-size:12px;color:var(--t3);margin-bottom:14px">Moves: <span id="mMov">0</span> &nbsp;|&nbsp; Fewer moves = more points</p>
+    <div class="mem-grid" id="memGrid"></div>
+    <div class="g-res" id="memRes" style="margin-top:10px"></div>
+    <button class="g-btn" onclick="renderMemory()">New Game</button>`;
+  renderMemGrid();
+}
+function renderMemGrid(){
+  document.getElementById('memGrid').innerHTML=mCards.map((c,i)=>`
+    <div class="mc${mFlipped[i]||mMatched.includes(i)?' fl':''}${mMatched.includes(i)?' mt':''}" onclick="flipMem(${i})">
+      ${mFlipped[i]||mMatched.includes(i)?c:'<span style="font-size:16px;color:var(--t3)">?</span>'}
+    </div>`).join('');
+}
+function flipMem(i){
+  if(mLocked||mFlipped[i]||mMatched.includes(i))return;
+  mFlipped[i]=true;mFIdx.push(i);renderMemGrid();
+  if(mFIdx.length===2){
+    mLocked=true;mMoves++;
+    const mEl=document.getElementById('mMov');if(mEl)mEl.textContent=mMoves;
+    const[a,b]=mFIdx;
+    if(mCards[a]===mCards[b]){
+      mMatched.push(a,b);mFIdx=[];mLocked=false;
+      if(mMatched.length===16){
+        const pts=Math.max(10,50-mMoves);
+        const el=document.getElementById('memRes');
+        el.className='g-res win';el.textContent=`🎉 Completed in ${mMoves} moves! +${pts} pts`;
+        addGamePoints(pts,'Memory game win');
+      }
+    } else {setTimeout(()=>{mFlipped[a]=false;mFlipped[b]=false;mFIdx=[];mLocked=false;renderMemGrid();},700);}
+    renderMemGrid();
+  }
+}
+
+// QUIZ
+const quizData=[
+  {q:'Which fragrance family features deep, resinous, and woody notes?',opts:['Floral','Oriental','Fresh','Fougère'],ans:1},
+  {q:'What is the topmost, first-impression layer of a fragrance called?',opts:['Base note','Heart note','Top note','Accord'],ans:2},
+  {q:'Which ingredient gives "Oud" its distinctive smoky, woody character?',opts:['Sandalwood','Agarwood resin','Cedarwood','Vetiver'],ans:1},
+  {q:'What does "Eau de Parfum" mean in English?',opts:['Water of perfume','Pure perfume','Light water','Toilet water'],ans:0},
+  {q:'Which flower is known as the "Queen of Flowers" in perfumery?',opts:['Jasmine','White lily','Rose','Neroli'],ans:2},
+  {q:'Which layer of a perfume lasts the longest on the skin?',opts:['Top note','Heart note','Base note','Opening note'],ans:2},
+  {q:'Bergamot — used in many fragrances — is a type of:',opts:['Flower blossom','Citrus fruit','Aromatic wood','Tree resin'],ans:1},
+  {q:'Oud oil is primarily extracted from which type of tree?',opts:['Cedarwood','Sandalwood','Agarwood','Pinewood'],ans:2},
+];
+let qIdx=0,qScore=0,qAnswered=false;
+function renderQuiz(){qIdx=0;qScore=0;qAnswered=false;showQuizQ();}
+function showQuizQ(){
+  if(qIdx>=quizData.length){
+    const pts=qScore*10;
+    if(pts>0) addGamePoints(pts,`Quiz score: ${qScore}/${quizData.length} correct`);
+    document.getElementById('gContent').innerHTML=`<h3>🎓 Quiz Complete!</h3>
+      <div class="g-res win" style="margin:16px auto;max-width:320px;font-size:15px">Score: ${qScore}/${quizData.length} &nbsp;|&nbsp; +${pts} points</div>
+      <button class="g-btn" onclick="renderQuiz()">Play Again</button>`;return;
+  }
+  const q=quizData[qIdx];qAnswered=false;
+  document.getElementById('gContent').innerHTML=`<h3>🎓 Scent Quiz</h3>
+    <div style="text-align:center;font-size:12px;color:var(--t3);margin-bottom:12px">Question ${qIdx+1} of ${quizData.length} &nbsp;·&nbsp; Score: ${qScore}</div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-opts">${q.opts.map((o,i)=>`<div class="q-opt" id="qo${i}" onclick="ansQ(${i})">${o}</div>`).join('')}</div>
+    <div class="g-res" id="qRes" style="display:none"></div>
+    <button class="g-btn" id="qNext" style="display:none" onclick="qIdx++;showQuizQ()">Next Question →</button>`;
+}
+function ansQ(i){
+  if(qAnswered)return;qAnswered=true;
+  const q=quizData[qIdx];const correct=i===q.ans;
+  if(correct)qScore++;
+  document.getElementById('qo'+i).className='q-opt '+(correct?'correct':'wrong');
+  if(!correct) document.getElementById('qo'+q.ans).className='q-opt correct';
+  const res=document.getElementById('qRes');res.style.display='block';
+  res.className='g-res'+(correct?' win':'');
+  res.textContent=correct?'✓ Correct! +10 pts coming':'✗ Not quite — the answer is: '+q.opts[q.ans];
+  document.getElementById('qNext').style.display='block';
+}
+
+// SPIN WHEEL
+let spinUsed=false;
+function renderSpin(){
+  document.getElementById('gContent').innerHTML=`<h3>🎡 Fortune Wheel</h3>
+    <p style="text-align:center;font-size:12px;color:var(--t3);margin-bottom:16px">Spin once a day for a surprise reward!</p>
+    <div style="text-align:center"><canvas id="spinC" width="240" height="240" style="border-radius:50%;border:2px solid var(--gold)"></canvas></div>
+    <div id="spinRes" style="text-align:center;font-family:'Cormorant Garamond',serif;font-size:20px;min-height:36px;margin:14px 0;color:var(--gold)"></div>
+    <button class="g-btn" id="spinBtn" onclick="doSpin()">SPIN!</button>`;
+  drawSpin(0);
+}
+const spinPrizes=[{l:'10 pts',pts:10},{l:'50 pts',pts:50},{l:'30 pts',pts:30},{l:'100 pts',pts:100},{l:'20 pts',pts:20},{l:'200 pts',pts:200},{l:'15 pts',pts:15},{l:'75 pts',pts:75}];
+function drawSpin(angle){
+  const cv=document.getElementById('spinC');if(!cv)return;
+  const ctx=cv.getContext('2d'),n=spinPrizes.length,arc=2*Math.PI/n,cx=120,cy=120,r=110;
+  ctx.clearRect(0,0,240,240);
+  const cols=['#1C1810','#242018','#1A1610','#2A2218'];
+  spinPrizes.forEach((p,i)=>{
+    ctx.beginPath();ctx.moveTo(cx,cy);ctx.arc(cx,cy,r,angle+i*arc,angle+(i+1)*arc);ctx.closePath();
+    ctx.fillStyle=(i===3||i===5)?'#3A3020':cols[i%4];ctx.fill();
+    ctx.strokeStyle='#C9A96E';ctx.lineWidth=1;ctx.stroke();
+    ctx.save();ctx.translate(cx,cy);ctx.rotate(angle+(i+.5)*arc);
+    ctx.textAlign='right';ctx.fillStyle=(i===3||i===5)?'#E8D5A3':'#8A7D6A';ctx.font='bold 11px Jost,sans-serif';
+    ctx.fillText(p.l,r-8,4);ctx.restore();
+  });
+  ctx.beginPath();ctx.arc(cx,cy,12,0,2*Math.PI);ctx.fillStyle='#C9A96E';ctx.fill();
+  ctx.beginPath();ctx.moveTo(cx+18,cy);ctx.lineTo(cx+30,cy-7);ctx.lineTo(cx+30,cy+7);ctx.closePath();ctx.fillStyle='#C9A96E';ctx.fill();
+}
+function doSpin(){
+  if(spinUsed){showToast('Come back tomorrow for another spin!');return;}
+  spinUsed=true;document.getElementById('spinBtn').disabled=true;
+  const winner=Math.floor(Math.random()*spinPrizes.length);
+  const target=4*2*Math.PI+(2*Math.PI-(winner+.5)*(2*Math.PI/spinPrizes.length));
+  let cur=0;const start=Date.now(),dur=3400;
+  (function animate(){
+    const t=Math.min((Date.now()-start)/dur,1),ease=1-Math.pow(1-t,4);
+    cur=target*ease;drawSpin(cur);
+    if(t<1){requestAnimationFrame(animate);}
+    else{
+      const pts=spinPrizes[winner].pts;
+      document.getElementById('spinRes').textContent='🎉 You won '+spinPrizes[winner].l+'!';
+      addGamePoints(pts,'Fortune Wheel spin');
+    }
+  })();
+}
+
+// --- OWNER AUTH ---------------------------------------------------------------
+// Password is set here -- works on ALL devices (not localStorage)
+const OWNER_PASSWORD = '@Bodunrin3319';
+
+// Secret access: triple-tap the brand logo within 1.5 seconds
+let _brandTaps = 0, _brandTimer = null;
+function brandClick() {
+  _brandTaps++;
+  clearTimeout(_brandTimer);
+  _brandTimer = setTimeout(function() { _brandTaps = 0; }, 1500);
+  if (_brandTaps >= 3) {
+    _brandTaps = 0;
+    clearTimeout(_brandTimer);
+    if (S.isOwner) exitOwner(); else openOwnerModal();
+    return; // don't navigate home on the 3rd tap
+  }
+  go('home'); // normal tap = go home
+}
+
+function openOwnerModal() {
+  const pi = document.getElementById('ownerPinInp'); if (pi) pi.value = '';
+  const oe = document.getElementById('ownerErr');   if (oe) oe.style.display = 'none';
+  const n1 = document.getElementById('newOwnerPin1'); if (n1) n1.value = '';
+  const n2 = document.getElementById('newOwnerPin2'); if (n2) n2.value = '';
+  document.getElementById('ownerOv').classList.add('on');
+  setTimeout(() => { const el = document.getElementById('ownerPinInp'); if (el) el.focus(); }, 200);
+}
+
+function toggleOwner() {
+  if (S.isOwner) exitOwner(); else openOwnerModal();
+}
+
+function exitOwner() {
+  S.isOwner = false;
+  const tab = document.getElementById('ownerTab'); if (tab) tab.style.display = 'none';
+  const ob  = document.getElementById('ownBtn');   if (ob)  { ob.style.display = 'none'; ob.classList.remove('on'); }
+  updateUserNav();
+  showToast('Owner mode disabled');
+  go('home');
+}
+
+let _ownerAttempts = 0, _ownerLockUntil = 0;
+function verifyOwnerPin() {
+  const now = Date.now();
+  if (now < _ownerLockUntil) {
+    const mins = Math.ceil((_ownerLockUntil - now) / 60000);
+    showOwnerErr('Too many attempts. Try again in ' + mins + ' minute(s).');
+    return;
+  }
+  const entered = (document.getElementById('ownerPinInp').value || '').trim();
+  if (!entered) { showOwnerErr('Please enter the password.'); return; }
+  if (entered === OWNER_PASSWORD) {
+    _ownerAttempts = 0;
+    document.getElementById('ownerOv').classList.remove('on');
+    S.isOwner = true;
+    const tab = document.getElementById('ownerTab'); if (tab) tab.style.display = 'block';
+    const ob  = document.getElementById('ownBtn');
+    if (ob) { ob.style.display = 'flex'; ob.textContent = 'Exit Owner'; ob.classList.add('on'); }
+    updateUserNav();
+    showToast('Welcome, Josephine!');
+    go('owner');
+  } else {
+    _ownerAttempts++;
+    if (_ownerAttempts >= 5) {
+      _ownerLockUntil = Date.now() + 10 * 60 * 1000;
+      showOwnerErr('5 failed attempts. Locked for 10 minutes.');
+    } else {
+      showOwnerErr('Incorrect password. ' + (5 - _ownerAttempts) + ' attempt(s) remaining.');
+    }
+    document.getElementById('ownerPinInp').value = '';
+    document.getElementById('ownerPinInp').focus();
+  }
+}
+
+function changeOwnerPin() {
+  const p1 = document.getElementById('newOwnerPin1').value;
+  const p2 = document.getElementById('newOwnerPin2').value;
+  if (!p1 || p1.length < 6) { showOwnerErr('Password must be at least 6 characters.'); return; }
+  if (p1 !== p2) { showOwnerErr('Passwords do not match.'); return; }
+  showOwnerErr('To save permanently, open the HTML file and change OWNER_PASSWORD to: ' + p1, true);
+}
+
+function showOwnerErr(msg, isSuccess = false) {
+  const e = document.getElementById('ownerErr'); if (!e) return;
+  e.textContent = msg; e.style.display = 'block';
+  e.style.background    = isSuccess ? 'rgba(76,175,115,.1)' : 'rgba(224,82,82,.1)';
+  e.style.borderColor   = isSuccess ? 'rgba(76,175,115,.3)' : 'rgba(224,82,82,.3)';
+  e.style.color         = isSuccess ? 'var(--ok)' : 'var(--er)';
+}
+function closeOwnerOv() { document.getElementById('ownerOv').classList.remove('on'); }
+
+// --- OWNER DASHBOARD -----------------------------------------------------------
+
+// Fragrance emoji palette
+const EMOJIS = [
+  '🌹','🌸','🌺','🌻','🌼','💐','🌷','🪷','🪼','🌿',
+  '🍀','🌱','🌾','🍃','🍂','🍁','🪵','🌲','🌳','🌴',
+  '🎋','🍊','🍋','🍇','🍑','🫐','🍓','🌊','💧','❄️',
+  '🔥','✨','💫','⭐','🌙','☀️','🕯️','🫙','🍯','🖤',
+  '🤍','💎','👑','🦋','🕊️','🧴','🌑','🌕','🎀','🪧'
+];
+
+let _selEmoji = EMOJIS[0];
+let _pStockOn = true;
+let _editingId = null;
+let _owNotifSettings = { email: true, wa: true };
+let _notifLog = [];
+
+function owTab(tab, evt) {
+  document.querySelectorAll('.ow-tab').forEach(b => b.classList.remove('on'));
+  document.querySelectorAll('.ow-section').forEach(s => s.classList.remove('on'));
+  if (evt && evt.target) evt.target.classList.add('on');
+  const sec = document.getElementById('owSec-' + tab);
+  if (sec) sec.classList.add('on');
+  if (tab === 'products') { renderOwProducts(); renderEmojiPicker(); }
+  if (tab === 'orders') renderOwOrders();
+  if (tab === 'promos') renderOwPromos();
+  if (tab === 'notifications') renderOwNotifs();
+}
+
+function renderOwner() {
+  const rev = S.orders.reduce((a, b) => a + (typeof b.total === 'number' ? b.total : 0), 0);
+  const pend = S.orders.filter(o => o.status === 'pending').length;
+  const oos = products.filter(p => !p.inStock).length;
+  const set = (id, v) => { const el = document.getElementById(id); if (el) el.textContent = v; };
+  set('dRev', '\u20a6' + rev.toLocaleString());
+  set('dOrd', S.orders.length);
+  set('dProds', products.length);
+  set('dPts', S.points + 480);
+  set('dOrdSub', pend + ' pending');
+  set('dProdSub', oos + ' out of stock');
+  renderOwProducts();
+  renderEmojiPicker();
+}
+
+function renderEmojiPicker() {
+  const el = document.getElementById('emojiPicker');
+  if (!el) return;
+  el.innerHTML = EMOJIS.map(e =>
+    '<button class="ep-btn' + (e === _selEmoji ? ' on' : '') + '" onclick="selectEmoji(\'' + e + '\')">' + e + '</button>'
+  ).join('');
+  const prev = document.getElementById('epPreview');
+  if (prev) prev.textContent = _selEmoji;
+}
+
+function selectEmoji(e) {
+  _selEmoji = e;
+  const prev = document.getElementById('epPreview');
+  if (prev) prev.textContent = e;
+  document.querySelectorAll('.ep-btn').forEach(b => b.classList.toggle('on', b.textContent.trim() === e));
+}
+
+function toggleFormStock() {
+  _pStockOn = !_pStockOn;
+  const sw = document.getElementById('pStockSw'); if (sw) sw.classList.toggle('on', _pStockOn);
+  const lb = document.getElementById('pStockLbl'); if (lb) lb.textContent = _pStockOn ? 'In Stock' : 'Out of Stock';
+}
+
+function saveProduct() {
+  const g = id => document.getElementById(id);
+  const name  = (g('pName')?.value || '').trim();
+  const price = parseInt(g('pPrice')?.value) || 0;
+  const cat   = g('pCat')?.value || 'Floral';
+  const desc  = (g('pDesc')?.value || '').trim();
+  if (!name)  { showToast('Product name is required'); return; }
+  if (!price) { showToast('Please enter a price');     return; }
+  if (!desc)  { showToast('Please add a description'); return; }
+  const brand = (g('pBrand')?.value || '').trim() || "Josephine's Scents";
+  const size  = (g('pSize')?.value  || '').trim() || '50ml';
+  const notes = (g('pNotes')?.value || '').trim() || cat + ' fragrance';
+  const isNew = g('pIsNew')?.checked || false;
+
+  if (_editingId !== null) {
+    const p = products.find(x => x.id === _editingId);
+    if (p) Object.assign(p, { name, price, cat, desc, brand, size, notes, isNew, em: _selEmoji, inStock: _pStockOn });
+    showToast(name + ' updated!');
+    cancelEdit();
+  } else {
+    const newId = Math.max(...products.map(p => p.id), 0) + 1;
+    products.push({ id: newId, name, em: _selEmoji, cat, price, size, notes, desc, brand, inStock: _pStockOn, isNew, rating: 5.0, ratingCount: 0 });
+    S.reviewMap[newId] = [];
+    showToast(name + ' added to the shop!');
+    clearProdForm();
+  }
+  renderOwProducts(); renderShop(); renderOwner();
+}
+
+function clearProdForm() {
+  ['pName','pBrand','pPrice','pSize','pNotes','pDesc'].forEach(id => {
+    const el = document.getElementById(id); if (el) el.value = '';
+  });
+  const pIsNew = document.getElementById('pIsNew'); if (pIsNew) pIsNew.checked = false;
+  const pCat   = document.getElementById('pCat');   if (pCat)   pCat.value = 'Floral';
+  _selEmoji = EMOJIS[0]; _pStockOn = true; _editingId = null;
+  const sw = document.getElementById('pStockSw'); if (sw) sw.classList.add('on');
+  const lb = document.getElementById('pStockLbl'); if (lb) lb.textContent = 'In Stock';
+  const ti = document.getElementById('prodFormTitle'); if (ti) ti.textContent = '+ Add New Product';
+  const cb = document.getElementById('cancelEditBtn'); if (cb) cb.style.display = 'none';
+  renderEmojiPicker();
+}
+
+function cancelEdit() { clearProdForm(); }
+
+function editProduct(id) {
+  const p = products.find(x => x.id === id); if (!p) return;
+  _editingId = id; _selEmoji = p.em; _pStockOn = p.inStock;
+  const s = (eid, v) => { const el = document.getElementById(eid); if (el) el.value = v; };
+  s('pName', p.name); s('pBrand', p.brand || ''); s('pPrice', p.price);
+  s('pSize', p.size); s('pNotes', p.notes); s('pDesc', p.desc);
+  const pIsNew = document.getElementById('pIsNew'); if (pIsNew) pIsNew.checked = p.isNew || false;
+  const pCat   = document.getElementById('pCat');   if (pCat)   pCat.value = p.cat;
+  const sw = document.getElementById('pStockSw'); if (sw) sw.classList.toggle('on', p.inStock);
+  const lb = document.getElementById('pStockLbl'); if (lb) lb.textContent = p.inStock ? 'In Stock' : 'Out of Stock';
+  const ti = document.getElementById('prodFormTitle'); if (ti) ti.textContent = 'Editing: ' + p.name;
+  const cb = document.getElementById('cancelEditBtn'); if (cb) cb.style.display = 'inline-block';
+  renderEmojiPicker();
+  const form = document.getElementById('prodForm');
+  if (form) form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function deleteProduct(id) {
+  const p = products.find(x => x.id === id); if (!p) return;
+  if (!confirm('Delete "' + p.name + '"? This cannot be undone.')) return;
+  products.splice(products.findIndex(x => x.id === id), 1);
+  showToast(p.name + ' deleted');
+  renderOwProducts(); renderShop(); renderOwner();
+}
+
+function renderOwProducts() {
+  const grid = document.getElementById('owProdGrid'); if (!grid) return;
+  const cnt  = document.getElementById('prodCount');  if (cnt) cnt.textContent = products.length;
+  grid.innerHTML = products.map(p => {
+    const oos = p.inStock ? '' : '<div class="ob">Out</div>';
+    const nw  = p.isNew   ? '<div class="nb">New</div>' : '';
+    const stk = '<div class="sw' + (p.inStock ? ' on' : '') + '" style="cursor:pointer" onclick="toggleStock(' + p.id + ');renderOwProducts();renderOwner()"><div class="sk"></div></div>';
+    const stkLbl = '<span style="font-size:10px;color:' + (p.inStock ? 'var(--ok)' : 'var(--er)') + '">' + (p.inStock ? 'In Stock' : 'Out') + '</span>';
+    return '<div class="owpc">' +
+      '<div class="owpc-img">' + p.em + oos + nw + '</div>' +
+      '<div class="owpc-bd">' +
+        '<div class="owpc-nm">' + p.name + '</div>' +
+        '<div class="owpc-pr">\u20a6' + p.price.toLocaleString() + ' \u00b7 ' + p.size + '</div>' +
+        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">' + stk + stkLbl + '</div>' +
+        '<div class="owpc-btns">' +
+          '<button class="oeb" onclick="editProduct(' + p.id + ')">Edit</button>' +
+          '<button class="odb" onclick="deleteProduct(' + p.id + ')">Del</button>' +
+        '</div>' +
+      '</div></div>';
+  }).join('');
+}
+
+function renderOwOrders() {
+  const tbody = document.getElementById('ordTbody'); if (!tbody) return;
+  const q = (document.getElementById('orderSearch')?.value || '').toLowerCase();
+  const list = q
+    ? S.orders.filter(o => o.customer.toLowerCase().includes(q) || o.id.toLowerCase().includes(q))
+    : S.orders;
+  if (!list.length) {
+    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;padding:24px;color:var(--t3)">No orders yet</td></tr>';
+    return;
+  }
+  tbody.innerHTML = list.map(o => {
+    const spCls = o.status === 'done' ? 'd' : o.status === 'ship' ? 's' : o.status === 'cancelled' ? 'c' : 'p';
+    const sel = '<select style="background:var(--b4);border:1px solid var(--br);color:var(--t2);border-radius:4px;padding:2px 6px;font-size:11px;cursor:pointer;outline:none" onchange="updStatus(\'' + o.id + '\',this.value)">' +
+      ['pending','ship','done','cancelled'].map(v => '<option value="' + v + '"' + (o.status === v ? ' selected' : '') + '>' + v.charAt(0).toUpperCase() + v.slice(1) + '</option>').join('') +
+      '</select>';
+    return '<tr>' +
+      '<td style="color:var(--gold);font-weight:600">' + o.id + '</td>' +
+      '<td>' + o.customer + '</td>' +
+      '<td>' + (o.phone || '\u2014') + '</td>' +
+      '<td>' + o.items + '</td>' +
+      '<td>\u20a6' + (typeof o.total === 'number' ? o.total.toLocaleString() : o.total) + '</td>' +
+      '<td style="font-size:11px">' + (o.payment || '\u2014') + '</td>' +
+      '<td style="font-size:11px;color:var(--t3)">' + (o.date || '\u2014') + '</td>' +
+      '<td><span class="sp sp-' + spCls + '">' + o.status + '</span></td>' +
+      '<td>' + sel + '</td>' +
+      '</tr>';
+  }).join('');
+}
+
+function filterOrders() { renderOwOrders(); }
+
+function renderOwPromos() {
+  const el = document.getElementById('promoMgr'); if (!el) return;
+  el.innerHTML = S.promos.length
+    ? S.promos.map(p => '<span class="promo-tag">' + p.code + ' <span style="opacity:.6">(' + p.pct + '% off)</span><button class="del-p" onclick="delPromo(\'' + p.code + '\')">x</button></span>').join('')
+    : '<p style="font-size:12px;color:var(--t3)">No promo codes yet.</p>';
+}
+
+function renderOwNotifs() {
+  const el = document.getElementById('notifLog'); if (!el) return;
+  const sw_e = document.getElementById('emailNotifSw');
+  const sw_w = document.getElementById('waNotifSw');
+  if (sw_e) sw_e.classList.toggle('on', _owNotifSettings.email);
+  if (sw_w) sw_w.classList.toggle('on', _owNotifSettings.wa);
+  el.innerHTML = _notifLog.length
+    ? _notifLog.map(n => '<div class="nitem' + (n.ok ? '' : ' fail') + '"><div>' + (n.ok ? '[OK]' : '[FAIL]') + ' ' + n.msg + '</div><div class="ntime">' + n.time + '</div></div>').join('')
+    : '<p style="font-size:13px;color:var(--t3);padding:12px">No notifications yet.</p>';
+}
+
+function toggleNotifSetting(type) {
+  _owNotifSettings[type] = !_owNotifSettings[type];
+  renderOwNotifs();
+  showToast((type === 'email' ? 'Email' : 'WhatsApp') + ' notifications ' + (_owNotifSettings[type] ? 'enabled' : 'disabled'));
+}
+
+function updStatus(id, status) {
+  const o = S.orders.find(x => x.id === id); if (o) o.status = status;
+  renderOwOrders(); showToast('Order ' + id + ' updated to ' + status);
+}
+
+function addPromo() {
+  const code = (document.getElementById('newPCode')?.value || '').trim().toUpperCase();
+  const pct  = parseInt(document.getElementById('newPVal')?.value) || 0;
+  if (!code || !pct) { showToast('Enter a code and a % value'); return; }
+  if (S.promos.find(p => p.code === code)) { showToast('Code already exists'); return; }
+  S.promos.push({ code, pct });
+  const pc = document.getElementById('newPCode'); if (pc) pc.value = '';
+  const pv = document.getElementById('newPVal');  if (pv) pv.value = '';
+  renderOwPromos(); showToast('Promo "' + code + '" added');
+}
+
+function delPromo(code) {
+  S.promos = S.promos.filter(p => p.code !== code);
+  renderOwPromos(); showToast('Promo removed');
+}
+
+
+// --- USER NAV UPDATE ----------------------------------------------------------
+function updateUserNav() {
+  // Update sign-in button label
+  const btn = document.getElementById('userBtnTxt');
+  if (btn) btn.textContent = S.user ? S.user.name.split(' ')[0] : 'Sign In';
+  // In owner mode: hide all customer-facing elements; in customer mode: show them
+  const hide = S.isOwner;
+  ['cartIconBtn','ptsChip','userBtn'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = hide ? 'none' : '';
+  });
+  ['ntHome','ntShop','ntWish','ntLoy','ntGames'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = hide ? 'none' : '';
+  });
+}
+
+function handleUserBtn() {
+  if (S.user) {
+    if (confirm('Signed in as ' + S.user.name + '.\n\nClick OK to sign out.')) logout();
+  } else {
+    openAuth();
+  }
+}
+
+// ─── INIT ─────────────────────────────────────
+renderAuthForm();
+updateCartUI();
+updatePtsUI();
+renderShop();
+// No auto-open — guests land directly on the shop
+</script>
+</body>
+</html>
