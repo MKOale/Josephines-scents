@@ -563,7 +563,8 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
           <div style="font-size:14px;font-weight:600;color:var(--gold);margin-bottom:4px">Supabase Database Not Set Up Yet</div>
           <div style="font-size:12px;color:var(--t2);line-height:1.7;margin-bottom:10px">Products you add will only be visible on this device until the database is created. To sync across all devices permanently, run the setup SQL in your Supabase project.</div>
           <div style="font-size:11px;color:var(--t3);line-height:1.8"><strong style="color:var(--t2)">Steps:</strong> Go to <span style="color:var(--gold)">supabase.com</span> &rarr; Your project &rarr; <span style="color:var(--gold)">SQL Editor</span> &rarr; New Query &rarr; Paste the <span style="color:var(--gold)">supabase-setup.sql</span> file &rarr; Run. Then come back and click Sync.</div>
-          <button onclick="sbLoadProducts().then(()=>{if(_sbReady)document.getElementById('sbSetupNotice').style.display='none';})" style="margin-top:10px;background:var(--gold);color:var(--bg);border:none;border-radius:6px;padding:7px 18px;font-size:12px;font-weight:600;cursor:pointer">&#x21BB; Try Sync Now</button>
+          <button id="syncNowBtn" onclick="doSyncNow()" style="margin-top:10px;background:var(--gold);color:var(--bg);border:none;border-radius:6px;padding:7px 18px;font-size:12px;font-weight:600;cursor:pointer">&#x21BB; Try Sync Now</button>
+          <span id="syncMsg" style="font-size:12px;margin-left:10px;color:var(--t3)"></span>
         </div>
       </div>
     </div>
@@ -689,12 +690,22 @@ const WEB3FORMS_KEY = '8c88b220-3604-493e-8239-e80479edec36';
 const SB_URL = 'https://wmyjscwwwjnqqalusvun.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndteWpzY3d3d2pucXFhbHVzdnVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzA2MTgsImV4cCI6MjA5NTgwNjYxOH0.2QZEJnvtF3rbtmcuS7FQZXr2suT7aBpyvKfvbV4o5Ng';
 let sb = null;
-try { sb = window.supabase ? window.supabase.createClient(SB_URL, SB_ANON) : null; } catch(e) { console.warn('SB:', e); }
+function initSB() {
+  if (sb) return true;
+  try {
+    if (window.supabase && window.supabase.createClient) {
+      sb = window.supabase.createClient(SB_URL, SB_ANON);
+      return true;
+    }
+  } catch(e) { console.info('Supabase init error:', e.message || e); }
+  return false;
+}
 
 let _sbReady = false; // tracks if Supabase tables exist
 
 async function sbLoadProducts() {
-  if (!sb) { console.info('Supabase not initialised — using built-in products'); return; }
+  if (!initSB()) { console.info('Supabase CDN not ready yet — retrying...'); return; }
+  if (!sb) return;
   try {
     const { data, error } = await sb.from('products').select('*').order('id', { ascending: true });
     if (error) {
@@ -727,7 +738,7 @@ async function sbLoadProducts() {
 }
 
 async function sbSaveProduct(p) {
-  if (!sb) return false;
+  if (!initSB()) return false;
   try {
     const {error} = await sb.from('products').upsert({id:p.id,name:p.name,em:p.em,cat:p.cat,price:p.price,size:p.size,notes:p.notes,description:p.desc,brand:p.brand,in_stock:p.inStock,is_new:p.isNew,rating:p.rating,rating_count:p.ratingCount,image_url:p.imageUrl||''},{ onConflict:'id' });
     if (error) throw error; return true;
@@ -735,7 +746,7 @@ async function sbSaveProduct(p) {
 }
 
 async function sbDeleteProduct(id) {
-  if (!sb) return false;
+  if (!initSB()) return false;
   try {
     const {error} = await sb.from('products').delete().eq('id',id);
     if (error) throw error; return true;
@@ -743,7 +754,7 @@ async function sbDeleteProduct(id) {
 }
 
 async function sbSaveOrder(o) {
-  if (!sb) return false;
+  if (!initSB()) return false;
   try {
     const {error} = await sb.from('orders').upsert({id:o.id,customer:o.customer,phone:o.phone,email:o.email,items:o.items,total:o.total,payment:o.payment,status:o.status,date:o.date,items_list:o.itemsList||''},{ onConflict:'id' });
     if (error) throw error; return true;
@@ -751,7 +762,7 @@ async function sbSaveOrder(o) {
 }
 
 async function sbLoadOrders() {
-  if (!sb) return;
+  if (!initSB()) return;
   try {
     const {data,error} = await sb.from('orders').select('*').order('created_at',{ascending:false});
     if (error) throw error;
@@ -2025,7 +2036,8 @@ renderAuthForm();
 updateCartUI();
 updatePtsUI();
 renderShop();
-sbLoadProducts(); // fetch live products from Supabase on every load
+// Wait for Supabase CDN to fully load before fetching products
+setTimeout(function() { initSB(); sbLoadProducts(); }, 800);
 // No auto-open — guests land directly on the shop
 
 // --- PASSWORD EYE TOGGLE ---
@@ -2037,4 +2049,29 @@ function togglePwd(inputId, btn) {
 }
 </script>
 </body>
-</html>
+</html
+// --- SUPABASE SYNC BUTTON ---
+async function doSyncNow() {
+  const btn = document.getElementById('syncNowBtn');
+  const msg = document.getElementById('syncMsg');
+  if (btn) { btn.disabled = true; btn.textContent = 'Syncing...'; }
+  if (msg) msg.textContent = '';
+  // Retry Supabase init in case CDN loaded late
+  if (!initSB()) {
+    if (msg) msg.textContent = 'Supabase CDN not loaded yet. Try refreshing the page.';
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Try Sync Now'; }
+    return;
+  }
+  await sbLoadProducts();
+  if (_sbReady) {
+    const notice = document.getElementById('sbSetupNotice');
+    if (notice) notice.style.display = 'none';
+    showToast('✓ Supabase synced! Products loaded from database.');
+    renderOwProducts();
+  } else {
+    if (msg) msg.textContent = 'Tables not found. Have you run the supabase-setup.sql yet?';
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Try Sync Now'; }
+  }
+}
+
+>
