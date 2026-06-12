@@ -37,11 +37,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .own-btn.on{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,.07);display:flex}
 
 /* ── PAGES ── */
-.pg{display:none;padding-top:92px;min-height:100vh}
+.pg{display:none;padding-top:90px;min-height:100vh}
 .pg.on{display:block}
 
 /* ── HERO ── */
-.hero{min-height:calc(100vh - 58px);display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 10%,rgba(201,169,110,.07) 0%,transparent 60%)}
+.hero{min-height:calc(100vh - 86px);display:flex;align-items:center;justify-content:center;text-align:center;background:radial-gradient(ellipse at 50% 10%,rgba(201,169,110,.07) 0%,transparent 60%)}
 .hero-in{max-width:660px;padding:40px 20px}
 .eyebrow{font-size:10px;letter-spacing:4px;color:var(--gold);text-transform:uppercase;margin-bottom:18px}
 .h-title{font-family:'Cormorant Garamond',serif;font-size:clamp(44px,9vw,82px);font-weight:300;line-height:1.08;margin-bottom:14px}
@@ -556,6 +556,17 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
       <h2 class="serif" style="font-size:28px;font-weight:300">Welcome, Josephine &#128081;</h2>
       <button onclick="exitOwner()" style="background:transparent;border:1px solid var(--br2);color:var(--t3);border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer">Exit Dashboard</button>
     </div>
+    <div id="sbSetupNotice" style="display:none;background:rgba(201,169,110,.08);border:1px solid var(--gold);border-radius:10px;padding:16px 18px;margin-bottom:20px">
+      <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
+        <span style="font-size:22px">&#9888;&#65039;</span>
+        <div style="flex:1">
+          <div style="font-size:14px;font-weight:600;color:var(--gold);margin-bottom:4px">Supabase Database Not Set Up Yet</div>
+          <div style="font-size:12px;color:var(--t2);line-height:1.7;margin-bottom:10px">Products you add will only be visible on this device until the database is created. To sync across all devices permanently, run the setup SQL in your Supabase project.</div>
+          <div style="font-size:11px;color:var(--t3);line-height:1.8"><strong style="color:var(--t2)">Steps:</strong> Go to <span style="color:var(--gold)">supabase.com</span> &rarr; Your project &rarr; <span style="color:var(--gold)">SQL Editor</span> &rarr; New Query &rarr; Paste the <span style="color:var(--gold)">supabase-setup.sql</span> file &rarr; Run. Then come back and click Sync.</div>
+          <button onclick="sbLoadProducts().then(()=>{if(_sbReady)document.getElementById('sbSetupNotice').style.display='none';})" style="margin-top:10px;background:var(--gold);color:var(--bg);border:none;border-radius:6px;padding:7px 18px;font-size:12px;font-weight:600;cursor:pointer">&#x21BB; Try Sync Now</button>
+        </div>
+      </div>
+    </div>
     <div class="d-grid" style="margin-bottom:20px">
       <div class="d-card"><div class="d-lbl">Revenue</div><div class="d-val" id="dRev">&#8358;0</div><div class="d-sub" id="dRevSub">All time</div></div>
       <div class="d-card"><div class="d-lbl">Orders</div><div class="d-val" id="dOrd">0</div><div class="d-sub" id="dOrdSub">0 pending</div></div>
@@ -680,25 +691,47 @@ const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsIn
 let sb = null;
 try { sb = window.supabase ? window.supabase.createClient(SB_URL, SB_ANON) : null; } catch(e) { console.warn('SB:', e); }
 
+let _sbReady = false; // tracks if Supabase tables exist
+
 async function sbLoadProducts() {
-  if (!sb) return;
+  if (!sb) { console.info('Supabase not initialised — using built-in products'); return; }
   try {
     const { data, error } = await sb.from('products').select('*').order('id', { ascending: true });
-    if (error) throw error;
+    if (error) {
+      // Table doesn't exist yet — guide owner to run setup SQL
+      const msg = error.message || error.code || JSON.stringify(error);
+      console.info('Supabase tables not yet created. Run supabase-setup.sql in your Supabase SQL Editor. Error:', msg);
+      _sbReady = false;
+      return; // falls back to built-in products silently
+    }
+    _sbReady = true;
     if (data && data.length > 0) {
       products.length = 0;
-      data.forEach(r => products.push({ id:r.id, name:r.name, em:r.em||'🌹', cat:r.cat, price:r.price, size:r.size||'50ml', notes:r.notes||'', desc:r.desc||'', brand:r.brand||"Josephine's Scents", inStock:r.in_stock!==false, isNew:r.is_new||false, rating:r.rating||5.0, ratingCount:r.rating_count||0, imageUrl:r.image_url||'' }));
-      renderShop(); const og=document.getElementById('owProdGrid'); if(og) renderOwProducts();
+      data.forEach(r => products.push({
+        id: r.id, name: r.name, em: r.em || '🌹',
+        cat: r.cat, price: r.price, size: r.size || '50ml',
+        notes: r.notes || '', desc: r.description || '',
+        brand: r.brand || "Josephine's Scents",
+        inStock: r.in_stock !== false, isNew: r.is_new || false,
+        rating: r.rating || 5.0, ratingCount: r.rating_count || 0,
+        imageUrl: r.image_url || ''
+      }));
+      renderShop();
+      const og = document.getElementById('owProdGrid');
+      if (og) renderOwProducts();
     }
-  } catch(e) { console.warn('sbLoad:',e); }
+  } catch(e) {
+    console.info('Supabase connection issue (using built-in products):', e.message || e);
+    _sbReady = false;
+  }
 }
 
 async function sbSaveProduct(p) {
   if (!sb) return false;
   try {
-    const {error} = await sb.from('products').upsert({id:p.id,name:p.name,em:p.em,cat:p.cat,price:p.price,size:p.size,notes:p.notes,desc:p.desc,brand:p.brand,in_stock:p.inStock,is_new:p.isNew,rating:p.rating,rating_count:p.ratingCount,image_url:p.imageUrl||''},{ onConflict:'id' });
+    const {error} = await sb.from('products').upsert({id:p.id,name:p.name,em:p.em,cat:p.cat,price:p.price,size:p.size,notes:p.notes,description:p.desc,brand:p.brand,in_stock:p.inStock,is_new:p.isNew,rating:p.rating,rating_count:p.ratingCount,image_url:p.imageUrl||''},{ onConflict:'id' });
     if (error) throw error; return true;
-  } catch(e) { console.warn('sbSave:',e); return false; }
+  } catch(e) { console.info('sbSave error (run setup SQL in Supabase):', e.message||e); return false; }
 }
 
 async function sbDeleteProduct(id) {
@@ -706,7 +739,7 @@ async function sbDeleteProduct(id) {
   try {
     const {error} = await sb.from('products').delete().eq('id',id);
     if (error) throw error; return true;
-  } catch(e) { console.warn('sbDel:',e); return false; }
+  } catch(e) { console.info('sbDel error:', e.message||e); return false; }
 }
 
 async function sbSaveOrder(o) {
@@ -714,7 +747,7 @@ async function sbSaveOrder(o) {
   try {
     const {error} = await sb.from('orders').upsert({id:o.id,customer:o.customer,phone:o.phone,email:o.email,items:o.items,total:o.total,payment:o.payment,status:o.status,date:o.date,items_list:o.itemsList||''},{ onConflict:'id' });
     if (error) throw error; return true;
-  } catch(e) { console.warn('sbOrder:',e); return false; }
+  } catch(e) { console.info('sbOrder error:', e.message||e); return false; }
 }
 
 async function sbLoadOrders() {
@@ -723,7 +756,7 @@ async function sbLoadOrders() {
     const {data,error} = await sb.from('orders').select('*').order('created_at',{ascending:false});
     if (error) throw error;
     if (data&&data.length>0) S.orders=data.map(r=>({id:r.id,customer:r.customer,phone:r.phone,email:r.email,items:r.items,total:r.total,payment:r.payment,status:r.status,date:r.date,itemsList:r.items_list||''}));
-  } catch(e) { console.warn('sbOrders:',e); }
+  } catch(e) { console.info('sbLoadOrders error:', e.message||e); }
 }
 
 const OWNER_WHATSAPP = '2347033273249';
@@ -1160,7 +1193,7 @@ function renderCk(){
         <div class="pm${S.ckData.payment==='bank'?' on':''}" onclick="setPay('bank')">🏦 Direct Bank Transfer</div>
         <div class="pm${S.ckData.payment==='cash'?' on':''}" onclick="setPay('cash')">🤝 Pay on Delivery</div>
       </div>
-      ${S.ckData.payment==='bank'?`<div class="pay-note" style="background:var(--b3);border-radius:8px;padding:14px;margin-top:6px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Bank Transfer Details</div><div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px">Oparinde Bodunrin Josephine</div><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;margin:4px 0">7033273249</div><div style="font-size:14px;color:var(--t2);margin-bottom:8px">Opay</div><div style="font-size:11px;color:var(--t3)">After transfer, send your receipt to the store WhatsApp to confirm.</div></div>`:''}
+      ${S.ckData.payment==='bank'?`<div class="pay-note" style="background:var(--b3);border-radius:8px;padding:14px;margin-top:6px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Bank Transfer Details</div><div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px">Josephine Adebisi</div><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;margin:4px 0">7033273249</div><div style="font-size:14px;color:var(--t2);margin-bottom:8px">Opay</div><div style="font-size:11px;color:var(--t3)">After transfer, send your receipt to the store WhatsApp to confirm.</div></div>`:''}
       ${S.ckData.payment==='ussd'?`<div class="pay-note"><strong>Dial:</strong> *901*000*<span style="color:var(--gold)">${total}</span># on your phone after placing the order.</div>`:''}
       </div>
       ${S.points>=100?`<div class="use-pts-row">
@@ -1269,6 +1302,7 @@ async function confirmOrder(c, sub, total) {
     itemsList
   };
   S.orders.unshift(orderObj);
+  sbSaveOrder(orderObj); // persist to Supabase
 
   // Loyalty points
   S.points += earn;
@@ -1698,6 +1732,9 @@ function owTab(tab, evt) {
 }
 
 function renderOwner() {
+  // Show/hide Supabase setup notice
+  const notice = document.getElementById('sbSetupNotice');
+  if (notice) notice.style.display = _sbReady ? 'none' : 'block';
   const rev = S.orders.reduce((a, b) => a + (typeof b.total === 'number' ? b.total : 0), 0);
   const pend = S.orders.filter(o => o.status === 'pending').length;
   const oos = products.filter(p => !p.inStock).length;
@@ -1789,6 +1826,7 @@ function editProduct(id) {
   const s = (eid, v) => { const el = document.getElementById(eid); if (el) el.value = v; };
   s('pName', p.name); s('pBrand', p.brand || ''); s('pPrice', p.price);
   s('pSize', p.size); s('pNotes', p.notes); s('pDesc', p.desc);
+  s('pImageUrl', p.imageUrl || ''); previewImg(p.imageUrl || '');
   const pIsNew = document.getElementById('pIsNew'); if (pIsNew) pIsNew.checked = p.isNew || false;
   const pCat   = document.getElementById('pCat');   if (pCat)   pCat.value = p.cat;
   const sw = document.getElementById('pStockSw'); if (sw) sw.classList.toggle('on', p.inStock);
@@ -1804,29 +1842,44 @@ function deleteProduct(id) {
   const p = products.find(x => x.id === id); if (!p) return;
   if (!confirm('Delete "' + p.name + '"? This cannot be undone.')) return;
   products.splice(products.findIndex(x => x.id === id), 1);
-  showToast(p.name + ' deleted');
+  sbDeleteProduct(id).then(ok => showToast(p.name + (ok ? ' deleted & removed from cloud ✓' : ' deleted locally')));
   renderOwProducts(); renderShop(); renderOwner();
 }
 
 function renderOwProducts() {
   const grid = document.getElementById('owProdGrid'); if (!grid) return;
   const cnt  = document.getElementById('prodCount');  if (cnt) cnt.textContent = products.length;
+  if (!products.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:52px 20px;color:var(--t3)">'
+      + '<div style="font-size:50px;margin-bottom:12px">🌸</div>'
+      + '<p style="font-family:Cormorant Garamond,serif;font-size:20px;margin-bottom:6px">No products yet</p>'
+      + '<p style="font-size:13px">Use the form above to add your first fragrance</p></div>';
+    return;
+  }
   grid.innerHTML = products.map(p => {
-    const oos = p.inStock ? '' : '<div class="ob">Out</div>';
-    const nw  = p.isNew   ? '<div class="nb">New</div>' : '';
-    const stk = '<div class="sw' + (p.inStock ? ' on' : '') + '" style="cursor:pointer" onclick="toggleStock(' + p.id + ');renderOwProducts();renderOwner()"><div class="sk"></div></div>';
-    const stkLbl = '<span style="font-size:10px;color:' + (p.inStock ? 'var(--ok)' : 'var(--er)') + '">' + (p.inStock ? 'In Stock' : 'Out') + '</span>';
-    return '<div class="owpc">' +
-      '<div class="owpc-img">' + p.em + oos + nw + '</div>' +
-      '<div class="owpc-bd">' +
-        '<div class="owpc-nm">' + p.name + '</div>' +
-        '<div class="owpc-pr">\u20a6' + p.price.toLocaleString() + ' \u00b7 ' + p.size + '</div>' +
-        '<div style="display:flex;align-items:center;gap:6px;margin-bottom:7px">' + stk + stkLbl + '</div>' +
-        '<div class="owpc-btns">' +
-          '<button class="oeb" onclick="editProduct(' + p.id + ')">Edit</button>' +
-          '<button class="odb" onclick="deleteProduct(' + p.id + ')">Del</button>' +
-        '</div>' +
-      '</div></div>';
+    const topImg = p.imageUrl
+      ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'" />'
+      : '<div class="pm-card-no-img">' + p.em + '</div>';
+    const emBadge  = p.imageUrl ? '<div class="pm-card-emoji-badge">' + p.em + '</div>' : '';
+    const oosBadge = p.inStock  ? '' : '<div class="ob" style="position:absolute;top:8px;right:8px">Out</div>';
+    const newBadge = p.isNew    ? '<div class="nb" style="position:absolute;top:8px;' + (p.imageUrl ? 'left:46px' : 'left:8px') + '">New</div>' : '';
+    const stk    = '<div class="sw' + (p.inStock ? ' on' : '') + '" style="cursor:pointer" onclick="toggleStock(' + p.id + ');renderOwProducts();renderOwner()"><div class="sk"></div></div>';
+    const stkLbl = '<span style="font-size:11px;font-weight:500;color:' + (p.inStock ? 'var(--ok)' : 'var(--er)') + '">' + (p.inStock ? 'In Stock' : 'Out of Stock') + '</span>';
+    return '<div class="pm-card">'
+      + '<div class="pm-card-top">' + topImg + emBadge + oosBadge + newBadge + '</div>'
+      + '<div class="pm-card-body">'
+        + '<div class="pm-card-top-row"><span class="pm-card-cat">' + p.cat + '</span>' + (p.isNew ? '<span class="pm-card-new-badge">NEW</span>' : '') + '</div>'
+        + '<div class="pm-card-name">' + p.name + '</div>'
+        + '<div class="pm-card-price">₦' + p.price.toLocaleString() + '</div>'
+        + '<div class="pm-card-meta"><span class="pm-card-size">' + p.size + '</span><span class="pm-card-brand">' + (p.brand || '') + '</span></div>'
+        + '<div class="pm-card-notes">' + (p.notes || '') + '</div>'
+        + '<div class="pm-card-desc">' + (p.desc || '') + '</div>'
+        + '<div class="pm-stock-row">' + stk + stkLbl + '</div>'
+        + '<div class="pm-card-btns">'
+            + '<button class="pm-edit-btn" onclick="editProduct(' + p.id + ')">✏️ Edit</button>'
+            + '<button class="pm-del-btn" onclick="deleteProduct(' + p.id + ')">🗑 Del</button>'
+          + '</div>'
+      + '</div></div>';
   }).join('');
 }
 
@@ -1932,14 +1985,56 @@ function handleUserBtn() {
   }
 }
 
+// --- BARGAIN BAR FUNCTIONS ---
+function updateBargain(id, orig, disc) {
+  disc = parseInt(disc);
+  var v = document.getElementById('bval_'  + id);
+  var o = document.getElementById('borig_' + id);
+  var b = document.getElementById('bbtn_'  + id);
+  if (v) v.textContent = '₦' + (orig - disc).toLocaleString();
+  if (o) o.textContent = disc > 0 ? '₦' + orig.toLocaleString() : '';
+  if (b) b.disabled = (disc === 0);
+}
+function sendOffer(id, encodedName, orig) {
+  var range = document.getElementById('brange_' + id);
+  var disc  = range ? parseInt(range.value) : 0;
+  if (disc === 0) { showToast('Drag the slider to make an offer first!'); return; }
+  var name  = decodeURIComponent(encodedName);
+  var offer = orig - disc;
+  var msg   = 'Hello Josephine!\n\nI would like to make an offer:\n'
+    + 'Product: ' + name + '\n'
+    + 'Listed Price: ₦' + orig.toLocaleString() + '\n'
+    + 'My Offer: ₦' + offer.toLocaleString() + ' (saving ₦' + disc + ')\n\n'
+    + 'Please let me know. Thank you!';
+  window.open('https://wa.me/' + OWNER_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
+  showToast('Offer sent via WhatsApp ✓');
+}
+function previewImg(url) {
+  var box = document.getElementById('imgPreviewBox');
+  if (!box) return;
+  if (url && url.indexOf('http') === 0) {
+    box.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover"'
+      + ' onerror="this.parentNode.innerHTML=\'<div class=&quot;img-url-ph&quot;><span>&#128247;</span>Cannot load image</div>\'" />';
+  } else {
+    box.innerHTML = '<div class="img-url-ph"><span>&#128247;</span>Image preview appears here</div>';
+  }
+}
+
 // ─── INIT ─────────────────────────────────────
 renderAuthForm();
 updateCartUI();
 updatePtsUI();
 renderShop();
+sbLoadProducts(); // fetch live products from Supabase on every load
 // No auto-open — guests land directly on the shop
+
+// --- PASSWORD EYE TOGGLE ---
+function togglePwd(inputId, btn) {
+  var inp = document.getElementById(inputId);
+  if (!inp) return;
+  if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
+  else { inp.type = 'password'; btn.textContent = '👁️'; }
+}
 </script>
 </body>
 </html>
-
-<!-- Production Owner Email: bodunrinoparinde@gmail.com -->
