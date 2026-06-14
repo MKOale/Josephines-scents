@@ -693,12 +693,21 @@ let sb = null; // kept for compatibility checks
 let _sbReady = false;
 
 // Headers for every Supabase REST call
+// GET requests — no Content-Type, no Prefer
+function sbGetHeaders() {
+  return {
+    'apikey': SB_ANON,
+    'Authorization': 'Bearer ' + SB_ANON,
+    'Accept': 'application/json'
+  };
+}
+// POST/DELETE requests
 function sbHeaders() {
   return {
     'apikey': SB_ANON,
     'Authorization': 'Bearer ' + SB_ANON,
     'Content-Type': 'application/json',
-    'Prefer': 'return=minimal'
+    'Accept': 'application/json'
   };
 }
 
@@ -707,11 +716,11 @@ async function sbLoadProducts() {
   try {
     const res = await fetch(SB_URL + '/rest/v1/products?select=*&order=id.asc', {
       method: 'GET',
-      headers: sbHeaders()
+      headers: sbGetHeaders()
     });
     if (!res.ok) {
       const err = await res.text();
-      console.info('Supabase products error:', err);
+      console.warn('Supabase products HTTP ' + res.status + ':', err);
       _sbReady = false; return;
     }
     const data = await res.json();
@@ -742,7 +751,7 @@ async function sbSaveProduct(p) {
   try {
     const res = await fetch(SB_URL + '/rest/v1/products', {
       method: 'POST',
-      headers: Object.assign({}, sbHeaders(), { 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+      headers: Object.assign({}, sbHeaders(), { 'Prefer': 'resolution=merge-duplicates' }),
       body: JSON.stringify({
         id: p.id, name: p.name, em: p.em, cat: p.cat,
         price: p.price, size: p.size, notes: p.notes,
@@ -761,7 +770,7 @@ async function sbDeleteProduct(id) {
   try {
     const res = await fetch(SB_URL + '/rest/v1/products?id=eq.' + id, {
       method: 'DELETE',
-      headers: sbHeaders()
+      headers: sbGetHeaders()
     });
     return res.ok;
   } catch(e) { console.info('sbDeleteProduct:', e.message||e); return false; }
@@ -772,7 +781,7 @@ async function sbSaveOrder(o) {
   try {
     const res = await fetch(SB_URL + '/rest/v1/orders', {
       method: 'POST',
-      headers: Object.assign({}, sbHeaders(), { 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+      headers: Object.assign({}, sbHeaders(), { 'Prefer': 'resolution=merge-duplicates' }),
       body: JSON.stringify({
         id: o.id, customer: o.customer, phone: o.phone,
         email: o.email, items: o.items, total: o.total,
@@ -789,7 +798,7 @@ async function sbLoadOrders() {
   try {
     const res = await fetch(SB_URL + '/rest/v1/orders?select=*&order=created_at.desc', {
       method: 'GET',
-      headers: sbHeaders()
+      headers: sbGetHeaders()
     });
     if (!res.ok) return;
     const data = await res.json();
@@ -2091,11 +2100,12 @@ async function doSyncNow() {
   if (_sbReady) {
     const notice = document.getElementById('sbSetupNotice');
     if (notice) notice.style.display = 'none';
-    showToast('✓ Supabase synced! Products loaded from database.');
+    showToast('✓ Synced! ' + products.length + ' products loaded.');
     renderOwProducts();
   } else {
-    if (msg) msg.textContent = 'Tables not found. Have you run the supabase-setup.sql yet?';
-    if (btn) { btn.disabled = false; btn.textContent = '↻ Try Sync Now'; }
+    if (msg) msg.style.cssText = 'font-size:12px;margin-top:8px;display:block;color:var(--er)';
+    if (msg) msg.textContent = 'Connection failed. Check browser console (F12) for the exact error.';
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
   }
 }
 
