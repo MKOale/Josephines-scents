@@ -4,7 +4,6 @@
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Josephine's Scents</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -689,32 +688,33 @@ const WEB3FORMS_KEY = '8c88b220-3604-493e-8239-e80479edec36';
 // --- SUPABASE ---
 const SB_URL = 'https://wmyjscwwwjnqqalusvun.supabase.co';
 const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndteWpzY3d3d2pucXFhbHVzdnVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzA2MTgsImV4cCI6MjA5NTgwNjYxOH0.2QZEJnvtF3rbtmcuS7FQZXr2suT7aBpyvKfvbV4o5Ng';
-let sb = null;
-function initSB() {
-  if (sb) return true;
-  try {
-    if (window.supabase && window.supabase.createClient) {
-      sb = window.supabase.createClient(SB_URL, SB_ANON);
-      return true;
-    }
-  } catch(e) { console.info('Supabase init error:', e.message || e); }
-  return false;
+// --- SUPABASE REST API (no CDN needed) ---
+let sb = null; // kept for compatibility checks
+let _sbReady = false;
+
+// Headers for every Supabase REST call
+function sbHeaders() {
+  return {
+    'apikey': SB_ANON,
+    'Authorization': 'Bearer ' + SB_ANON,
+    'Content-Type': 'application/json',
+    'Prefer': 'return=minimal'
+  };
 }
 
-let _sbReady = false; // tracks if Supabase tables exist
-
+// Load all products from Supabase
 async function sbLoadProducts() {
-  if (!initSB()) { console.info('Supabase CDN not ready yet — retrying...'); return; }
-  if (!sb) return;
   try {
-    const { data, error } = await sb.from('products').select('*').order('id', { ascending: true });
-    if (error) {
-      // Table doesn't exist yet — guide owner to run setup SQL
-      const msg = error.message || error.code || JSON.stringify(error);
-      console.info('Supabase tables not yet created. Run supabase-setup.sql in your Supabase SQL Editor. Error:', msg);
-      _sbReady = false;
-      return; // falls back to built-in products silently
+    const res = await fetch(SB_URL + '/rest/v1/products?select=*&order=id.asc', {
+      method: 'GET',
+      headers: sbHeaders()
+    });
+    if (!res.ok) {
+      const err = await res.text();
+      console.info('Supabase products error:', err);
+      _sbReady = false; return;
     }
+    const data = await res.json();
     _sbReady = true;
     if (data && data.length > 0) {
       products.length = 0;
@@ -732,42 +732,76 @@ async function sbLoadProducts() {
       if (og) renderOwProducts();
     }
   } catch(e) {
-    console.info('Supabase connection issue (using built-in products):', e.message || e);
+    console.info('sbLoadProducts failed:', e.message || e);
     _sbReady = false;
   }
 }
 
+// Save (upsert) a product
 async function sbSaveProduct(p) {
-  if (!initSB()) return false;
   try {
-    const {error} = await sb.from('products').upsert({id:p.id,name:p.name,em:p.em,cat:p.cat,price:p.price,size:p.size,notes:p.notes,description:p.desc,brand:p.brand,in_stock:p.inStock,is_new:p.isNew,rating:p.rating,rating_count:p.ratingCount,image_url:p.imageUrl||''},{ onConflict:'id' });
-    if (error) throw error; return true;
-  } catch(e) { console.info('sbSave error (run setup SQL in Supabase):', e.message||e); return false; }
+    const res = await fetch(SB_URL + '/rest/v1/products', {
+      method: 'POST',
+      headers: Object.assign({}, sbHeaders(), { 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+      body: JSON.stringify({
+        id: p.id, name: p.name, em: p.em, cat: p.cat,
+        price: p.price, size: p.size, notes: p.notes,
+        description: p.desc, brand: p.brand,
+        in_stock: p.inStock, is_new: p.isNew,
+        rating: p.rating, rating_count: p.ratingCount,
+        image_url: p.imageUrl || ''
+      })
+    });
+    return res.ok;
+  } catch(e) { console.info('sbSaveProduct:', e.message||e); return false; }
 }
 
+// Delete a product
 async function sbDeleteProduct(id) {
-  if (!initSB()) return false;
   try {
-    const {error} = await sb.from('products').delete().eq('id',id);
-    if (error) throw error; return true;
-  } catch(e) { console.info('sbDel error:', e.message||e); return false; }
+    const res = await fetch(SB_URL + '/rest/v1/products?id=eq.' + id, {
+      method: 'DELETE',
+      headers: sbHeaders()
+    });
+    return res.ok;
+  } catch(e) { console.info('sbDeleteProduct:', e.message||e); return false; }
 }
 
+// Save an order
 async function sbSaveOrder(o) {
-  if (!initSB()) return false;
   try {
-    const {error} = await sb.from('orders').upsert({id:o.id,customer:o.customer,phone:o.phone,email:o.email,items:o.items,total:o.total,payment:o.payment,status:o.status,date:o.date,items_list:o.itemsList||''},{ onConflict:'id' });
-    if (error) throw error; return true;
-  } catch(e) { console.info('sbOrder error:', e.message||e); return false; }
+    const res = await fetch(SB_URL + '/rest/v1/orders', {
+      method: 'POST',
+      headers: Object.assign({}, sbHeaders(), { 'Prefer': 'resolution=merge-duplicates,return=minimal' }),
+      body: JSON.stringify({
+        id: o.id, customer: o.customer, phone: o.phone,
+        email: o.email, items: o.items, total: o.total,
+        payment: o.payment, status: o.status,
+        date: o.date, items_list: o.itemsList || ''
+      })
+    });
+    return res.ok;
+  } catch(e) { console.info('sbSaveOrder:', e.message||e); return false; }
 }
 
+// Load orders (for dashboard)
 async function sbLoadOrders() {
-  if (!initSB()) return;
   try {
-    const {data,error} = await sb.from('orders').select('*').order('created_at',{ascending:false});
-    if (error) throw error;
-    if (data&&data.length>0) S.orders=data.map(r=>({id:r.id,customer:r.customer,phone:r.phone,email:r.email,items:r.items,total:r.total,payment:r.payment,status:r.status,date:r.date,itemsList:r.items_list||''}));
-  } catch(e) { console.info('sbLoadOrders error:', e.message||e); }
+    const res = await fetch(SB_URL + '/rest/v1/orders?select=*&order=created_at.desc', {
+      method: 'GET',
+      headers: sbHeaders()
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data && data.length > 0) {
+      S.orders = data.map(r => ({
+        id: r.id, customer: r.customer, phone: r.phone,
+        email: r.email, items: r.items, total: r.total,
+        payment: r.payment, status: r.status,
+        date: r.date, itemsList: r.items_list || ''
+      }));
+    }
+  } catch(e) { console.info('sbLoadOrders:', e.message||e); }
 }
 
 const OWNER_WHATSAPP = '2347033273249';
@@ -2036,8 +2070,7 @@ renderAuthForm();
 updateCartUI();
 updatePtsUI();
 renderShop();
-// Wait for Supabase CDN to fully load before fetching products
-setTimeout(function() { initSB(); sbLoadProducts(); }, 800);
+sbLoadProducts(); // fetch live products from Supabase on load
 // No auto-open — guests land directly on the shop
 
 // --- PASSWORD EYE TOGGLE ---
@@ -2047,21 +2080,13 @@ function togglePwd(inputId, btn) {
   if (inp.type === 'password') { inp.type = 'text'; btn.textContent = '🙈'; }
   else { inp.type = 'password'; btn.textContent = '👁️'; }
 }
-</script>
-</body>
-</html
-// --- SUPABASE SYNC BUTTON ---
+
+
 async function doSyncNow() {
   const btn = document.getElementById('syncNowBtn');
   const msg = document.getElementById('syncMsg');
   if (btn) { btn.disabled = true; btn.textContent = 'Syncing...'; }
   if (msg) msg.textContent = '';
-  // Retry Supabase init in case CDN loaded late
-  if (!initSB()) {
-    if (msg) msg.textContent = 'Supabase CDN not loaded yet. Try refreshing the page.';
-    if (btn) { btn.disabled = false; btn.textContent = '↻ Try Sync Now'; }
-    return;
-  }
   await sbLoadProducts();
   if (_sbReady) {
     const notice = document.getElementById('sbSetupNotice');
@@ -2074,4 +2099,6 @@ async function doSyncNow() {
   }
 }
 
->
+</script>
+</body>
+</html>
