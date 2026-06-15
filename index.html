@@ -2094,17 +2094,54 @@ function togglePwd(inputId, btn) {
 async function doSyncNow() {
   const btn = document.getElementById('syncNowBtn');
   const msg = document.getElementById('syncMsg');
-  if (btn) { btn.disabled = true; btn.textContent = 'Syncing...'; }
-  if (msg) msg.textContent = '';
-  await sbLoadProducts();
-  if (_sbReady) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Testing...'; }
+  if (msg) { msg.style.cssText = 'font-size:12px;margin-top:8px;display:block;color:var(--t3)'; msg.textContent = 'Connecting to Supabase...'; }
+
+  // Step 1: Test if Supabase project is reachable at all
+  try {
+    const ping = await fetch(SB_URL + '/rest/v1/', { headers: sbGetHeaders() });
+    if (!ping.ok) {
+      const pingErr = await ping.text();
+      if (msg) msg.innerHTML = '<span style="color:var(--er)">Supabase error ' + ping.status + ':</span> ' + pingErr.substring(0,120);
+      if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
+      return;
+    }
+  } catch(e) {
+    if (msg) msg.innerHTML = '<span style="color:var(--er)">Cannot reach Supabase:</span> ' + (e.message||e) + '<br><span style="color:var(--t3);font-size:11px">Your Supabase project may be paused. Go to supabase.com, open the project and click "Restore project".</span>';
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
+    return;
+  }
+
+  // Step 2: Load products
+  if (msg) msg.textContent = 'Connected! Loading products...';
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/products?select=*&order=id.asc', { headers: sbGetHeaders() });
+    if (!res.ok) {
+      const err = await res.text();
+      if (msg) msg.innerHTML = '<span style="color:var(--er)">Products table error ' + res.status + ':</span> ' + err.substring(0,200);
+      if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
+      return;
+    }
+    const data = await res.json();
+    _sbReady = true;
+    if (data && data.length > 0) {
+      products.length = 0;
+      data.forEach(r => products.push({
+        id:r.id, name:r.name, em:r.em||'🌹', cat:r.cat, price:r.price,
+        size:r.size||'50ml', notes:r.notes||'', desc:r.description||'',
+        brand:r.brand||"Josephine's Scents",
+        inStock:r.in_stock!==false, isNew:r.is_new||false,
+        rating:r.rating||5.0, ratingCount:r.rating_count||0, imageUrl:r.image_url||''
+      }));
+    }
+    // Hide notice and show success
     const notice = document.getElementById('sbSetupNotice');
     if (notice) notice.style.display = 'none';
-    showToast('✓ Synced! ' + products.length + ' products loaded.');
-    renderOwProducts();
-  } else {
-    if (msg) msg.style.cssText = 'font-size:12px;margin-top:8px;display:block;color:var(--er)';
-    if (msg) msg.textContent = 'Connection failed. Check browser console (F12) for the exact error.';
+    showToast('✓ Synced! ' + products.length + ' products loaded from Supabase.');
+    renderShop(); renderOwProducts();
+    if (btn) { btn.disabled = false; btn.textContent = '↻ Sync Now'; }
+  } catch(e) {
+    if (msg) msg.innerHTML = '<span style="color:var(--er)">Fetch error:</span> ' + (e.message||e);
     if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
   }
 }
