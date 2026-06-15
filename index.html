@@ -687,7 +687,7 @@ const WEB3FORMS_KEY = '8c88b220-3604-493e-8239-e80479edec36';
 
 // --- SUPABASE ---
 const SB_URL = 'https://wmyjscwwwjnqqalusvun.supabase.co';
-const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndteWpzY3d3d2pucXFhbHVzdnVuIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4MDIzMDYxOCwiZXhwIjoyMDk1ODA2NjE4fQ.ERy1DzX6toBZP9p5AyvrPN9XBneimAqNJjedkGF5aHA';
+const SB_ANON = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndteWpzY3d3d2pucXFhbHVzdnVuIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAyMzA2MTgsImV4cCI6MjA5NTgwNjYxOH0.2QZEJnvtF3rbtmcuS7FQZXr2suT7aBpyvKfvbV4o5Ng';
 // --- SUPABASE REST API (no CDN needed) ---
 let sb = null; // kept for compatibility checks
 let _sbReady = false;
@@ -2094,31 +2094,13 @@ function togglePwd(inputId, btn) {
 async function doSyncNow() {
   const btn = document.getElementById('syncNowBtn');
   const msg = document.getElementById('syncMsg');
-  if (btn) { btn.disabled = true; btn.textContent = 'Testing...'; }
-  if (msg) { msg.style.cssText = 'font-size:12px;margin-top:8px;display:block;color:var(--t3)'; msg.textContent = 'Connecting to Supabase...'; }
-
-  // Step 1: Test if Supabase project is reachable at all
-  try {
-    const ping = await fetch(SB_URL + '/rest/v1/', { headers: sbGetHeaders() });
-    if (!ping.ok) {
-      const pingErr = await ping.text();
-      if (msg) msg.innerHTML = '<span style="color:var(--er)">Supabase error ' + ping.status + ':</span> ' + pingErr.substring(0,120);
-      if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
-      return;
-    }
-  } catch(e) {
-    if (msg) msg.innerHTML = '<span style="color:var(--er)">Cannot reach Supabase:</span> ' + (e.message||e) + '<br><span style="color:var(--t3);font-size:11px">Your Supabase project may be paused. Go to supabase.com, open the project and click "Restore project".</span>';
-    if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
-    return;
-  }
-
-  // Step 2: Load products
-  if (msg) msg.textContent = 'Connected! Loading products...';
+  if (btn) { btn.disabled = true; btn.textContent = 'Syncing...'; }
+  if (msg) { msg.style.cssText = 'font-size:12px;margin-top:8px;display:block;color:var(--t3)'; msg.textContent = 'Connecting...'; }
   try {
     const res = await fetch(SB_URL + '/rest/v1/products?select=*&order=id.asc', { headers: sbGetHeaders() });
     if (!res.ok) {
       const err = await res.text();
-      if (msg) msg.innerHTML = '<span style="color:var(--er)">Products table error ' + res.status + ':</span> ' + err.substring(0,200);
+      if (msg) msg.innerHTML = '<span style="color:var(--er)">Error ' + res.status + ':</span> ' + err.substring(0,200);
       if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
       return;
     }
@@ -2134,14 +2116,13 @@ async function doSyncNow() {
         rating:r.rating||5.0, ratingCount:r.rating_count||0, imageUrl:r.image_url||''
       }));
     }
-    // Hide notice and show success
     const notice = document.getElementById('sbSetupNotice');
     if (notice) notice.style.display = 'none';
-    showToast('✓ Synced! ' + products.length + ' products loaded from Supabase.');
+    showToast('✓ Synced! ' + products.length + ' products loaded.');
     renderShop(); renderOwProducts();
     if (btn) { btn.disabled = false; btn.textContent = '↻ Sync Now'; }
   } catch(e) {
-    if (msg) msg.innerHTML = '<span style="color:var(--er)">Fetch error:</span> ' + (e.message||e);
+    if (msg) msg.innerHTML = '<span style="color:var(--er)">Network error:</span> ' + (e.message||e);
     if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
   }
 }
