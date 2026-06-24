@@ -48,6 +48,16 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .h-sub{font-size:14px;color:var(--t3);line-height:1.8;max-width:420px;margin:0 auto 32px}
 .h-cta{background:var(--gold);color:var(--bg);padding:13px 34px;border-radius:3px;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;border:none;transition:all .3s}
 .h-cta:hover{background:var(--gl)}
+.h-cta-sec{background:transparent;border:1.5px solid var(--gold);color:var(--gold);padding:13px 30px;border-radius:3px;font-size:13px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;font-family:'Jost',sans-serif;transition:all .3s}
+.h-cta-sec:hover{background:rgba(201,169,110,.1)}
+.feat-wrap{max-width:1180px;margin:0 auto;padding:20px 20px 48px}
+.test-wrap{max-width:1180px;margin:0 auto;padding:0 20px 48px}
+.test-strip{display:flex;gap:14px;overflow-x:auto;padding-bottom:12px;scrollbar-width:none;-ms-overflow-style:none}
+.test-strip::-webkit-scrollbar{display:none}
+.tcard{background:var(--b3);border:1px solid var(--br);border-radius:12px;padding:18px;min-width:230px;max-width:250px;flex-shrink:0;display:flex;flex-direction:column;gap:8px}
+.tcard-stars{color:var(--gold);font-size:13px;letter-spacing:1px}
+.tcard-text{font-size:12px;color:var(--t2);line-height:1.65;font-style:italic;flex:1}
+.tcard-author{font-size:11px;color:var(--t3);font-weight:500}
 .h-stats{display:flex;gap:32px;justify-content:center;margin-top:44px;padding-top:32px;border-top:1px solid var(--br);flex-wrap:wrap}
 .h-sn{font-family:'Cormorant Garamond',serif;font-size:28px;color:var(--gold)}
 .h-sl{font-size:10px;color:var(--t3);letter-spacing:2px;text-transform:uppercase;margin-top:2px}
@@ -90,7 +100,11 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .pc{background:var(--b2);border:1px solid var(--br);border-radius:12px;overflow:hidden;transition:all .3s;cursor:pointer;position:relative}
 .pc:hover{border-color:var(--br2);transform:translateY(-3px);box-shadow:0 14px 40px rgba(0,0,0,.5)}
 .pc.oos{opacity:.55}
-.p-img{height:185px;display:flex;align-items:center;justify-content:center;font-size:58px;background:var(--b3);position:relative}
+.p-img{height:185px;display:flex;align-items:center;justify-content:center;font-size:58px;background:var(--b3);position:relative;overflow:hidden}
+.p-phot{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.p-em-fb{display:none}
+.m-img-box{text-align:center;margin-bottom:10px}
+.m-phot{width:100%;max-height:250px;object-fit:cover;border-radius:10px;display:block}
 .ob{position:absolute;top:8px;right:8px;background:rgba(224,82,82,.9);color:#fff;font-size:9px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px}
 .nb{position:absolute;top:8px;left:8px;background:rgba(201,169,110,.9);color:var(--bg);font-size:9px;font-weight:700;padding:3px 9px;border-radius:3px;letter-spacing:.5px}
 .wb{position:absolute;bottom:8px;right:8px;background:rgba(13,11,8,.7);border:1px solid var(--br);border-radius:6px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;transition:all .2s}
@@ -101,6 +115,8 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .p-stars{font-size:11px;color:var(--gold);margin-bottom:7px}
 .p-footer{display:flex;align-items:center;justify-content:space-between}
 .p-price{font-size:17px;font-weight:600;color:var(--gold)}
+.promo-cd{font-size:10px;color:#e0a82e;background:rgba(224,168,46,.08);border:1px solid rgba(224,168,46,.2);border-radius:20px;padding:3px 10px;margin-top:5px;display:none;align-items:center;gap:4px;width:fit-content}
+.pcd-val{font-weight:700;letter-spacing:.3px}
 .p-size{font-size:10px;color:var(--t3);margin-top:1px}
 .atc{background:transparent;border:1px solid var(--br2);color:var(--gold);padding:7px 13px;border-radius:5px;font-size:11px;font-weight:500;cursor:pointer;transition:all .2s}
 .atc:hover:not(:disabled){background:var(--gold);color:var(--bg)}
@@ -220,6 +236,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .g-name{font-family:'Cormorant Garamond',serif;font-size:18px;font-weight:400;margin-bottom:6px}
 .g-desc{font-size:12px;color:var(--t3);line-height:1.6;margin-bottom:12px}
 .g-rwd{font-size:11px;color:var(--gold);background:rgba(201,169,110,.1);border-radius:14px;padding:3px 12px;display:inline-block}
+.g-cap-badge{font-size:10px;margin-top:6px;padding:3px 10px;border-radius:20px;background:var(--b4);color:var(--t3);display:inline-block}
+.g-cap-badge.done{background:rgba(201,169,110,.1);color:var(--gold)}
+.g-done{opacity:.65}
 .g-area{background:var(--b2);border:1px solid var(--br);border-radius:14px;padding:24px;margin-top:8px}
 .g-area h3{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:400;text-align:center;margin-bottom:16px}
 .sc-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;max-width:270px;margin:0 auto 14px}
@@ -287,6 +306,25 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .promo-tag{background:var(--b3);border:1px solid var(--br2);border-radius:5px;padding:5px 12px;font-size:12px;color:var(--gold);display:inline-flex;align-items:center;gap:8px;margin:3px}
 .del-p{background:none;border:none;color:var(--t3);cursor:pointer;font-size:12px}
 
+.ck-type-btn{width:100%;background:var(--b3);border:1.5px solid var(--br);border-radius:11px;padding:15px 16px;cursor:pointer;text-align:left;display:flex;align-items:center;gap:14px;transition:all .2s;color:var(--t1);margin:0}
+.ck-type-btn:hover,.ck-type-btn:focus{border-color:var(--gold);background:rgba(201,169,110,.06);outline:none}
+/* ── LOOKBOOK LIGHTBOX ── */
+.lk-box{background:var(--b2);border-radius:16px;padding:20px;width:min(560px,95vw);position:relative;display:flex;flex-direction:column;gap:12px;max-height:92vh}
+.lk-close{position:absolute;top:12px;right:14px;background:none;border:none;font-size:20px;cursor:pointer;color:var(--t2);z-index:1;padding:4px 8px}
+.lk-slide{flex:1;display:flex;align-items:center;justify-content:center;min-height:220px;max-height:60vh;overflow:hidden;border-radius:10px;background:var(--b3)}
+.lk-slide img,.lk-slide video{max-width:100%;max-height:60vh;object-fit:contain;border-radius:10px;display:block}
+.lk-slide iframe{width:100%;height:340px;border:none;border-radius:10px}
+.lk-controls{display:flex;align-items:center;justify-content:center;gap:16px}
+.lk-nav-btn{background:var(--b3);border:1px solid var(--br);border-radius:50%;width:36px;height:36px;font-size:20px;cursor:pointer;color:var(--t1);display:flex;align-items:center;justify-content:center;transition:.2s;line-height:1}
+.lk-nav-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.lk-nav-btn:disabled{opacity:.3;cursor:default}
+.lk-count{font-size:13px;color:var(--t3);min-width:50px;text-align:center}
+.lk-open-btn{width:100%;margin-top:10px;padding:11px;background:transparent;border:1.5px solid var(--gold);color:var(--gold);border-radius:9px;font-size:13px;cursor:pointer;transition:.2s;font-family:inherit}
+.lk-open-btn:hover{background:rgba(201,169,110,.08)}
+/* ── WA FAB ── */
+@keyframes wa-pulse{0%,100%{box-shadow:0 4px 16px rgba(37,211,102,.45),0 0 0 0 rgba(37,211,102,.3)}70%{box-shadow:0 4px 16px rgba(37,211,102,.45),0 0 0 14px rgba(37,211,102,0)}}
+.wa-fab{position:fixed;bottom:24px;right:24px;width:56px;height:56px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;cursor:pointer;z-index:9998;border:none;animation:wa-pulse 3s infinite;transition:transform .2s}
+.wa-fab:hover{transform:scale(1.1)}
 /* ── TOAST ── */
 .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--b3);border:1px solid var(--gold);border-radius:7px;padding:11px 22px;font-size:13px;color:var(--t1);z-index:600;opacity:0;transition:all .3s;pointer-events:none;white-space:nowrap;max-width:90vw;text-align:center}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(-8px)}
@@ -349,6 +387,9 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .pm-edit-btn:hover{background:var(--gold);color:var(--bg)}
 .pm-del-btn{padding:9px 13px;border-radius:7px;border:1px solid rgba(224,82,82,.3);background:transparent;color:var(--er);font-size:12px;cursor:pointer;transition:all .2s}
 .pm-del-btn:hover{background:var(--er);color:#fff}
+.pm-low-btn{width:100%;margin-top:7px;background:transparent;border:1px solid var(--br);border-radius:6px;padding:6px;font-size:11px;cursor:pointer;color:var(--t3);transition:.2s;font-family:inherit;text-align:center}
+.pm-low-btn:hover{border-color:var(--gold);color:var(--gold)}
+.pm-low-btn.on{border-color:rgba(224,168,46,.5);color:var(--gold);background:rgba(224,168,46,.07)}
 /* BIG EMOJI */
 .emoji-picker-big{display:flex;flex-wrap:wrap;gap:8px;padding:14px;background:var(--b3);border-radius:10px;border:1px solid var(--br);max-height:230px;overflow-y:auto;flex:1}
 .ep-btn-big{width:52px;height:52px;border-radius:10px;border:2px solid transparent;background:var(--b4);font-size:26px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
@@ -450,6 +491,59 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
   </div>
 </div>
 
+<!-- ORDER TRACKER -->
+<div class="auth-ov" id="trackOv" onclick="if(event.target===this)closeTracker()">
+  <div class="auth-box">
+    <div class="auth-logo" style="font-size:17px">📦 Track Your Order</div>
+    <p class="auth-sub">Enter your order ID to see the status</p>
+    <div style="display:flex;gap:8px;margin:12px 0">
+      <input class="f-inp" id="trackInp" placeholder="e.g. JS-1A2B3C4D" style="flex:1;text-transform:uppercase" oninput="this.value=this.value.toUpperCase()"/>
+      <button onclick="trackOrder()" style="background:var(--gold);color:#1a1209;border:none;border-radius:7px;padding:10px 16px;font-size:13px;cursor:pointer;font-family:inherit;white-space:nowrap">Track</button>
+    </div>
+    <div id="trackResult"></div>
+    <p class="guest-link" onclick="closeTracker()">Close</p>
+  </div>
+</div>
+
+<!-- LOOKBOOK LIGHTBOX -->
+<div class="auth-ov" id="lookbookOv" onclick="if(event.target===this)closeLookbook()" style="z-index:10001">
+  <div class="lk-box">
+    <button class="lk-close" onclick="closeLookbook()">✕</button>
+    <div style="font-size:14px;font-weight:600;color:var(--t1);padding-right:30px" id="lkTitle">Lookbook</div>
+    <div class="lk-slide" id="lkSlide"></div>
+    <div class="lk-controls">
+      <button class="lk-nav-btn" id="lkPrev" onclick="prevLook()">&#8249;</button>
+      <span class="lk-count" id="lkCount">1 / 1</span>
+      <button class="lk-nav-btn" id="lkNext" onclick="nextLook()">&#8250;</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT TYPE MODAL -->
+<div class="auth-ov" id="ckTypeOv" onclick="if(event.target===this)closeCkType()">
+  <div class="auth-box">
+    <div class="auth-logo" style="font-size:17px">📦 How Would You Like to Pay?</div>
+    <p class="auth-sub">Select your checkout preference</p>
+    <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+      <button class="ck-type-btn" onclick="setCkType('all')">
+        <span style="font-size:26px;flex-shrink:0">📦</span>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--t1)">Pay All Now</div>
+          <div style="font-size:12px;color:var(--t3);margin-top:3px">Product + delivery fee — choose your zone</div>
+        </div>
+      </button>
+      <button class="ck-type-btn" onclick="setCkType('product_only')">
+        <span style="font-size:26px;flex-shrink:0">🛍️</span>
+        <div>
+          <div style="font-size:14px;font-weight:600;color:var(--t1)">Pay Product Only</div>
+          <div style="font-size:12px;color:var(--t3);margin-top:3px">Pay for products now · delivery arranged separately</div>
+        </div>
+      </button>
+    </div>
+    <p class="guest-link" onclick="closeCkType()">Cancel</p>
+  </div>
+</div>
+
 <!-- ══ HOME ══ -->
 <div class="pg on" id="pg-home">
   <div class="hero">
@@ -457,7 +551,10 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
       <p class="eyebrow">Eau de Parfum · Lagos · Est. 2021</p>
       <h1 class="h-title">Where Scent<br>Becomes <em>Memory</em></h1>
       <p class="h-sub">Handcrafted fragrances that tell your story. Each bottle a journey, each note a feeling never forgotten.</p>
-      <button class="h-cta" onclick="go('shop')">Explore Collection</button>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="h-cta" onclick="go('shop')">Explore Collection</button>
+        <button class="h-cta-sec" onclick="openTracker()">📦 Track Order</button>
+      </div>
       <div class="h-stats">
         <div><div class="h-sn">48+</div><div class="h-sl">Fragrances</div></div>
         <div><div class="h-sn">2.4k</div><div class="h-sl">Clients</div></div>
@@ -465,6 +562,14 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
         <div><div class="h-sn">5★</div><div class="h-sl">Rated</div></div>
       </div>
     </div>
+  </div>
+  <div class="feat-wrap" id="featWrap" style="display:none">
+    <div class="sec-hdr" style="border-top:1px solid var(--br);padding-top:32px"><h2 class="sec-title">✨ Featured</h2></div>
+    <div class="pgrid" id="featGrid"></div>
+  </div>
+  <div class="test-wrap">
+    <div class="sec-hdr" style="border-top:1px solid var(--br);padding-top:32px"><h2 class="sec-title">What Our Clients Say</h2></div>
+    <div class="test-strip" id="testStrip"></div>
   </div>
 </div>
 
@@ -513,6 +618,7 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
       <div class="pts-circle"><div class="pts-n" id="loyPts">0</div><div class="pts-l">Points</div></div>
       <div class="tier-b t-bronze" id="tierBadge">Bronze Member</div>
       <p style="font-size:13px;color:var(--t3);margin:10px 0 6px" id="tierProg"></p>
+      <p style="font-size:12px;color:var(--gold);margin-bottom:6px;min-height:16px" id="tierBonusTxt"></p>
       <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
     </div>
     <div class="ref-box" style="margin-bottom:26px">
@@ -535,12 +641,7 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
       <h2 class="serif" style="font-size:34px;font-weight:300;margin-bottom:6px">Play & Earn</h2>
       <p style="font-size:13px;color:var(--t3)">Win loyalty points every time you play</p>
     </div>
-    <div class="g-grid">
-      <div class="g-card" onclick="launchGame('scratch')"><div class="g-icon">🎫</div><div class="g-name">Scent Scratch</div><div class="g-desc">Reveal tiles and match 3 symbols.</div><div class="g-rwd">Up to 100 pts</div></div>
-      <div class="g-card" onclick="launchGame('memory')"><div class="g-icon">🌸</div><div class="g-name">Fragrance Memory</div><div class="g-desc">Flip cards and match all scent pairs.</div><div class="g-rwd">Up to 50 pts</div></div>
-      <div class="g-card" onclick="launchGame('quiz')"><div class="g-icon">🎓</div><div class="g-name">Scent Quiz</div><div class="g-desc">Answer perfumery trivia. 10 pts each!</div><div class="g-rwd">10 pts per answer</div></div>
-      <div class="g-card" onclick="launchGame('spin')"><div class="g-icon">🎡</div><div class="g-name">Fortune Wheel</div><div class="g-desc">Spin once a day for surprise rewards.</div><div class="g-rwd">10–200 pts</div></div>
-    </div>
+    <div class="g-grid" id="gGrid"></div>
     <div class="g-area" id="gArea" style="display:none"><div id="gContent"></div></div>
   </div>
 </div>
@@ -553,7 +654,10 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
   <div class="ow-wrap">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:20px">
       <h2 class="serif" style="font-size:28px;font-weight:300">Welcome, Josephine &#128081;</h2>
-      <button onclick="exitOwner()" style="background:transparent;border:1px solid var(--br2);color:var(--t3);border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer">Exit Dashboard</button>
+      <div style="display:flex;gap:8px">
+        <button id="dashRefreshBtn" onclick="refreshDashboard()" style="background:transparent;border:1px solid var(--br2);color:var(--t3);border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer">🔄 Refresh</button>
+        <button onclick="exitOwner()" style="background:transparent;border:1px solid var(--br2);color:var(--t3);border-radius:7px;padding:7px 16px;font-size:12px;cursor:pointer">Exit Dashboard</button>
+      </div>
     </div>
     <div id="sbSetupNotice" style="display:none;background:rgba(201,169,110,.08);border:1px solid var(--gold);border-radius:10px;padding:16px 18px;margin-bottom:20px">
       <div style="display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap">
@@ -602,6 +706,16 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
         </div>
         <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Scent Notes</label><input class="f-inp" id="pNotes" placeholder="e.g. Rose, Oud, Musk"/></div>
         <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Product Image URL <span style="color:var(--t3);font-size:10px;text-transform:none;letter-spacing:0">&mdash; paste from Google Photos, WhatsApp Web, etc.</span></label><input class="f-inp" id="pImageUrl" placeholder="https://..." oninput="previewImg(this.value)"/><div class="img-url-preview" id="imgPreviewBox"><div class="img-url-ph"><span>&#128247;</span>Image preview appears here</div></div></div>
+        <div class="f-grp" style="margin-top:10px">
+          <label class="f-lbl">🎬 Lookbook Media <span style="color:var(--t3);font-size:10px;text-transform:none;letter-spacing:0">— GIFs, video or YouTube URLs shown to customers</span></label>
+          <div style="display:flex;gap:8px;margin-top:6px"><input class="f-inp" id="pLookUrl" placeholder="https://..." style="flex:1"/><button type="button" onclick="addLookbookUrl()" style="background:var(--gold);color:#1a1209;border:none;border-radius:7px;padding:8px 14px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit">+ Add</button></div>
+          <div id="lookbookList" style="margin-top:8px;display:flex;flex-direction:column;gap:6px"><div style="font-size:11px;color:var(--t3)">No media added yet</div></div>
+        </div>
+        <div class="f-grp" style="margin-top:10px">
+          <label class="f-lbl">⏰ Promo End Date <span style="color:var(--t3);font-size:10px;text-transform:none;letter-spacing:0">— countdown shows on product card</span></label>
+          <input class="f-inp" id="pPromoEnd" type="datetime-local"/>
+          <div style="font-size:11px;color:var(--t3);margin-top:4px">Leave blank for no timer</div>
+        </div>
         <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Description *</label>
           <textarea class="f-inp" id="pDesc" rows="3" placeholder="Describe the fragrance story, feel, and who it is for..." style="resize:vertical;min-height:80px"></textarea>
         </div>
@@ -614,11 +728,18 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
           <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);cursor:pointer">
             <input type="checkbox" id="pIsNew" style="accent-color:var(--gold)"/> Mark as New Arrival
           </label>
+          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--t2);cursor:pointer">
+            <input type="checkbox" id="pFeatured" style="accent-color:var(--gold)"/> ✨ Feature on Homepage
+          </label>
         </div>
         <div style="margin-top:14px">
           <button class="spb" onclick="saveProduct()">Save Product</button>
           <button class="ceb" id="cancelEditBtn" style="display:none" onclick="cancelEdit()">Cancel</button>
         </div>
+      </div>
+      <div id="lowStockWarn" style="display:none;background:rgba(224,168,46,.06);border:1px solid rgba(224,168,46,.2);border-radius:10px;padding:14px 16px;margin-bottom:16px">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">⚠️ <strong style="color:var(--gold);font-size:13px">Low Stock Alert</strong></div>
+        <div id="lowStockList" style="font-size:12px;color:var(--t2);display:flex;flex-direction:column;gap:4px"></div>
       </div>
       <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin:22px 0 14px"><h4 style="font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:400">All Products (<span id="prodCount">0</span>)</h4><button onclick="sbLoadProducts()" style="background:var(--b3);border:1px solid var(--br);border-radius:6px;padding:6px 14px;font-size:12px;color:var(--t2);cursor:pointer">↻ Sync from Cloud</button></div>
       <div class="pm-grid" id="owProdGrid"></div>
@@ -777,6 +898,17 @@ async function sbDeleteProduct(id) {
 }
 
 // Save an order
+async function sbUpdateOrderStatus(id, status) {
+  try {
+    const res = await fetch(SB_URL + '/rest/v1/orders?id=eq.' + encodeURIComponent(id), {
+      method: 'PATCH',
+      headers: Object.assign({}, sbHeaders(), { 'Prefer': 'return=minimal' }),
+      body: JSON.stringify({ status })
+    });
+    return res.ok;
+  } catch(e) { console.info('sbUpdateOrderStatus:', e.message||e); return false; }
+}
+
 async function sbSaveOrder(o) {
   try {
     const res = await fetch(SB_URL + '/rest/v1/orders', {
@@ -815,6 +947,7 @@ async function sbLoadOrders() {
 
 const OWNER_WHATSAPP = '2347033273249';
 const PAYSTACK_PK = 'pk_test_a5e02752656ad57301fdd73a94671d1cd6c70e84';
+const ZONE_DELIVERY = {lagos:6000,ibadan:4000,others:7000};
 
 // ─── STATE ───────────────────────────────────
 const S = {
@@ -834,8 +967,9 @@ const S = {
   ],
   reviewMap: {},
   spinUsed: false,
+  ckType: 'all',
   ckStep: 1,
-  ckData: {name:'',phone:'',email:'',addr:'',payment:'paystack',usePoints:false,promoCode:'',promoDiscount:0,paystackRef:''},
+  ckData: {name:'',phone:'',email:'',addr:'',zone:'lagos',payment:'paystack',usePoints:false,promoCode:'',promoDiscount:0,paystackRef:''},
   notifSent: false,
 };
 
@@ -873,15 +1007,251 @@ products.forEach(p => {
 
 const cats = ['all','Floral','Oud','Fresh','Woody','Oriental'];
 const rewards = [
-  {id:'r1',icon:'💝',name:'10% Off Next Order',cost:100},
-  {id:'r2',icon:'🎁',name:'Free 5ml Sample',cost:150},
-  {id:'r3',icon:'🚚',name:'Free Delivery',cost:80},
-  {id:'r4',icon:'✨',name:'VIP Scent Access',cost:300},
+  {id:'r1',icon:'💝',name:'10% Off Next Order',cost:50},
+  {id:'r2',icon:'🎁',name:'Free 5ml Sample',cost:100},
+  {id:'r3',icon:'🚚',name:'Free Delivery',cost:60},
+  {id:'r4',icon:'✨',name:'VIP Scent Access',cost:200},
 ];
 
 // ─── UTILS ───────────────────────────────────
 function stars(r){return'★'.repeat(Math.round(r))+'☆'.repeat(5-Math.round(r));}
 function uid(){return'JS-'+Date.now().toString().slice(-6);}
+// ── LOOKBOOK ─────────────────────────────────────
+let _lkUrls=[], _lkIdx=0, _editLookbook=[];
+
+function openLookbook(productId){
+  const urls=JSON.parse(localStorage.getItem('lookbook_'+productId)||'[]');
+  if(!urls.length){showToast('No lookbook media for this product yet 🎬');return;}
+  const p=products.find(x=>x.id===productId);
+  const el=document.getElementById('lkTitle');
+  if(el) el.textContent=(p?p.name+' ':'')+'Lookbook';
+  _lkUrls=urls; _lkIdx=0;
+  document.getElementById('lookbookOv').classList.add('on');
+  renderLookbookSlide();
+}
+function closeLookbook(){document.getElementById('lookbookOv').classList.remove('on');}
+function renderLookbookSlide(){
+  const url=_lkUrls[_lkIdx];
+  const slide=document.getElementById('lkSlide');
+  const counter=document.getElementById('lkCount');
+  const prev=document.getElementById('lkPrev');
+  const next=document.getElementById('lkNext');
+  if(counter) counter.textContent=(_lkIdx+1)+' / '+_lkUrls.length;
+  if(prev) prev.disabled=_lkIdx===0;
+  if(next) next.disabled=_lkIdx===_lkUrls.length-1;
+  if(!slide) return;
+  if(/\.(mp4|webm|ogg)(\?.*)?$/i.test(url)){
+    slide.innerHTML='<video src="'+url+'" controls autoplay muted playsinline style="max-width:100%;max-height:60vh;border-radius:10px"></video>';
+  } else if(url.includes('youtube.com')||url.includes('youtu.be')){
+    const vid=(url.match(/(?:v=|youtu\.be\/)([^&?]+)/)||[])[1]||'';
+    slide.innerHTML='<iframe src="https://www.youtube.com/embed/'+vid+'?autoplay=1" style="width:100%;height:340px;border:none;border-radius:10px" allowfullscreen></iframe>';
+  } else {
+    slide.innerHTML='<img src="'+url+'" style="max-width:100%;max-height:60vh;object-fit:contain;border-radius:10px" onerror="this.style.opacity=0.3">';
+  }
+}
+function prevLook(){if(_lkIdx>0){_lkIdx--;renderLookbookSlide();}}
+function nextLook(){if(_lkIdx<_lkUrls.length-1){_lkIdx++;renderLookbookSlide();}}
+
+function addLookbookUrl(){
+  const inp=document.getElementById('pLookUrl');
+  const url=(inp?.value||'').trim();
+  if(!url||!url.startsWith('http')){showToast('Please enter a valid https:// URL');return;}
+  _editLookbook.push(url); inp.value=''; renderLookbookList();
+}
+function removeLookbookUrl(i){_editLookbook.splice(i,1);renderLookbookList();}
+function renderLookbookList(){
+  const el=document.getElementById('lookbookList'); if(!el) return;
+  if(!_editLookbook.length){el.innerHTML='<div style="font-size:11px;color:var(--t3)">No media added yet</div>';return;}
+  el.innerHTML=_editLookbook.map((u,i)=>`<div style="display:flex;align-items:center;gap:8px;background:var(--b3);border-radius:7px;padding:7px 10px"><span style="font-size:11px;color:var(--t2);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${u}</span><button onclick="removeLookbookUrl(${i})" style="background:none;border:none;color:var(--t3);cursor:pointer;font-size:15px;flex-shrink:0;padding:0 2px">✕</button></div>`).join('');
+}
+
+// ── WA CHAT ──────────────────────────────────
+function openWhatsAppChat(){
+  const msg='Hello Josephine! I’d love to know more about your fragrances. 💝';
+  window.open('https://wa.me/'+OWNER_WHATSAPP+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+// ── DAILY GAME CAPS ──────────────────────────────
+const GAME_DEFS=[
+  {id:'scratch',icon:'🏫',name:'Scent Scratch',   desc:'Reveal tiles and match 3 symbols.',         rwd:'Up to 100 pts'},
+  {id:'memory', icon:'🌸',name:'Fragrance Memory',desc:'Flip cards and match all scent pairs.',     rwd:'Up to 50 pts'},
+  {id:'quiz',   icon:'🎓',name:'Scent Quiz',      desc:'Answer perfumery trivia. 10 pts each!',     rwd:'10 pts per answer'},
+  {id:'spin',   icon:'🎡',name:'Fortune Wheel',   desc:'Spin for surprise rewards.',                rwd:'10–200 pts'},
+];
+const GAME_CAPS={scratch:3,memory:3,quiz:2,spin:1};
+function getToday(){return new Date().toISOString().split('T')[0];}
+function getGamePlays(g){return parseInt(localStorage.getItem('gp_'+g+'_'+getToday())||'0');}
+function incGamePlays(g){localStorage.setItem('gp_'+g+'_'+getToday(),getGamePlays(g)+1);}
+function canPlayGame(g){return !S.user||getGamePlays(g)<(GAME_CAPS[g]||99);}
+function remPlays(g){return Math.max(0,(GAME_CAPS[g]||99)-getGamePlays(g));}
+function renderGameCards(){
+  const grid=document.getElementById('gGrid'); if(!grid) return;
+  grid.innerHTML=GAME_DEFS.map(g=>{
+    const rem=S.user?remPlays(g.id):GAME_CAPS[g.id];
+    const cap=GAME_CAPS[g.id];
+    const done=S.user&&rem===0;
+    return`<div class="g-card${done?' g-done':''}" onclick="launchGame('${g.id}')">
+      <div class="g-icon">${g.icon}</div>
+      <div class="g-name">${g.name}</div>
+      <div class="g-desc">${g.desc}</div>
+      <div class="g-rwd">${g.rwd}</div>
+      <div class="g-cap-badge${done?' done':''}">
+        ${done?'🌙 Done for today · resets midnight':'▶ '+rem+' of '+cap+' plays left today'}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── PROMO COUNTDOWN TIMERS ───────────────────────
+function getPromoEnd(id){const v=localStorage.getItem('promo_end_'+id);return v?new Date(v):null;}
+function setPromoEnd(id,val){if(val)localStorage.setItem('promo_end_'+id,val);else localStorage.removeItem('promo_end_'+id);}
+function formatCountdown(ms){
+  if(ms<=0) return null;
+  const s=Math.floor(ms/1000),m=Math.floor(s/60),h=Math.floor(m/60),d=Math.floor(h/24);
+  if(d>0) return d+'d '+(h%24)+'h';
+  if(h>0) return h+'h '+(m%60)+'m';
+  return m+'m '+(s%60)+'s';
+}
+function updatePromoTimers(){
+  const now=Date.now();
+  products.forEach(p=>{
+    const el=document.getElementById('pcd-'+p.id); if(!el) return;
+    const end=getPromoEnd(p.id);
+    if(!end||end.getTime()<=now){el.style.display='none';return;}
+    const rem=formatCountdown(end.getTime()-now);
+    if(rem){el.style.display='flex';el.querySelector('.pcd-val').textContent=rem;}
+    else{el.style.display='none';}
+  });
+}
+function startPromoTimers(){
+  updatePromoTimers();
+  setInterval(updatePromoTimers,10000);
+}
+
+// ── FEATURED PRODUCTS ────────────────────────────
+function getFeaturedIds(){try{return JSON.parse(localStorage.getItem('js_featured')||'[]');}catch{return [];}}
+function setFeaturedId(id,val){
+  let ids=getFeaturedIds();
+  if(val){if(!ids.includes(id))ids.push(id);}else{ids=ids.filter(x=>x!==id);}
+  localStorage.setItem('js_featured',JSON.stringify(ids));
+}
+function renderFeatured(){
+  const ids=getFeaturedIds();
+  const featured=products.filter(p=>ids.includes(p.id));
+  const wrap=document.getElementById('featWrap');
+  const grid=document.getElementById('featGrid');
+  if(!wrap||!grid) return;
+  if(!featured.length){wrap.style.display='none';return;}
+  wrap.style.display='block';
+  grid.innerHTML=featured.map(p=>`<div class="pc" onclick="openMod(${p.id})">
+    <div class="p-img">${p.imageUrl?`<img src="${p.imageUrl}" class="p-phot" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="p-em-fb">${p.em}</span>`:p.em}
+      ${!p.inStock?'<div class="ob">Out of Stock</div>':''}${p.isNew?'<div class="nb">New</div>':''}
+    </div>
+    <div class="p-info">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
+        <div class="p-name">${p.name}</div>
+        <div style="font-size:10px;color:var(--gold);white-space:nowrap">✨ Featured</div>
+      </div>
+      <div class="p-brand">${p.brand||''}</div>
+      <div class="p-price">₦${p.price.toLocaleString()}</div>
+    </div>
+  </div>`).join('');
+}
+
+// ── ORDER TRACKER ─────────────────────────────────
+function openTracker(){
+  document.getElementById('trackOv').classList.add('on');
+  document.getElementById('trackResult').innerHTML='';
+  setTimeout(()=>document.getElementById('trackInp')?.focus(),100);
+}
+function closeTracker(){document.getElementById('trackOv').classList.remove('on');}
+async function trackOrder(){
+  const raw=(document.getElementById('trackInp')?.value||'').trim().toUpperCase();
+  if(!raw){showToast('Please enter your order ID');return;}
+  const el=document.getElementById('trackResult');
+  el.innerHTML='<div style="text-align:center;padding:18px;color:var(--t3)">Searching…</div>';
+  // 1. Local orders
+  let order=(S.orders||[]).find(o=>(o.id||'').toUpperCase()===raw);
+  // 2. Supabase fallback
+  if(!order){
+    try{
+      const res=await fetch(SB_URL+'/rest/v1/orders?id=eq.'+encodeURIComponent(raw)+'&select=*',{headers:sbHeaders()});
+      if(res.ok){const d=await res.json();if(d.length)order=d[0];}
+    }catch{}
+  }
+  if(!order){
+    el.innerHTML='<div style="text-align:center;padding:20px;background:var(--b3);border-radius:10px"><div style="font-size:28px;margin-bottom:8px">⚠️</div><div style="color:var(--t2);font-size:13px">Order not found.</div><div style="color:var(--t3);font-size:12px;margin-top:4px">Double-check your order ID and try again.</div></div>';
+    return;
+  }
+  const sCol={pending:'#e0a82e',processing:'#4fc3f7',shipped:'#9c88ff',delivered:'#4cd97a',cancelled:'#ef5350'};
+  const sEm={pending:'⏳',processing:'🔄',shipped:'🚚',delivered:'✅',cancelled:'❌'};
+  const st=order.status||'pending';
+  const col=sCol[st]||'var(--gold)'; const em=sEm[st]||'📦';
+  el.innerHTML=`<div style="background:var(--b3);border-radius:12px;padding:16px;margin-top:6px">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+      <div style="font-size:11px;color:var(--t3);font-family:monospace">ID: ${order.id}</div>
+      <div style="background:${col}22;color:${col};border:1px solid ${col}55;border-radius:20px;padding:3px 12px;font-size:12px;font-weight:600">${em} ${st.charAt(0).toUpperCase()+st.slice(1)}</div>
+    </div>
+    <div style="font-size:13px;color:var(--t2);display:grid;grid-template-columns:auto 1fr;gap:4px 10px">
+      <span style="color:var(--t3)">👤</span><span>${order.customer||'Customer'}</span>
+      <span style="color:var(--t3)">📅</span><span>${order.date||'--'}</span>
+      <span style="color:var(--t3)">🛍️</span><span>${order.items||0} item${(order.items||0)===1?'':'s'}</span>
+      <span style="color:var(--t3)">💰</span><span style="color:var(--gold);font-weight:600">₦${(order.total||0).toLocaleString()}</span>
+    </div>
+    ${order.itemsList?`<div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--br);font-size:11px;color:var(--t3);white-space:pre-line;line-height:1.6">${order.itemsList}</div>`:''}
+  </div>
+  <p style="font-size:11px;color:var(--t3);text-align:center;margin-top:10px">Questions? <span onclick="openWhatsAppChat()" style="color:var(--gold);cursor:pointer">Chat on WhatsApp 💬</span></p>`;
+}
+
+// ── TESTIMONIALS ─────────────────────────────────
+const _seedTestimonials=[
+  {name:'Amaka C.',stars:5,text:'Absolutely divine! The scent lasts all day long. I get compliments everywhere I go.',product:'Josephine’s Collection'},
+  {name:'Tunde A.',stars:5,text:'Great quality, very elegant. My wife loves it. Will definitely order again soon.',product:'Fragrance Gift Set'},
+  {name:'Chidinma O.',stars:5,text:'The packaging is gorgeous and the scent is heavenly. Worth every kobo!',product:'Luxury Oud'},
+  {name:'Bola M.',stars:4,text:'Fast delivery and exactly as described. Very satisfied with my purchase.',product:'Floral Essence'},
+  {name:'Seun K.',stars:5,text:'Best fragrance brand in Lagos! Josephine always delivers perfection.',product:'Signature Collection'},
+];
+function renderTestimonials(){
+  const strip=document.getElementById('testStrip'); if(!strip) return;
+  const allRevs=[];
+  Object.entries(S.reviewMap||{}).forEach(([pid,revs])=>{
+    const p=products.find(x=>x.id===parseInt(pid));
+    (revs||[]).forEach(r=>allRevs.push({...r,product:p?.name||''}));
+  });
+  const src=allRevs.filter(r=>r.text&&r.text.length>20).length>=3
+    ?allRevs.filter(r=>r.text&&r.text.length>20).slice(0,6)
+    :_seedTestimonials;
+  strip.innerHTML=src.map(r=>`<div class="tcard">
+    <div class="tcard-stars">${'★'.repeat(r.stars)+'☆'.repeat(5-r.stars)}</div>
+    <div class="tcard-text">&#8220;${r.text}&#8221;</div>
+    <div class="tcard-author">— ${r.name}${r.product?' · <em>'+r.product+'</em>':''}</div>
+  </div>`).join('');
+}
+
+// ── LOW STOCK ────────────────────────────────────
+function getLowStockIds(){try{return JSON.parse(localStorage.getItem('js_lowstock')||'[]');}catch{return [];}}
+function setLowStock(id,val){let ids=getLowStockIds();if(val){if(!ids.includes(id))ids.push(id);}else{ids=ids.filter(x=>x!==id);}localStorage.setItem('js_lowstock',JSON.stringify(ids));}
+function toggleLowStock(id){
+  const wasLow=getLowStockIds().includes(id);
+  setLowStock(id,!wasLow);
+  renderOwProducts();
+  const p=products.find(x=>x.id===id);
+  showToast((p?p.name+' ':'')+(wasLow?'removed from low stock list':'⚠️ marked as Low Stock'));
+}
+function renderLowStockWarn(){
+  const ids=getLowStockIds();
+  const low=products.filter(p=>ids.includes(p.id));
+  const el=document.getElementById('lowStockWarn');
+  const list=document.getElementById('lowStockList');
+  if(!el||!list) return;
+  if(!low.length){el.style.display='none';return;}
+  el.style.display='block';
+  list.innerHTML=low.map(p=>'<div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(224,168,46,.1)">'
+    +'<span>'+p.em+' '+p.name+'</span>'
+    +'<span style="font-size:10px;color:'+(p.inStock?'var(--ok)':'var(--er)')+'">'+( p.inStock?'In Stock':'Out of Stock')+'</span>'
+    +'</div>').join('');
+}
+
 function showToast(msg, dur=2600){
   const t=document.getElementById('toast');
   t.textContent=msg;t.classList.add('on');
@@ -950,18 +1320,18 @@ function doSignup(){
   if(!name||!email||!pwd){showAuthErr('Name, email, and password are required.');return;}
   if(localStorage.getItem('js_user_'+email)){showAuthErr('An account with this email already exists.');return;}
   const refCode=makeRef(name);
-  const userData={name,email,phone,pwd:btoa(pwd),refCode,points:50,pHistory:[{lbl:'Welcome bonus',date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}),pts:50,t:'earn'}],orders:[],wishlist:[]};
+  const userData={name,email,phone,pwd:btoa(pwd),refCode,points:100,pHistory:[{lbl:'Welcome bonus',date:new Date().toLocaleDateString('en-GB',{day:'numeric',month:'short'}),pts:100,t:'earn'}],orders:[],wishlist:[]};
   // Handle referral
   if(ref){
     // Award referrer (scan all users — in production this is backend logic)
     for(let k in localStorage){
       if(k.startsWith('js_user_')){
         const u=JSON.parse(localStorage[k]);
-        if(u.refCode===ref){u.points=(u.points||0)+50;u.pHistory=u.pHistory||[];u.pHistory.unshift({lbl:'Referral bonus: '+name+' joined',date:'Today',pts:50,t:'earn'});localStorage.setItem(k,JSON.stringify(u));break;}
+        if(u.refCode===ref){u.points=(u.points||0)+100;u.pHistory=u.pHistory||[];u.pHistory.unshift({lbl:'Referral bonus: '+name+' joined',date:'Today',pts:100,t:'earn'});localStorage.setItem(k,JSON.stringify(u));break;}
       }
     }
-    userData.points+=50;
-    userData.pHistory.unshift({lbl:'Referral signup bonus',date:'Today',pts:50,t:'earn'});
+    userData.points+=100;
+    userData.pHistory.unshift({lbl:'Referral signup bonus',date:'Today',pts:100,t:'earn'});
   }
   localStorage.setItem('js_user_'+email,JSON.stringify(userData));
   loginUser(userData);
@@ -991,6 +1361,8 @@ function logout(){
   const tab=document.getElementById('ownerTab'); if(tab) tab.style.display='none';
   const ob=document.getElementById('ownBtn'); if(ob){ob.classList.remove('on');ob.textContent='Owner';}
   updatePtsUI();updateCartUI();updateWishlistBadge();updateUserNav();showToast('Signed out.');go('home');
+startPromoTimers();
+renderGameCards();
 }
 
 // ─── NAVIGATION ──────────────────────────────
@@ -1001,6 +1373,8 @@ function go(p){
   const tabMap={home:'ntHome',shop:'ntShop',wishlist:'ntWish',loyalty:'ntLoy',games:'ntGames'};
   if(tabMap[p]){const t=document.getElementById(tabMap[p]);if(t)t.classList.add('on');}
   if(p==='shop') renderShop();
+  if(p==='home'){renderFeatured();renderTestimonials();}
+  if(p==='games') renderGameCards();
   if(p==='wishlist') renderWishlist();
   if(p==='loyalty'){if(!S.user){openAuth();return;}renderLoyalty();}
   if(p==='games') document.getElementById('gArea').style.display='none';
@@ -1026,9 +1400,10 @@ function renderShop(){
   else if(sort==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
   else if(sort==='rating') list.sort((a,b)=>b.rating-a.rating);
   const w=new Set(S.wishlist);
+  // note: updatePromoTimers called via rAF below
   document.getElementById('pGrid').innerHTML=list.length ? list.map(p=>`
     <div class="pc${p.inStock?'':' oos'}" onclick="openMod(${p.id})">
-      <div class="p-img">${p.em}
+      <div class="p-img">${p.imageUrl?`<img src="${p.imageUrl}" class="p-phot" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="p-em-fb">${p.em}</span>`:p.em}
         ${!p.inStock?'<div class="ob">Out of Stock</div>':''}
         ${p.isNew?'<div class="nb">New</div>':''}
         <div class="wb${w.has(p.id)?' on':''}" onclick="event.stopPropagation();toggleWish(${p.id})">${w.has(p.id)?'❤️':'🤍'}</div>
@@ -1041,6 +1416,7 @@ function renderShop(){
           <div><div class="p-price">₦${p.price.toLocaleString()}</div><div class="p-size">${p.size}</div></div>
           <button class="atc" ${!p.inStock?'disabled':''} onclick="event.stopPropagation();addCart(${p.id})">${p.inStock?'Add':'Sold Out'}</button>
         </div>
+        <div class="promo-cd" id="pcd-${p.id}">⏰ Ends in <span class="pcd-val"></span></div>
         ${S.isOwner?`<div class="stk-row" onclick="event.stopPropagation()">
           <div class="sw${p.inStock?' on':''}" onclick="toggleStock(${p.id})"><div class="sk"></div></div>
           <span style="font-size:10px;color:var(--t3)">${p.inStock?'In Stock':'Out of Stock'}</span>
@@ -1058,8 +1434,14 @@ function renderShop(){
     :`<div style="grid-column:1/-1;text-align:center;padding:48px;color:var(--t3)">No products found matching "<em style="color:var(--t2)">${q}</em>"</div>`;
 }
 function toggleStock(id){
-  const p=products.find(x=>x.id===id);p.inStock=!p.inStock;
-  renderShop();showToast(`${p.name} → ${p.inStock?'In Stock':'Out of Stock'}`);
+  const p=products.find(x=>x.id===id);
+  if(!p) return;
+  p.inStock=!p.inStock;
+  renderShop();
+  if(document.getElementById('owProdGrid')) renderOwProducts();
+  sbSaveProduct(p).then(ok=>{
+    showToast(p.name+' → '+(p.inStock?'✅ In Stock':'⛔ Out of Stock')+(ok?' · synced ✓':''));
+  });
 }
 
 // ─── WISHLIST ────────────────────────────────
@@ -1080,7 +1462,7 @@ function renderWishlist(){
   document.getElementById('wishGrid').innerHTML=S.wishlist.map(id=>{
     const p=products.find(x=>x.id===id);if(!p)return'';
     return`<div class="pc${p.inStock?'':' oos'}" onclick="openMod(${p.id})">
-      <div class="p-img">${p.em}${!p.inStock?'<div class="ob">Out of Stock</div>':''}
+      <div class="p-img">${p.imageUrl?`<img src="${p.imageUrl}" class="p-phot" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="p-em-fb">${p.em}</span>`:p.em}${!p.inStock?'<div class="ob">Out of Stock</div>':''}
         <div class="wb on" onclick="event.stopPropagation();toggleWish(${p.id})">❤️</div>
       </div>
       <div class="p-body">
@@ -1091,8 +1473,10 @@ function renderWishlist(){
           <div><div class="p-price">₦${p.price.toLocaleString()}</div><div class="p-size">${p.size}</div></div>
           <button class="atc" ${!p.inStock?'disabled':''} onclick="event.stopPropagation();addCart(${p.id})">${p.inStock?'Add':'Sold Out'}</button>
         </div>
+        <div class="promo-cd" id="pcd-${p.id}">⏰ Ends in <span class="pcd-val"></span></div>
       </div>
     </div>`;}).join('');
+  requestAnimationFrame(updatePromoTimers);
 }
 
 // ─── PRODUCT MODAL ───────────────────────────
@@ -1102,8 +1486,9 @@ function openMod(id){
   const p=products.find(x=>x.id===id);
   const revs=S.reviewMap[id]||[];
   const avg=revs.length?revs.reduce((a,b)=>a+b.stars,0)/revs.length:p.rating;
+  const lookbook=JSON.parse(localStorage.getItem('lookbook_'+id)||'[]');
   document.getElementById('mBody').innerHTML=`
-    <span class="m-em">${p.em}</span>
+    ${p.imageUrl?`<div class="m-img-box"><img src="${p.imageUrl}" class="m-phot" onerror="this.onerror=null;this.style.display='none';this.nextElementSibling.style.display='block'"/><span class="m-em" style="display:none">${p.em}</span></div>`:`<span class="m-em">${p.em}</span>`}
     <div class="m-name serif">${p.name}</div>
     <div class="m-notes">${p.notes}</div>
     <div style="font-size:13px;color:var(--gold);margin-bottom:10px">${stars(avg)} <span style="color:var(--t3);font-size:11px">${avg.toFixed(1)} · ${revs.length} reviews</span></div>
@@ -1112,9 +1497,10 @@ function openMod(id){
       <div class="mm"><div class="mm-l">Price</div><div class="mm-v">₦${p.price.toLocaleString()}</div></div>
       <div class="mm"><div class="mm-l">Size</div><div class="mm-v">${p.size}</div></div>
       <div class="mm"><div class="mm-l">Category</div><div class="mm-v">${p.cat}</div></div>
-      <div class="mm"><div class="mm-l">Earn Points</div><div class="mm-v">⭐ ${Math.floor(p.price/500)}</div></div>
+      <div class="mm"><div class="mm-l">Earn Points</div><div class="mm-v">⭐ ${Math.floor(p.price/200)}</div></div>
     </div>
     <button class="m-add" ${!p.inStock?'disabled':''} onclick="addCart(${p.id});closeMod()">${p.inStock?'Add to Cart — ₦'+p.price.toLocaleString():'Currently Out of Stock'}</button>
+    ${lookbook.length?`<button class="lk-open-btn" onclick="openLookbook(${p.id})">🎬 View Lookbook <span style="opacity:.7;font-size:11px">&nbsp;·&nbsp; ${lookbook.length} item${lookbook.length>1?'s':''}</span></button>`:''}
     <div class="rvs-sec">
       <p style="font-size:13px;font-weight:500;margin-bottom:12px;color:var(--t2)">Customer Reviews</p>
       ${revs.map(r=>`<div class="rv"><div class="rv-hdr"><span class="rv-name">${r.name}</span><span class="rv-stars">${stars(r.stars)}</span></div><div class="rv-text">${r.text}</div><div class="rv-date">${r.date}</div></div>`).join('')}
@@ -1139,8 +1525,9 @@ function submitReview(id){
   if(!S.reviewMap[id]) S.reviewMap[id]=[];
   const d=new Date();
   S.reviewMap[id].unshift({name:nm,stars:draftStars,text:txt,date:d.toLocaleDateString('en-GB',{day:'numeric',month:'short'})});
-  if(S.user){S.points+=5;S.pHistory.unshift({lbl:'Wrote a review — '+products.find(x=>x.id===id)?.name,date:'Today',pts:5,t:'earn'});updatePtsUI();saveUserData();}
-  showToast('Review submitted! '+( S.user?'+5 pts ⭐':''));
+  if(S.user){S.points+=10;S.pHistory.unshift({lbl:'Wrote a review — '+products.find(x=>x.id===id)?.name,date:'Today',pts:10,t:'earn'});updatePtsUI();saveUserData();}
+  showToast('Review submitted! '+( S.user?'+10 pts ⭐':''));
+  renderTestimonials();
   openMod(id);
 }
 function closeMod(){document.getElementById('mOv').classList.remove('on');}
@@ -1185,21 +1572,25 @@ function renderCart(){
       <button class="rm" onclick="rmCart(${i.id})">✕</button>
     </div>`).join('');
   const sub=S.cart.reduce((a,b)=>a+b.price*b.qty,0);
-  const del=sub>=15000?0:1500;
   const promoD=S.ckData.promoDiscount?Math.floor(sub*S.ckData.promoDiscount/100):0;
-  const total=sub+del-promoD;
-  const earn=Math.floor(sub/500);
+  const total=sub-promoD;
+  const earn=Math.floor(sub/200);
+  const _ct=S.points>=1500?'Gold':S.points>=500?'Silver':'Bronze';
+  const _cm=_ct==='Gold'?1.25:_ct==='Silver'?1.15:1.0;
+  const earnFinal=Math.floor(earn*_cm);
+  const _ctBadge=_ct!=='Bronze'?` <span style="font-size:10px;background:rgba(201,169,110,.15);color:var(--gold);padding:2px 8px;border-radius:10px;font-weight:600">${_ct} +${_ct==='Gold'?'25':'15'}%</span>`:'';
   foot.innerHTML=`
     <div class="promo-row">
       <input class="promo-in" id="promoInp" placeholder="Enter promo code" value="${S.ckData.promoCode}"/>
       <button class="promo-apply" onclick="applyPromo(document.getElementById('promoInp').value)">Apply</button>
     </div>
     <div class="c-row"><span>Subtotal</span><span>₦${sub.toLocaleString()}</span></div>
-    <div class="c-row"><span>Delivery</span><span>${del===0?'<span style="color:var(--ok)">Free</span>':'₦'+del.toLocaleString()}</span></div>
+    <div class="c-row"><span>Delivery</span><span style="font-size:11px;color:var(--t3)">Select zone at checkout</span></div>
+    <div style="font-size:10px;color:var(--t3);padding:2px 0 4px;line-height:1.8">📍 Lagos ₦6k · Ibadan ₦4k · Others ₦7k · 🌍 Intl → WhatsApp</div>
     ${promoD?`<div class="c-row"><span>Discount (${S.ckData.promoDiscount}%)</span><span style="color:var(--ok)">−₦${promoD.toLocaleString()}</span></div>`:''}
-    <div class="c-tot"><span>Total</span><span>₦${total.toLocaleString()}</span></div>
+    <div class="c-tot"><span>Products Total</span><span>₦${total.toLocaleString()} <span style="font-size:10px;font-weight:400;color:var(--t3)">+ delivery</span></span></div>
     <button class="ck-btn" onclick="startCk()">Proceed to Checkout</button>
-    <div class="earn-note">You'll earn <strong>⭐ ${earn} points</strong> on this order${del>0?'<br><span style="font-size:10px;color:var(--gd)">Spend ₦15,000+ for free delivery</span>':''}</div>`;
+    <div class="earn-note">You'll earn <strong>⭐ ${earnFinal} points</strong>${_ctBadge} on this order</div>`;
 }
 function chgQty(id,d){const i=S.cart.find(x=>x.id===id);if(!i)return;i.qty+=d;if(i.qty<=0)S.cart=S.cart.filter(x=>x.id!==id);updateCartUI();}
 function rmCart(id){S.cart=S.cart.filter(x=>x.id!==id);updateCartUI();}
@@ -1208,13 +1599,29 @@ function rmCart(id){S.cart=S.cart.filter(x=>x.id!==id);updateCartUI();}
 function startCk(){
   if(!S.cart.length){showToast('Your cart is empty!');return;}
   if(!S.user) openAuth();
-  else{toggleCart();S.ckStep=1;go('checkout');renderCk();}
+  else{toggleCart();openCkType();}
+}
+function openCkType(){document.getElementById('ckTypeOv').classList.add('on');}
+function closeCkType(){document.getElementById('ckTypeOv').classList.remove('on');}
+function setCkType(type){S.ckType=type;closeCkType();S.ckStep=1;go('checkout');renderCk();}
+function renderCkZoneInfo(zone){
+  S.ckData.zone=zone;
+  const el=document.getElementById('zoneInfo'); if(!el) return;
+  if(zone==='international'){
+    el.innerHTML='<span style="color:var(--gold)">🌍 You’ll be redirected to WhatsApp to arrange international delivery.</span>';
+  } else {
+    el.innerHTML='<span style="color:var(--ok)">Delivery fee: ₦'+(ZONE_DELIVERY[zone]||6000).toLocaleString()+'</span>';
+  }
 }
 function renderCk(){
   const sub=S.cart.reduce((a,b)=>a+b.price*b.qty,0);
-  const del=sub>=15000?0:1500;
+  const del=S.ckType==='product_only'?0:(ZONE_DELIVERY[S.ckData.zone||'lagos']||6000);
   const promoD=S.ckData.promoDiscount?Math.floor(sub*S.ckData.promoDiscount/100):0;
-  const ptsDis=S.ckData.usePoints&&S.points>=100?Math.floor(sub*.1):0;
+  const ptsDis=S.ckData.usePoints&&S.points>=50?Math.floor(sub*.1):0;
+  const _rkTier=S.points>=1500?'Gold':S.points>=500?'Silver':'Bronze';
+  const _rkMult=_rkTier==='Gold'?1.25:_rkTier==='Silver'?1.15:1;
+  const ckEarn=Math.floor(Math.floor(sub/200)*_rkMult);
+  const _rkNote=_rkTier!=='Bronze'?' (+'+(_rkTier==='Gold'?'25':'15')+'% '+_rkTier+')':'';
   const total=sub+del-promoD-ptsDis;
   const c=document.getElementById('ckInner');
   if(S.ckStep===4){confirmOrder(c,sub,total);return;}
@@ -1238,7 +1645,20 @@ function renderCk(){
         <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="fe" value="${S.ckData.email}" placeholder="you@example.com"/></div>
       </div>
       <div class="f-grp"><label class="f-lbl">Delivery Address</label><input class="f-inp" id="fa" value="${S.ckData.addr}" placeholder="Full address, area, Lagos"/></div>
-      </div><button class="nx-btn" onclick="nextCk()">Continue to Payment →</button>`;
+      ${S.ckType==='all'?`
+      <div class="f-grp" style="margin-top:10px"><label class="f-lbl">📦 Delivery Zone</label>
+        <select class="f-inp" id="fd" onchange="renderCkZoneInfo(this.value)">
+          <option value="lagos" ${S.ckData.zone==='lagos'?'selected':''}>Lagos — ₦6,000</option>
+          <option value="ibadan" ${S.ckData.zone==='ibadan'?'selected':''}>Ibadan — ₦4,000</option>
+          <option value="others" ${S.ckData.zone==='others'?'selected':''}>Other Nigeria — ₦7,000</option>
+          <option value="international" ${S.ckData.zone==='international'?'selected':''}>International 🌍 — via WhatsApp</option>
+        </select>
+        <div id="zoneInfo" style="margin-top:5px;font-size:12px">${S.ckData.zone==='international'?'<span style="color:var(--gold)">🌍 Redirecting to WhatsApp for international delivery.</span>':('<span style="color:var(--ok)">Delivery fee: ₦'+(ZONE_DELIVERY[S.ckData.zone||'lagos']||6000).toLocaleString()+'</span>')}</div>
+      </div>`:''}
+      <div style="margin-top:10px;padding:9px 13px;background:var(--b4);border-radius:7px;font-size:12px;color:var(--t3)">
+        ${S.ckType==='all'?'📦 <strong style="color:var(--t2)">Pay All Now</strong> — product + delivery':'🛍️ <strong style="color:var(--t2)">Pay Product Only</strong> — delivery arranged separately'}
+      </div>
+      </div><button class="nx-btn" onclick="nextCk()">${S.ckType==='all'&&S.ckData.zone==='international'?'Send via WhatsApp 🌍':'Continue to Payment →'}</button>`;
   } else if(S.ckStep===2){
     body=`<div class="s-card"><h4>Payment Method</h4>
       <div class="pay-methods">
@@ -1247,11 +1667,11 @@ function renderCk(){
         <div class="pm${S.ckData.payment==='bank'?' on':''}" onclick="setPay('bank')">🏦 Direct Bank Transfer</div>
         <div class="pm${S.ckData.payment==='cash'?' on':''}" onclick="setPay('cash')">🤝 Pay on Delivery</div>
       </div>
-      ${S.ckData.payment==='bank'?`<div class="pay-note" style="background:var(--b3);border-radius:8px;padding:14px;margin-top:6px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Bank Transfer Details</div><div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px">Oparinde Bodunrin Josephine</div><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;margin:4px 0">7033273249</div><div style="font-size:14px;color:var(--t2);margin-bottom:8px">Opay</div><div style="font-size:11px;color:var(--t3)">After transfer, send your receipt to the store WhatsApp to confirm.</div></div>`:''}
+      ${S.ckData.payment==='bank'?`<div class="pay-note" style="background:var(--b3);border-radius:8px;padding:14px;margin-top:6px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Bank Transfer Details</div><div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px">Josephine Adebisi</div><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;margin:4px 0">7033273249</div><div style="font-size:14px;color:var(--t2);margin-bottom:8px">Opay</div><div style="font-size:11px;color:var(--t3)">After transfer, send your receipt to the store WhatsApp to confirm.</div></div>`:''}
       ${S.ckData.payment==='ussd'?`<div class="pay-note"><strong>Dial:</strong> *901*000*<span style="color:var(--gold)">${total}</span># on your phone after placing the order.</div>`:''}
       </div>
-      ${S.points>=100?`<div class="use-pts-row">
-        <div><div style="font-size:13px;color:var(--t2)">Use 100 pts → 10% off</div><div style="font-size:11px;color:var(--t3)">Balance: ${S.points} pts</div></div>
+      ${S.points>=50?`<div class="use-pts-row">
+        <div><div style="font-size:13px;color:var(--t2)">Use 50 pts → 10% off</div><div style="font-size:11px;color:var(--t3)">Balance: ${S.points} pts</div></div>
         <div class="sw${S.ckData.usePoints?' on':''}" onclick="S.ckData.usePoints=!S.ckData.usePoints;renderCk()"><div class="sk"></div></div>
       </div>`:''}
       <button class="nx-btn" onclick="nextCk()">Review Order →</button>`;
@@ -1260,9 +1680,10 @@ function renderCk(){
       ${S.cart.map(i=>`<div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--br);font-size:13px;color:var(--t2)"><span>${i.em} ${i.name} ×${i.qty}</span><span>₦${(i.price*i.qty).toLocaleString()}</span></div>`).join('')}
       <div style="padding-top:10px">
         <div class="c-row"><span>Subtotal</span><span>₦${sub.toLocaleString()}</span></div>
-        <div class="c-row"><span>Delivery</span><span>${del===0?'Free':'₦'+del.toLocaleString()}</span></div>
+        <div class="c-row" style="color:var(--gold)"><span>⭐ Points Earned</span><span>${ckEarn} pts${_rkNote}</span></div>
+        <div class="c-row"><span>Delivery</span><span>${S.ckType==='product_only'?'<span style="color:var(--t3)">Not included</span>':(del===0?'<span style="color:var(--ok)">Free</span>':'₦'+del.toLocaleString()+' ('+({lagos:'Lagos',ibadan:'Ibadan',others:'Other Nigeria'}[S.ckData.zone]||'Lagos')+')')}</span></div>
         ${promoD?`<div class="c-row"><span>Promo discount</span><span style="color:var(--ok)">−₦${promoD.toLocaleString()}</span></div>`:''}
-        ${ptsDis?`<div class="c-row"><span>Points discount (100 pts)</span><span style="color:var(--ok)">−₦${ptsDis.toLocaleString()}</span></div>`:''}
+        ${ptsDis?`<div class="c-row"><span>Points discount (50 pts)</span><span style="color:var(--ok)">−₦${ptsDis.toLocaleString()}</span></div>`:''}
         <div class="c-tot"><span>Total</span><span>₦${total.toLocaleString()}</span></div>
       </div>
       <div style="font-size:12px;color:var(--t3);margin-top:4px">📍 ${S.ckData.addr||'No address entered'}</div>
@@ -1285,6 +1706,18 @@ function nextCk(){
     S.ckData.email=document.getElementById('fe')?.value||'';
     S.ckData.addr=document.getElementById('fa')?.value||'';
     if(!S.ckData.name||!S.ckData.addr){showToast('Please fill in your name and address.');return;}
+    if(S.ckType==='all'){
+      const zEl=document.getElementById('fd');
+      if(zEl) S.ckData.zone=zEl.value;
+      if(S.ckData.zone==='international'){
+        const sub=S.cart.reduce((a,b)=>a+b.price*b.qty,0);
+        const items=S.cart.map(i=>i.em+' '+i.name+' x'+i.qty+' = ₦'+(i.price*i.qty).toLocaleString()).join('\n');
+        const msg='Hello Josephine! I’d like to place an international order.\n\nItems:\n'+items+'\n\nSubtotal: ₦'+sub.toLocaleString()+'\nName: '+S.ckData.name+'\nPhone: '+S.ckData.phone+'\nAddress: '+S.ckData.addr+'\n\nPlease advise on delivery cost. Thank you!';
+        window.open('https://wa.me/'+OWNER_WHATSAPP+'?text='+encodeURIComponent(msg),'_blank');
+        showToast('🌍 Opening WhatsApp for international delivery...');
+        return;
+      }
+    }
   }
   S.ckStep++;renderCk();
 }
@@ -1336,7 +1769,10 @@ function simulatePayment(amount){
 // --- ORDER CONFIRMATION + DUAL NOTIFICATIONS -----------------------------------
 async function confirmOrder(c, sub, total) {
   const oid   = uid();
-  const earn  = Math.floor(sub / 500);
+  const _cTier=S.points>=1500?'Gold':S.points>=500?'Silver':'Bronze';
+  const _cMult=_cTier==='Gold'?1.25:_cTier==='Silver'?1.15:1;
+  const earn  = Math.floor(Math.floor(sub/200)*_cMult);
+  const _cNote=_cTier!=='Bronze'?' ('+_cTier+' +'+Math.round((_cMult-1)*100)+'% tier bonus)':'';
   const d     = new Date();
   const dateStr = d.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
   const timeStr = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
@@ -1360,10 +1796,10 @@ async function confirmOrder(c, sub, total) {
 
   // Loyalty points
   S.points += earn;
-  S.pHistory.unshift({ lbl: 'Purchase: ' + S.cart.map(x => x.name).join(', '), date: 'Today', pts: earn, t: 'earn' });
-  if (S.ckData.usePoints && S.points >= 100) {
-    S.points -= 100;
-    S.pHistory.unshift({ lbl: 'Used 100 pts for 10% discount', date: 'Today', pts: -100, t: 'spend' });
+  S.pHistory.unshift({ lbl: 'Purchase'+_cNote+': ' + S.cart.map(x => x.name).join(', '), date: 'Today', pts: earn, t: 'earn' });
+  if (S.ckData.usePoints && S.points >= 50) {
+    S.points -= 50;
+    S.pHistory.unshift({ lbl: 'Used 50 pts for 10% discount', date: 'Today', pts: -50, t: 'spend' });
   }
   saveUserData(); updatePtsUI();
 
@@ -1377,6 +1813,7 @@ async function confirmOrder(c, sub, total) {
     "Phone    : " + (S.ckData.phone || '--'),
     "Email    : " + (S.ckData.email || '--'),
     "Address  : " + (S.ckData.addr  || '--'),
+    "Delivery : " + (S.ckType==='product_only'?'Product Only':(({lagos:'Lagos',ibadan:'Ibadan',others:'Other Nigeria',international:'International'}[S.ckData.zone]||'Lagos')+' — ₦'+(ZONE_DELIVERY[S.ckData.zone]||0).toLocaleString())),
     "",
     "ITEMS ORDERED:",
     itemsList,
@@ -1384,7 +1821,7 @@ async function confirmOrder(c, sub, total) {
     "Total   : \u20a6" + total.toLocaleString(),
     "Payment : " + S.ckData.payment + (S.ckData.paystackRef ? " | Ref: " + S.ckData.paystackRef : ""),
     "",
-    "Customer earns: " + earn + " loyalty pts",
+    "Customer earns: " + earn + " loyalty pts" + _cNote,
     "",
     "Please process this order promptly!"
   ].join('\n');
@@ -1437,7 +1874,8 @@ async function confirmOrder(c, sub, total) {
 
   const custName = S.ckData.name;
   S.cart = []; updateCartUI();
-  S.ckData = { name: '', phone: '', email: '', addr: '', payment: 'paystack', usePoints: false, promoCode: '', promoDiscount: 0, paystackRef: '' };
+  S.ckData = { name: '', phone: '', email: '', addr: '', zone: 'lagos', payment: 'paystack', usePoints: false, promoCode: '', promoDiscount: 0, paystackRef: '' };
+  S.ckType = 'all';
 
   const badges =
     (emailOk ? '<span style="font-size:12px;color:var(--ok);background:rgba(76,175,115,.1);border-radius:6px;padding:5px 12px">Email sent</span>' : '') +
@@ -1450,7 +1888,7 @@ async function confirmOrder(c, sub, total) {
     '<p class="suc-s">Thank you' + (custName ? ', ' + custName : '') + '! Your fragrance is being prepared with love. The store has been notified.</p>' +
     '<div class="suc-id"># ' + oid + '</div><br>' +
     (badges ? '<div style="text-align:center;margin-bottom:16px">' + badges + '</div>' : '') +
-    '<p style="font-size:13px;color:var(--gold);margin-bottom:22px">You earned ' + earn + ' loyalty points on this order!</p>' +
+    '<p style="font-size:13px;color:var(--gold);margin-bottom:22px">You earned <strong>' + earn + ' loyalty points</strong>' + _cNote + ' on this order!</p>' +
     '<button class="cont-btn" onclick="go(\'shop\')">Continue Shopping</button>' +
     ' <button class="cont-btn" onclick="go(\'loyalty\')" style="margin-left:8px">View My Points</button>' +
     '</div>';
@@ -1467,6 +1905,8 @@ function renderLoyalty(){
   const tb=document.getElementById('tierBadge');
   tb.textContent=tier+' Member';tb.className='tier-b t-'+tier.toLowerCase();
   document.getElementById('tierProg').textContent=next?`Earn ${needed} more points to reach ${next}`:'You\'ve reached the highest tier! 🏆';
+  const _tBonus=document.getElementById('tierBonusTxt');
+  if(_tBonus)_tBonus.textContent=tier==='Gold'?'✨ +25% bonus points on every purchase — Gold perk':tier==='Silver'?'⭐ +15% bonus points on every purchase — Silver perk':'Reach Silver (500 pts) to unlock purchase bonuses';
   document.getElementById('progFill').style.width=prog+'%';
   if(S.user) document.getElementById('refCode').textContent=S.user.refCode||'JOSE–0000';
   document.getElementById('rwGrid').innerHTML=rewards.map(r=>`
@@ -1497,6 +1937,13 @@ function copyRef(){
 
 // ─── GAMES ────────────────────────────────────
 function launchGame(g){
+  if(!S.user){showToast('Sign in to play games and earn points!');openAuth();return;}
+  if(!canPlayGame(g)){
+    showToast('🌙 Daily limit reached! Come back tomorrow to play again.');
+    return;
+  }
+  incGamePlays(g);
+  renderGameCards();
   document.getElementById('gArea').style.display='block';
   document.getElementById('gArea').scrollIntoView({behavior:'smooth',block:'start'});
   if(g==='scratch') renderScratch();
@@ -1519,7 +1966,7 @@ function renderScratch(){
     <p style="text-align:center;font-size:12px;color:var(--t3);margin-bottom:16px">Tap all tiles to reveal. Match 3 identical symbols to win!</p>
     <div class="sc-grid" id="scGrid"></div>
     <div class="g-res" id="scRes">Tap a tile to begin</div>
-    <button class="g-btn" onclick="renderScratch()">Play Again</button>`;
+    <button class="g-btn" onclick="launchGame('scratch')">Play Again</button>`;
   renderScrGrid();
 }
 function renderScrGrid(){
@@ -1550,7 +1997,7 @@ function renderMemory(){
     <p style="text-align:center;font-size:12px;color:var(--t3);margin-bottom:14px">Moves: <span id="mMov">0</span> &nbsp;|&nbsp; Fewer moves = more points</p>
     <div class="mem-grid" id="memGrid"></div>
     <div class="g-res" id="memRes" style="margin-top:10px"></div>
-    <button class="g-btn" onclick="renderMemory()">New Game</button>`;
+    <button class="g-btn" onclick="launchGame('memory')">New Game</button>`;
   renderMemGrid();
 }
 function renderMemGrid(){
@@ -1598,7 +2045,7 @@ function showQuizQ(){
     if(pts>0) addGamePoints(pts,`Quiz score: ${qScore}/${quizData.length} correct`);
     document.getElementById('gContent').innerHTML=`<h3>🎓 Quiz Complete!</h3>
       <div class="g-res win" style="margin:16px auto;max-width:320px;font-size:15px">Score: ${qScore}/${quizData.length} &nbsp;|&nbsp; +${pts} points</div>
-      <button class="g-btn" onclick="renderQuiz()">Play Again</button>`;return;
+      <button class="g-btn" onclick="launchGame('quiz')">Play Again</button>`;return;
   }
   const q=quizData[qIdx];qAnswered=false;
   document.getElementById('gContent').innerHTML=`<h3>🎓 Scent Quiz</h3>
@@ -1704,6 +2151,20 @@ function exitOwner() {
   updateUserNav();
   showToast('Owner mode disabled');
   go('home');
+}
+
+async function refreshDashboard() {
+  const btn = document.getElementById('dashRefreshBtn');
+  if (btn) { btn.textContent = '🔄 Refreshing…'; btn.disabled = true; }
+  try {
+    await sbLoadProducts();
+    renderOwner();
+    showToast('✅ Dashboard refreshed — products up to date');
+  } catch(e) {
+    showToast('❌ Refresh failed — check connection');
+  } finally {
+    if (btn) { btn.textContent = '🔄 Refresh'; btn.disabled = false; }
+  }
 }
 
 let _ownerAttempts = 0, _ownerLockUntil = 0;
@@ -1839,11 +2300,15 @@ function saveProduct() {
   const size     = (g('pSize')?.value  || '').trim() || '50ml';
   const notes    = (g('pNotes')?.value || '').trim() || cat + ' fragrance';
   const isNew    = g('pIsNew')?.checked || false;
+  const isFeat   = g('pFeatured')?.checked || false;
   const imageUrl = (g('pImageUrl')?.value || '').trim();
 
   if (_editingId !== null) {
     const p = products.find(x => x.id === _editingId);
     if (p) Object.assign(p, { name, price, cat, desc, brand, size, notes, isNew, em: _selEmoji, inStock: _pStockOn, imageUrl });
+    localStorage.setItem('lookbook_'+_editingId, JSON.stringify(_editLookbook));
+    setPromoEnd(_editingId, document.getElementById('pPromoEnd')?.value||null);
+    setFeaturedId(_editingId, isFeat); renderFeatured();
     sbSaveProduct(p).then(ok => showToast(ok ? name + ' updated & synced ✓' : name + ' updated locally'));
     cancelEdit();
   } else {
@@ -1851,6 +2316,9 @@ function saveProduct() {
     const newP  = { id: newId, name, em: _selEmoji, cat, price, size, notes, desc, brand, inStock: _pStockOn, isNew, imageUrl, rating: 5.0, ratingCount: 0 };
     products.push(newP);
     S.reviewMap[newId] = [];
+    localStorage.setItem('lookbook_'+newId, JSON.stringify(_editLookbook));
+    setPromoEnd(newId, document.getElementById('pPromoEnd')?.value||null);
+    setFeaturedId(newId, isFeat); renderFeatured();
     sbSaveProduct(newP).then(ok => showToast(ok ? name + ' added & live on all devices ✓' : name + ' added locally'));
     clearProdForm();
   }
@@ -1869,6 +2337,9 @@ function clearProdForm() {
   const ti = document.getElementById('prodFormTitle'); if (ti) ti.textContent = '+ Add New Product';
   const cb = document.getElementById('cancelEditBtn'); if (cb) cb.style.display = 'none';
   const ib = document.getElementById('imgPreviewBox'); if (ib) ib.innerHTML = '<div class="img-url-ph"><span>&#128247;</span>Image preview appears here</div>';
+  _editLookbook=[]; renderLookbookList();
+  const _fCb=document.getElementById('pFeatured'); if(_fCb) _fCb.checked=false;
+  const _peEl=document.getElementById('pPromoEnd'); if(_peEl) _peEl.value='';
   renderEmojiPicker();
 }
 
@@ -1881,6 +2352,9 @@ function editProduct(id) {
   s('pName', p.name); s('pBrand', p.brand || ''); s('pPrice', p.price);
   s('pSize', p.size); s('pNotes', p.notes); s('pDesc', p.desc);
   s('pImageUrl', p.imageUrl || ''); previewImg(p.imageUrl || '');
+  _editLookbook=JSON.parse(localStorage.getItem('lookbook_'+id)||'[]'); renderLookbookList();
+  const featCb=document.getElementById('pFeatured'); if(featCb) featCb.checked=getFeaturedIds().includes(id);
+  const peEl=document.getElementById('pPromoEnd'); if(peEl){const pe=getPromoEnd(id);peEl.value=pe?pe.toISOString().slice(0,16):'';}
   const pIsNew = document.getElementById('pIsNew'); if (pIsNew) pIsNew.checked = p.isNew || false;
   const pCat   = document.getElementById('pCat');   if (pCat)   pCat.value = p.cat;
   const sw = document.getElementById('pStockSw'); if (sw) sw.classList.toggle('on', p.inStock);
@@ -1912,7 +2386,7 @@ function renderOwProducts() {
   }
   grid.innerHTML = products.map(p => {
     const topImg = p.imageUrl
-      ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover" onerror="this.style.display=\'none\'" />'
+      ? '<img src="' + p.imageUrl + '" alt="' + p.name + '" style="width:100%;height:100%;object-fit:cover" onerror="this.onerror=null;this.style.display=\'none\';if(this.nextSibling)this.nextSibling.style.display=\'flex\'" /><div class="pm-card-no-img" style="display:none">' + p.em + '</div>'
       : '<div class="pm-card-no-img">' + p.em + '</div>';
     const emBadge  = p.imageUrl ? '<div class="pm-card-emoji-badge">' + p.em + '</div>' : '';
     const oosBadge = p.inStock  ? '' : '<div class="ob" style="position:absolute;top:8px;right:8px">Out</div>';
@@ -1933,8 +2407,10 @@ function renderOwProducts() {
             + '<button class="pm-edit-btn" onclick="editProduct(' + p.id + ')">✏️ Edit</button>'
             + '<button class="pm-del-btn" onclick="deleteProduct(' + p.id + ')">🗑 Del</button>'
           + '</div>'
+        + '<button class="pm-low-btn' + (getLowStockIds().includes(p.id) ? ' on' : '') + '" onclick="toggleLowStock(' + p.id + ')">⚠️ ' + (getLowStockIds().includes(p.id) ? 'Low Stock ✓' : 'Mark Low Stock') + '</button>'
       + '</div></div>';
   }).join('');
+  renderLowStockWarn();
 }
 
 function renderOwOrders() {
@@ -1994,7 +2470,10 @@ function toggleNotifSetting(type) {
 
 function updStatus(id, status) {
   const o = S.orders.find(x => x.id === id); if (o) o.status = status;
-  renderOwOrders(); showToast('Order ' + id + ' updated to ' + status);
+  renderOwOrders();
+  sbUpdateOrderStatus(id, status).then(ok => {
+    showToast('Order ' + id.slice(-6) + ' → ' + status + (ok ? ' · synced ✓' : ' · saved locally'));
+  });
 }
 
 function addPromo() {
@@ -2128,5 +2607,10 @@ async function doSyncNow() {
 }
 
 </script>
+<!-- FLOATING WHATSAPP BUTTON -->
+<button class="wa-fab" onclick="openWhatsAppChat()" title="Chat with us on WhatsApp" aria-label="Chat on WhatsApp">
+  <svg viewBox="0 0 24 24" fill="currentColor" width="27" height="27"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</button>
+
 </body>
 </html>
