@@ -705,7 +705,7 @@ input[type=range].bargain-range::-moz-range-thumb{width:20px;height:20px;border-
           </div>
         </div>
         <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Scent Notes</label><input class="f-inp" id="pNotes" placeholder="e.g. Rose, Oud, Musk"/></div>
-        <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Product Image URL <span style="color:var(--t3);font-size:10px;text-transform:none;letter-spacing:0">&mdash; paste from Google Photos, WhatsApp Web, etc.</span></label><input class="f-inp" id="pImageUrl" placeholder="https://..." oninput="previewImg(this.value)"/><div class="img-url-preview" id="imgPreviewBox"><div class="img-url-ph"><span>&#128247;</span>Image preview appears here</div></div></div>
+        <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Product Image URL <span style="color:var(--t3);font-size:10px;text-transform:none;letter-spacing:0">&mdash; use <strong>Google Drive</strong>, Imgur, or Cloudinary (Google Photos blocks embedding)</span></label><input class="f-inp" id="pImageUrl" placeholder="https://..." oninput="previewImg(this.value)"/><div class="img-url-preview" id="imgPreviewBox"><div class="img-url-ph"><span>&#128247;</span>Image preview appears here</div></div></div>
         <div class="f-grp" style="margin-top:10px">
           <label class="f-lbl">🎬 Lookbook Media <span style="color:var(--t3);font-size:10px;text-transform:none;letter-spacing:0">— GIFs, video or YouTube URLs shown to customers</span></label>
           <div style="display:flex;gap:8px;margin-top:6px"><input class="f-inp" id="pLookUrl" placeholder="https://..." style="flex:1"/><button type="button" onclick="addLookbookUrl()" style="background:var(--gold);color:#1a1209;border:none;border-radius:7px;padding:8px 14px;font-size:12px;cursor:pointer;white-space:nowrap;font-family:inherit">+ Add</button></div>
@@ -2301,7 +2301,7 @@ function saveProduct() {
   const notes    = (g('pNotes')?.value || '').trim() || cat + ' fragrance';
   const isNew    = g('pIsNew')?.checked || false;
   const isFeat   = g('pFeatured')?.checked || false;
-  const imageUrl = (g('pImageUrl')?.value || '').trim();
+  const imageUrl = normaliseImgUrl((g('pImageUrl')?.value || '').trim());
 
   if (_editingId !== null) {
     const p = products.find(x => x.id === _editingId);
@@ -2542,15 +2542,35 @@ function sendOffer(id, encodedName, orig) {
   window.open('https://wa.me/' + OWNER_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
   showToast('Offer sent via WhatsApp ✓');
 }
+function imgLoadErr(box) {
+  box.innerHTML = '<div class="img-url-ph" style="padding:10px;font-size:12px;line-height:1.6"><span style="font-size:20px">⚠️</span><br><strong style="color:#e0a82e">Can&#39;t load image</strong><br><span style="color:var(--t3)">Use Google Drive: Share file → Copy link → Paste here</span></div>';
+}
+function normaliseImgUrl(url) {
+  if (!url) return url;
+  // Google Drive: convert share link → direct embed
+  // e.g. https://drive.google.com/file/d/FILE_ID/view → https://drive.google.com/uc?export=view&id=FILE_ID
+  const gd = url.match(/drive\.google\.com\/file\/d\/([^\/\?]+)/);
+  if (gd) return 'https://drive.google.com/uc?export=view&id=' + gd[1];
+  return url;
+}
+
 function previewImg(url) {
-  var box = document.getElementById('imgPreviewBox');
+  const box = document.getElementById('imgPreviewBox');
   if (!box) return;
-  if (url && url.indexOf('http') === 0) {
-    box.innerHTML = '<img src="' + url + '" style="width:100%;height:100%;object-fit:cover"'
-      + ' onerror="this.parentNode.innerHTML=\'<div class=&quot;img-url-ph&quot;><span>&#128247;</span>Cannot load image</div>\'" />';
-  } else {
+  if (!url || !url.startsWith('http')) {
     box.innerHTML = '<div class="img-url-ph"><span>&#128247;</span>Image preview appears here</div>';
+    return;
   }
+  // Google Photos detection — can't be fixed
+  if (url.includes('photos.google.com') || (url.includes('googleusercontent.com') && url.includes('/pw/'))) {
+    box.innerHTML = '<div class="img-url-ph" style="line-height:1.6;padding:10px 14px;font-size:12px"><span style="font-size:20px">⚠️</span><br><strong style="color:#e0a82e">Google Photos won&#39;t work</strong><br><span style="color:var(--t3)">Upload to <strong>Google Drive</strong> instead:<br>Share the file → copy link → paste here</span></div>';
+    return;
+  }
+  const fixed = normaliseImgUrl(url);
+  // Update the input to the converted URL so it saves correctly
+  const inp = document.getElementById('pImageUrl');
+  if (inp && fixed !== url) inp.value = fixed;
+  box.innerHTML = '<img src="' + fixed + '" style="width:100%;height:100%;object-fit:cover" onerror="imgLoadErr(this.parentNode)" />';
 }
 
 // ─── INIT ─────────────────────────────────────
