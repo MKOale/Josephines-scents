@@ -2601,7 +2601,11 @@ async function doSyncNow() {
     renderShop(); renderOwProducts();
     if (btn) { btn.disabled = false; btn.textContent = '↻ Sync Now'; }
   } catch(e) {
-    if (msg) msg.innerHTML = '<span style="color:var(--er)">Network error:</span> ' + (e.message||e);
+    const errTxt = (e.message||String(e));
+    const isDown = errTxt.includes('fetch')||errTxt.includes('network')||errTxt.includes('Failed');
+    if (msg) msg.innerHTML = isDown
+      ? '<span style="color:var(--er)">Could not reach Supabase.</span> Project may be <strong>paused</strong> — visit <a href="https://app.supabase.com" target="_blank" style="color:var(--gold)">app.supabase.com</a> to restore it, then try again.'
+      : '<span style="color:var(--er)">Error:</span> ' + errTxt;
     if (btn) { btn.disabled = false; btn.textContent = '↻ Try Again'; }
   }
 }
