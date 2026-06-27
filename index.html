@@ -397,7 +397,7 @@ nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(13,11,8,.96)
 .ep-btn-big.on{border-color:var(--gold);background:rgba(201,169,110,.2)}
 .ep-preview-big{font-size:52px;width:82px;height:82px;display:flex;align-items:center;justify-content:center;background:var(--b3);border-radius:12px;border:2px solid var(--br2);flex-shrink:0}
 /* IMAGE PREVIEW */
-.img-url-preview{width:100%;height:110px;background:var(--b3);border:1px dashed var(--br2);border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:6px}
+.img-url-preview{width:100%;aspect-ratio:1/1;background:var(--b3);border:1px dashed var(--br2);border-radius:10px;display:flex;align-items:center;justify-content:center;overflow:hidden;margin-top:6px;max-height:320px}
 .img-url-preview img{width:100%;height:100%;object-fit:cover}
 .img-url-ph{text-align:center;color:var(--t3);font-size:12px;padding:12px}
 .img-url-ph span{font-size:28px;display:block;margin-bottom:5px}
@@ -1286,7 +1286,8 @@ function renderAuthForm(){
     f.innerHTML=`
       <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="aEmail" type="email" placeholder="you@example.com"/></div>
       <div class="f-grp"><label class="f-lbl">Password</label><div class="pwd-wrap"><input class="f-inp" id="aPwd" type="password" placeholder="Your password"/><button class="eye-btn" onclick="togglePwd('aPwd',this)">👁️</button></div></div>
-      <button class="auth-btn" onclick="doLogin()">Sign In</button>`;
+      <button class="auth-btn" onclick="doLogin()">Sign In</button>
+      <p style="text-align:center;margin-top:10px;font-size:12px;color:var(--t3)">Forgot your password? <span style="color:var(--gold);cursor:pointer;text-decoration:underline" onclick="showForgotPwd()">Reset it</span></p>`;
   } else {
     f.innerHTML=`
       <div class="f-grp"><label class="f-lbl">Full Name</label><input class="f-inp" id="aName" placeholder="Your full name"/></div>
@@ -1297,6 +1298,57 @@ function renderAuthForm(){
       <button class="auth-btn" onclick="doSignup()">Create Account</button>`;
   }
 }
+function showForgotPwd(){
+  const f=document.getElementById('authFields');
+  const err=document.getElementById('authErr'); if(err) err.style.display='none';
+  f.innerHTML=`
+    <div style="font-size:14px;font-weight:600;color:var(--t1);margin-bottom:4px">🔑 Reset Password</div>
+    <p style="font-size:12px;color:var(--t3);margin-bottom:14px">Enter your email and the phone number you signed up with to verify your identity.</p>
+    <div class="f-grp"><label class="f-lbl">Email</label><input class="f-inp" id="rEmail" type="email" placeholder="you@example.com"/></div>
+    <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Phone number (as entered at signup)</label><input class="f-inp" id="rPhone" placeholder="+234 000 000 0000"/></div>
+    <div id="resetErr" style="color:var(--er);font-size:12px;margin-top:8px;display:none"></div>
+    <button class="auth-btn" style="margin-top:14px" onclick="verifyResetIdentity()">Verify Identity</button>
+    <p style="text-align:center;margin-top:10px;font-size:12px;color:var(--t3)"><span style="color:var(--gold);cursor:pointer" onclick="renderAuth()">Back to Sign In</span></p>`;
+}
+
+function verifyResetIdentity(){
+  const email=(document.getElementById('rEmail')?.value||'').trim().toLowerCase();
+  const phone=(document.getElementById('rPhone')?.value||'').trim().replace(/\s+/g,'');
+  const errEl=document.getElementById('resetErr');
+  if(!email||!phone){errEl.textContent='Please fill in both fields.';errEl.style.display='block';return;}
+  const saved=localStorage.getItem('js_user_'+email);
+  if(!saved){errEl.textContent='No account found with that email.';errEl.style.display='block';return;}
+  const userData=JSON.parse(saved);
+  const storedPhone=(userData.phone||'').replace(/\s+/g,'');
+  if(storedPhone!==phone){errEl.textContent='Phone number does not match our records.';errEl.style.display='block';return;}
+  // Identity verified — show new password form
+  const f=document.getElementById('authFields');
+  f.innerHTML=`
+    <div style="text-align:center;margin-bottom:12px"><span style="font-size:30px">✅</span><div style="font-size:13px;color:var(--ok);margin-top:4px">Identity verified!</div></div>
+    <div class="f-grp"><label class="f-lbl">New Password</label><div class="pwd-wrap"><input class="f-inp" id="newPwd1" type="password" placeholder="Enter new password"/><button class="eye-btn" onclick="togglePwd('newPwd1',this)">👁️</button></div></div>
+    <div class="f-grp" style="margin-top:10px"><label class="f-lbl">Confirm New Password</label><div class="pwd-wrap"><input class="f-inp" id="newPwd2" type="password" placeholder="Repeat new password"/><button class="eye-btn" onclick="togglePwd('newPwd2',this)">👁️</button></div></div>
+    <div id="resetErr2" style="color:var(--er);font-size:12px;margin-top:8px;display:none"></div>
+    <button class="auth-btn" style="margin-top:14px" onclick="doResetPassword('${email}')">Set New Password</button>`;
+}
+
+function doResetPassword(email){
+  const p1=(document.getElementById('newPwd1')?.value||'');
+  const p2=(document.getElementById('newPwd2')?.value||'');
+  const errEl=document.getElementById('resetErr2');
+  if(!p1||!p2){errEl.textContent='Please fill in both password fields.';errEl.style.display='block';return;}
+  if(p1.length<6){errEl.textContent='Password must be at least 6 characters.';errEl.style.display='block';return;}
+  if(p1!==p2){errEl.textContent='Passwords do not match.';errEl.style.display='block';return;}
+  const saved=localStorage.getItem('js_user_'+email);
+  if(!saved){errEl.textContent='Account not found.';errEl.style.display='block';return;}
+  const userData=JSON.parse(saved);
+  userData.pwd=btoa(p1);
+  localStorage.setItem('js_user_'+email,JSON.stringify(userData));
+  // Auto log in
+  loginUser(userData);
+  closeAuth();
+  showToast('✅ Password reset! You are now signed in.');
+}
+
 function showAuthErr(msg){
   const e=document.getElementById('authErr');e.textContent=msg;e.style.display='block';
 }
