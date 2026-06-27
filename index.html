@@ -1667,7 +1667,7 @@ function renderCk(){
         <div class="pm${S.ckData.payment==='bank'?' on':''}" onclick="setPay('bank')">🏦 Direct Bank Transfer</div>
         <div class="pm${S.ckData.payment==='cash'?' on':''}" onclick="setPay('cash')">🤝 Pay on Delivery</div>
       </div>
-      ${S.ckData.payment==='bank'?`<div class="pay-note" style="background:var(--b3);border-radius:8px;padding:14px;margin-top:6px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Bank Transfer Details</div><div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px">Oparinde Bodunrin Josephine</div><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;margin:4px 0">7033273249</div><div style="font-size:14px;color:var(--t2);margin-bottom:8px">Opay</div><div style="font-size:11px;color:var(--t3)">After transfer, send your receipt to the store WhatsApp to confirm.</div></div>`:''}
+      ${S.ckData.payment==='bank'?`<div class="pay-note" style="background:var(--b3);border-radius:8px;padding:14px;margin-top:6px"><div style="font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px">Bank Transfer Details</div><div style="font-size:15px;font-weight:600;color:var(--t1);margin-bottom:3px">Josephine Adebisi</div><div style="font-size:24px;font-weight:700;color:var(--gold);letter-spacing:2px;margin:4px 0">7033273249</div><div style="font-size:14px;color:var(--t2);margin-bottom:8px">Opay</div><div style="font-size:11px;color:var(--t3)">After transfer, send your receipt to the store WhatsApp to confirm.</div></div>`:''}
       ${S.ckData.payment==='ussd'?`<div class="pay-note"><strong>Dial:</strong> *901*000*<span style="color:var(--gold)">${total}</span># on your phone after placing the order.</div>`:''}
       </div>
       ${S.points>=50?`<div class="use-pts-row">
@@ -2542,15 +2542,17 @@ function sendOffer(id, encodedName, orig) {
   window.open('https://wa.me/' + OWNER_WHATSAPP + '?text=' + encodeURIComponent(msg), '_blank');
   showToast('Offer sent via WhatsApp ✓');
 }
-function imgLoadErr(box) {
-  box.innerHTML = '<div class="img-url-ph" style="padding:10px;font-size:12px;line-height:1.6"><span style="font-size:20px">⚠️</span><br><strong style="color:#e0a82e">Can&#39;t load image</strong><br><span style="color:var(--t3)">Use Google Drive: Share file → Copy link → Paste here</span></div>';
-}
 function normaliseImgUrl(url) {
   if (!url) return url;
-  // Google Drive: convert share link → direct embed
-  // e.g. https://drive.google.com/file/d/FILE_ID/view → https://drive.google.com/uc?export=view&id=FILE_ID
+  // Google Drive share link → direct embed
   const gd = url.match(/drive\.google\.com\/file\/d\/([^\/\?]+)/);
-  if (gd) return 'https://drive.google.com/uc?export=view&id=' + gd[1];
+  if (gd) return 'https://lh3.googleusercontent.com/d/' + gd[1];
+  // Google Drive open?id= format
+  const gd2 = url.match(/drive\.google\.com\/open\?id=([^&]+)/);
+  if (gd2) return 'https://lh3.googleusercontent.com/d/' + gd2[1];
+  // Imgur page URL → direct image (https://imgur.com/XXXXX → https://i.imgur.com/XXXXX.jpg)
+  const im = url.match(/^https?:\/\/(?:www\.)?imgur\.com\/([a-zA-Z0-9]{5,8})$/);
+  if (im) return 'https://i.imgur.com/' + im[1] + '.jpg';
   return url;
 }
 
@@ -2561,16 +2563,31 @@ function previewImg(url) {
     box.innerHTML = '<div class="img-url-ph"><span>&#128247;</span>Image preview appears here</div>';
     return;
   }
-  // Google Photos detection — can't be fixed
   if (url.includes('photos.google.com') || (url.includes('googleusercontent.com') && url.includes('/pw/'))) {
-    box.innerHTML = '<div class="img-url-ph" style="line-height:1.6;padding:10px 14px;font-size:12px"><span style="font-size:20px">⚠️</span><br><strong style="color:#e0a82e">Google Photos won&#39;t work</strong><br><span style="color:var(--t3)">Upload to <strong>Google Drive</strong> instead:<br>Share the file → copy link → paste here</span></div>';
+    box.innerHTML = '<div class="img-url-ph" style="line-height:1.6;padding:10px 14px;font-size:12px"><span style="font-size:20px">⚠️</span><br><strong style="color:#e0a82e">Google Photos blocked</strong><br><span style="color:var(--t3)">Use Google Drive or Imgur instead</span></div>';
     return;
   }
   const fixed = normaliseImgUrl(url);
-  // Update the input to the converted URL so it saves correctly
   const inp = document.getElementById('pImageUrl');
-  if (inp && fixed !== url) inp.value = fixed;
-  box.innerHTML = '<img src="' + fixed + '" style="width:100%;height:100%;object-fit:cover" onerror="imgLoadErr(this.parentNode)" />';
+  if (inp && fixed !== url) { inp.value = fixed; }
+  // Use JS events instead of inline onerror to avoid escaping issues
+  box.innerHTML = '<div style="color:var(--t3);font-size:11px;text-align:center;padding:16px">⏳ Loading preview…</div>';
+  const img = new Image();
+  img.onload = function() {
+    box.innerHTML = '';
+    img.style.cssText = 'width:100%;height:100%;object-fit:cover;border-radius:7px';
+    box.appendChild(img);
+  };
+  img.onerror = function() {
+    const service = url.includes('imgur') ? 'Imgur' : url.includes('drive.google') ? 'Google Drive' : 'Image';
+    box.innerHTML = '<div class="img-url-ph" style="padding:10px;font-size:11px;line-height:1.7">'
+      + '<span style="font-size:22px">⚠️</span><br>'
+      + '<strong style="color:#e0a82e">' + service + ' failed to load</strong><br>'
+      + '<a href="' + fixed + '" target="_blank" style="color:var(--gold);text-decoration:underline">Open URL in new tab ↗</a><br>'
+      + '<span style="color:var(--t3);font-size:10px">If it opens ✔ it is a CORS issue — try Cloudinary.<br>If it does not open ✖ the link or sharing settings are wrong.</span>'
+      + '</div>';
+  };
+  img.src = fixed;
 }
 
 // ─── INIT ─────────────────────────────────────
